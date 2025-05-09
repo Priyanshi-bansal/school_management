@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 const Login = () => {
   return (
     <div
-      className="h-screen w-screen backdrop-blur-md flex  justify-center"
+      className="min-h-screen w-full flex justify-center items-center p-4"
       style={{
         backgroundImage: `url("https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")`,
         backgroundRepeat: "no-repeat",
@@ -11,45 +12,29 @@ const Login = () => {
         backgroundSize: "cover",
       }}
     >
-      <div className="flex flex-col items-center mt-10 space-y-32">
-        <h1 className="text-3xl font-semibold bg-black text-white w-full text-center py-4 bg-opacity-75 rounded-2xl">
-          STUDENT RESULT MANAGEMENT SYSTEM
+      <div className="w-full max-w-7xl bg-black bg-opacity-50 p-8 rounded-xl shadow-2xl backdrop-blur-lg">
+        <h1 className="text-white text-2xl sm:text-3xl md:text-4xl text-center font-bold mb-10">
+          School Management System
         </h1>
-        <div className="grid grid-cols-3 gap-28">
-          <div className="h-96 w-96 space-y-11 shadow-2xl flex flex-col justify-center items-center bg-transparent backdrop-blur-md bg-[#E91E63] bg-opacity-60 rounded-xl">
-            <h1 className="text-4xl font-extrabold">Admin</h1>
-            <Link
-              type="button"
-              to="/login/adminlogin"
-              className="flex items-center justify-center bg-blue-500 h-10 w-32 text-lg rounded-lg text-white hover:scale-110 transition-all duration-200"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { title: "Admin", color: "bg-[#E91E63]", link: "/login/adminlogin" },
+            { title: "Faculty", color: "bg-[#5a51d6]", link: "/login/facultylogin" },
+            { title: "Student", color: "bg-[#d65158]", link: "/login/studentlogin" },
+          ].map(({ title, color, link }) => (
+            <div
+              key={title}
+              className={`h-80 w-full flex flex-col justify-center items-center text-white p-6 rounded-xl shadow-xl ${color} bg-opacity-70 backdrop-blur-md transition-transform transform hover:scale-105 hover:shadow-2xl`}
             >
-              Login
-            </Link>
-            
-          </div>
-          <div className="h-96 w-96 space-y-11 shadow-2xl flex flex-col justify-center items-center bg-transparent backdrop-blur-md bg-[#5a51d6] bg-opacity-60 rounded-xl">
-            <h1 className="text-4xl font-extrabold">Faculty</h1>
-
-            <Link
-              type="button"
-              to="/login/facultylogin"
-              className="flex items-center justify-center bg-blue-500 h-10 w-32 text-lg rounded-lg text-white hover:scale-110 transition-all duration-200"
-            >
-              Login
-            </Link>
-            
-          </div>
-          <div className="h-96 w-96 space-y-11 shadow-2xl flex flex-col justify-center items-center bg-transparent backdrop-blur-md bg-[#d65158] bg-opacity-60 rounded-xl">
-            <h1 className="text-4xl font-extrabold">Student</h1>
-            <Link
-              type="button"
-              to="/login/studentlogin"
-              className="flex items-center justify-center bg-blue-500 h-10 w-32 text-lg rounded-lg text-white hover:scale-110 transition-all duration-200"
-            >
-              Login
-            </Link>
-            
-          </div>
+              <h2 className="text-3xl font-extrabold mb-6">{title}</h2>
+              <Link
+                to={link}
+                className="bg-blue-500 hover:bg-blue-600 transition-colors duration-200 w-32 h-10 flex items-center justify-center rounded-lg"
+              >
+                Login
+              </Link>
+            </div>
+          ))}
         </div>
       </div>
     </div>

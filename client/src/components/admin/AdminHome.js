@@ -20,13 +20,17 @@ const AdminHome = () => {
     dispatch(getAllDepartment());
     dispatch(getNotice());
   }, [dispatch]);
+
   return (
-    <div className="bg-[#d6d9e0] h-screen flex items-center justify-center">
-      <div className="flex flex-col  bg-[#f4f6fa] h-5/6 w-[95%] rounded-2xl shadow-2xl space-y-6 overflow-y-hidden">
+    <div className="h-full bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-6">
+      <div className="flex flex-col bg-white rounded-2xl shadow-xl overflow-hidden max-w-7xl mx-auto h-[calc(100vh-2rem)]">
         <Header />
-        <div className="flex flex-[0.95]">
+        <div className="flex flex-1 overflow-hidden">
+          {/* Mobile sidebar toggle would go here */}
           <Sidebar />
-          <Body />
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
+            <Body />
+          </div>
         </div>
       </div>
     </div>
