@@ -5,29 +5,28 @@ import { adminSignIn } from "../../../redux/actions/adminActions";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Spinner from "../../../utils/Spinner";
-
+ 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
-
+ 
 const schema = yup.object({
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
 });
-
+ 
 const defaultValues = {
   username: "",
   password: "",
 };
-
+ 
 const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [translate, setTranslate] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+ 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+ 
   const {
     handleSubmit,
     control,
@@ -36,124 +35,106 @@ const AdminLogin = () => {
     defaultValues,
     resolver: yupResolver(schema),
   });
-
-  useEffect(() => {
-    const timer = setTimeout(() => setTranslate(true), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
+ 
   const onSubmit = ({ username, password }) => {
     setLoading(true);
     dispatch(adminSignIn({ username, password }, navigate));
   };
-
+ 
   return (
-    <div className="bg-[#04bd7d] min-h-screen w-full flex flex-col items-center justify-center px-4 py-10">
-      <a href="/" className="mb-4">
-        <button className="w-32 hover:scale-105 transition duration-150 rounded-lg text-white text-base py-2 bg-[#FF2400]">
-          Home
-        </button>
-      </a>
-      <div className="flex flex-col md:flex-row items-center justify-center gap-10 max-w-4xl w-full">
+    <div
+      className="flex items-center justify-center min-h-screen bg-cover bg-center relative"
+      style={{ backgroundImage: "url('/assets/bg-admin.avif')" }}
+    >
+      <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
+      <div className="relative flex w-3/4 max-w-7xl bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Left Panel */}
-        <div
-          className={`w-full md:w-1/2 h-72 flex items-center justify-center bg-white rounded-3xl shadow-2xl transform transition-transform duration-1000 ${
-            translate ? "translate-x-0 md:translate-x-12" : ""
-          }`}
-        >
-          <h1 className="text-[2.5rem] font-bold text-center text-gray-800">
-            Admin <br /> Login
-          </h1>
+        <div className="hidden md:flex md:w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/assets/bg-admin.avif')" }}>
+          {/* Empty for background image */}
         </div>
-
-        {/* Login Form */}
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className={`w-full md:w-1/2 bg-[#2c2f35] rounded-3xl shadow-2xl p-8 flex flex-col gap-6 transform transition-transform duration-1000 ${
-            translate ? "translate-x-0 md:-translate-x-12" : ""
-          }`}
-        >
-          <h2 className="text-white text-2xl font-semibold text-center">Welcome Back</h2>
-
-          {/* Username */}
-          <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-400">Username</label>
-            <Controller
-              name="username"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="text"
-                  placeholder="Enter your username"
-                  className={`w-full px-4 py-2 rounded-lg bg-[#515966] text-white outline-none placeholder:text-sm ${
-                    errors.username ? "border border-red-500" : "focus:ring-2 focus:ring-green-400"
-                  }`}
-                />
-              )}
-            />
-            {errors.username && (
-              <p className="text-red-400 text-xs mt-1">{errors.username.message}</p>
-            )}
-          </div>
-
-          {/* Password */}
-          <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-400">Password</label>
-            <Controller
-              name="password"
-              control={control}
-              render={({ field }) => (
-                <div className="flex items-center px-4 py-2 rounded-lg bg-[#515966]">
+ 
+        {/* Right Panel */}
+        <div className="w-full md:w-1/2 p-16">
+          <h2 className="text-4xl font-bold text-gray-800">Admin Login</h2>
+          <p className="mt-4 text-lg text-gray-600">Please login to your account</p>
+ 
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-8">
+            {/* Username */}
+            <div>
+              <label className="block text-base font-semibold text-gray-600">Username</label>
+              <Controller
+                name="username"
+                control={control}
+                render={({ field }) => (
                   <input
                     {...field}
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    className="flex-1 bg-transparent text-white outline-none placeholder:text-sm"
+                    type="text"
+                    placeholder="Enter your username"
+                    className={`w-full px-4 py-3 mt-2 text-gray-700 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+                      errors.username ? "border border-red-500" : ""
+                    }`}
                   />
-                  {showPassword ? (
-                    <VisibilityIcon
-                      onClick={() => setShowPassword(false)}
-                      className="cursor-pointer text-white ml-2"
-                    />
-                  ) : (
-                    <VisibilityOffIcon
-                      onClick={() => setShowPassword(true)}
-                      className="cursor-pointer text-white ml-2"
-                    />
-                  )}
-                </div>
-              )}
-            />
-            {errors.password && (
-              <p className="text-red-400 text-xs mt-1">{errors.password.message}</p>
-            )}
-          </div>
-
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full md:w-32 mx-auto hover:scale-105 transition duration-150 rounded-lg text-white text-base py-2 bg-[#04bd7d]"
-          >
-            Login
-          </button>
-
-          {/* Spinner */}
-          {loading && (
-            <div className="flex justify-center mt-4">
-              <Spinner
-                message="Logging In..."
-                height={30}
-                width={150}
-                color="#ffffff"
-                messageColor="#fff"
+                )}
               />
+              {errors.username && (
+                <p className="text-xs text-red-500 mt-1">{errors.username.message}</p>
+              )}
             </div>
-          )}
-        </form>
+ 
+            <div>
+              <label className="block text-base font-semibold text-gray-600">Password</label>
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <div className="relative">
+                    <input
+                      {...field}
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      className="w-full px-4 py-3 mt-2 text-gray-700 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    />
+                    <div
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <VisibilityIcon className="text-gray-500" />
+                      ) : (
+                        <VisibilityOffIcon className="text-gray-500" />
+                      )}
+                    </div>
+                  </div>
+                )}
+              />
+              {errors.password && (
+                <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
+              )}
+            </div>
+ 
+            <button
+              type="submit"
+              className="w-full px-4 py-3 mt-6 text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            >
+              Login
+            </button>
+ 
+            {loading && (
+              <div className="flex justify-center mt-4">
+                <Spinner
+                  message="Logging In..."
+                  height={30}
+                  width={150}
+                  color="#000000"
+                  messageColor="#000"
+                />
+              </div>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );
 };
-
+ 
 export default AdminLogin;
