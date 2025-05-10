@@ -134,6 +134,13 @@ const StudentLogin = () => {
               </div>
             )}
           </form>
+
+          <p className="mt-8 text-sm text-gray-600 text-center">
+            Don't have an account? 
+            <a href="/register/student-register" className="text-yellow-500 hover:underline">
+              Register here
+            </a>
+          </p>
         </div>
       </div>
     </div>
