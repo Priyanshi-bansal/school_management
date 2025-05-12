@@ -45,7 +45,7 @@ const FacultyLogin = () => {
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center relative"
-      style={{ backgroundImage: "url('/assets/bg-admin.avif')" }}
+      style={{ backgroundImage: "url('/asset/bg-admin.avif')" }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
       <div className="relative flex w-3/4 max-w-7xl bg-white rounded-lg shadow-lg overflow-hidden">

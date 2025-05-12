@@ -13,7 +13,7 @@ const Login = () => {
         {/* Left Panel */}
         <div
           className="hidden md:flex md:w-1/2 bg-cover bg-center"
-          style={{ backgroundImage: `url("/assets/bg-admin.avif")` }}
+          style={{ backgroundImage: `url("/asset/bg-admin.avif")` }}
         ></div>
  
         {/* Right Panel */}
