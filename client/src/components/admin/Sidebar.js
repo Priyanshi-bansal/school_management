@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import EngineeringIcon from "@mui/icons-material/Engineering";
-import AddIcon from "@mui/icons-material/Add";
-import BoyIcon from "@mui/icons-material/Boy";
-import DeleteIcon from "@mui/icons-material/Delete";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
+import {
+  Home,
+  Person,
+  Engineering,
+  Add,
+  PersonOutline,
+  Delete,
+  MenuBook,
+  School,
+  Groups,
+  AdminPanelSettings,
+  Notifications
+} from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
 
-const isNotActiveStyle =
-  "flex items-center px-5 gap-3 text-gray-500 hover:text-blue-600 transition-all duration-200 ease-in-out capitalize hover:bg-gray-100 py-2 rounded-lg";
-const isActiveStyle =
-  "flex items-center px-5 gap-3 text-blue-600 bg-blue-100 transition-all duration-200 ease-in-out capitalize py-2 rounded-lg";
-
 const Sidebar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -35,170 +37,140 @@ const Sidebar = () => {
     setUser(JSON.parse(localStorage.getItem("admin")));
   }, [navigate]);
 
+  const menuItems = [
+    { icon: <Home />, label: "Dashboard", path: "/admin/home" },
+    { icon: <Person />, label: "Profile", path: "/admin/profile" },
+    { 
+      icon: <Notifications />, 
+      label: "Create Notice", 
+      path: "/admin/createNotice" 
+    },
+    { 
+      header: "Admin Management",
+      items: [
+        { icon: <Add />, label: "Add Admin", path: "/admin/addadmin" },
+        { icon: <Delete />, label: "Delete Admin", path: "/admin/deleteadmin" }
+      ]
+    },
+    { 
+      header: "Department Management",
+      items: [
+        { icon: <Add />, label: "Add Department", path: "/admin/adddepartment" },
+        { icon: <Delete />, label: "Delete Department", path: "/admin/deletedepartment" }
+      ]
+    },
+    { 
+      header: "Faculty Management",
+      items: [
+        { icon: <Engineering />, label: "Our Faculty", path: "/admin/allfaculty" },
+        { icon: <Add />, label: "Add Faculty", path: "/admin/addfaculty" },
+        { icon: <Delete />, label: "Delete Faculty", path: "/admin/deletefaculty" }
+      ]
+    },
+    { 
+      header: "Student Management",
+      items: [
+        { icon: <Groups />, label: "Our Students", path: "/admin/allstudent" },
+        { icon: <Add />, label: "Add Students", path: "/admin/addstudent" },
+        { icon: <Delete />, label: "Delete Student", path: "/admin/deletestudent" }
+      ]
+    },
+    { 
+      header: "Subject Management",
+      items: [
+        { icon: <MenuBook />, label: "Subjects", path: "/admin/allsubject" },
+        { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+      ]
+    }
+  ];
+
   return (
-    <div className="flex-[0.2] bg-gray-50 h-full shadow-md p-4">
-      <div className="space-y-6 overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300 h-[calc(100vh-4rem)]">
-        {/* Dashboard Section */}
-        <NavLink
-          to="/admin/home"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
+    <>
+      {/* Mobile menu button */}
+      <div className="lg:hidden fixed bottom-4 right-4 z-50">
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition"
         >
-          <HomeIcon />
-          <h1 className="font-medium">Dashboard</h1>
-        </NavLink>
-
-        {/* Profile Section */}
-        <NavLink
-          to="/admin/profile"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <AssignmentIndIcon />
-          <h1 className="font-medium">Profile</h1>
-        </NavLink>
-
-        {/* Notice Section */}
-        <NavLink
-          to="/admin/createNotice"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <AddIcon />
-          <h1 className="font-medium">Create Notice</h1>
-        </NavLink>
-
-        {/* Admin Management */}
-        <NavLink
-          to="/admin/addadmin"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <AddIcon />
-          <h1 className="font-medium">Add Admin</h1>
-        </NavLink>
-        <NavLink
-          to="/admin/deleteadmin"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <DeleteIcon />
-          <h1 className="font-medium">Delete Admin</h1>
-        </NavLink>
-
-        {/* Department Management */}
-        <NavLink
-          to="/admin/adddepartment"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <AddIcon />
-          <h1 className="font-medium">Add Department</h1>
-        </NavLink>
-        <NavLink
-          to="/admin/deletedepartment"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <DeleteIcon />
-          <h1 className="font-medium">Delete Department</h1>
-        </NavLink>
-
-        {/* Faculty Management */}
-        <NavLink
-          to="/admin/allfaculty"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <EngineeringIcon />
-          <h1 className="font-medium">Our Faculty</h1>
-        </NavLink>
-        <NavLink
-          to="/admin/addfaculty"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <AddIcon />
-          <h1 className="font-medium">Add Faculty</h1>
-        </NavLink>
-        <NavLink
-          to="/admin/deletefaculty"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <DeleteIcon />
-          <h1 className="font-medium">Delete Faculty</h1>
-        </NavLink>
-
-        {/* Student Management */}
-        <NavLink
-          to="/admin/allstudent"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <BoyIcon />
-          <h1 className="font-medium">Our Students</h1>
-        </NavLink>
-        <NavLink
-          to="/admin/addstudent"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <AddIcon />
-          <h1 className="font-medium">Add Students</h1>
-        </NavLink>
-        <NavLink
-          to="/admin/deletestudent"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <DeleteIcon />
-          <h1 className="font-medium">Delete Student</h1>
-        </NavLink>
-
-        {/* Subject Management */}
-        <NavLink
-          to="/admin/allsubject"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <MenuBookIcon />
-          <h1 className="font-medium">Subjects</h1>
-        </NavLink>
-        <NavLink
-          to="/admin/addsubject"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <AddIcon />
-          <h1 className="font-medium">Add Subject</h1>
-        </NavLink>
-        <NavLink
-          to="/admin/deletesubject"
-          className={({ isActive }) =>
-            isActive ? isActiveStyle : isNotActiveStyle
-          }
-        >
-          <DeleteIcon />
-          <h1 className="font-medium">Delete Subject</h1>
-        </NavLink>
+          {mobileMenuOpen ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
       </div>
-    </div>
+
+      {/* Sidebar */}
+      <div className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300 ease-in-out`}>
+        <div className="h-full flex flex-col">
+          <div className="p-4 border-b border-gray-200">
+            <h1 className="text-xl font-bold text-blue-600">Admin Panel</h1>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto py-4 px-2 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50">
+            {menuItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {item.header ? (
+                  <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    {item.header}
+                  </div>
+                ) : (
+                  <NavLink
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `flex items-center px-4 py-3 rounded-lg transition-colors duration-200 ${
+                        isActive 
+                          ? 'bg-blue-100 text-blue-600 font-medium' 
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`
+                    }
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="mr-3">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </NavLink>
+                )}
+                
+                {item.items?.map((subItem, subIndex) => (
+                  <NavLink
+                    key={subIndex}
+                    to={subItem.path}
+                    className={({ isActive }) =>
+                      `flex items-center px-4 py-3 ml-6 rounded-lg transition-colors duration-200 ${
+                        isActive 
+                          ? 'bg-blue-100 text-blue-600 font-medium' 
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`
+                    }
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="mr-3">{subItem.icon}</span>
+                    <span>{subItem.label}</span>
+                  </NavLink>
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
+          
+          <div className="p-4 border-t border-gray-200">
+            <div className="flex items-center">
+              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                <PersonOutline />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-gray-700">{user?.result?.name}</p>
+                <p className="text-xs text-gray-500">Admin</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
