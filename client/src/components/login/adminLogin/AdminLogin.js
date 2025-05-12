@@ -44,6 +44,7 @@ const AdminLogin = () => {
  
   return (
     <div
+
     className="flex flex-col md:flex-row items-center justify-center min-h-screen bg-cover bg-center relative px-4 sm:px-6 lg:px-8"
     style={{ backgroundImage: "url('/asset/top.avif')" }}
   >

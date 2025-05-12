@@ -2,14 +2,18 @@ import React from "react";
 import Body from "./Body";
 
 import Header from "../../../Header";
+import Sidebar from "../../../Sidebar";
 
 const FirstTimePassword = () => {
   return (
-    <div className="bg-[#d6d9e0] h-full flex items-center justify-center p-4">
-      <div className="flex flex-col  bg-[#f4f6fa] h-5/6 w-[95%] rounded-2xl shadow-2xl space-y-6 ">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="flex flex-col h-screen">
         <Header />
-        <div className="flex flex-[0.95] w-full">
-          <Body />
+        <div className="flex flex-1 overflow-hidden">
+          <Sidebar />
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
+            <Body />
+          </div>
         </div>
       </div>
     </div>

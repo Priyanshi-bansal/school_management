@@ -1,12 +1,12 @@
 # STUDENT RESULT MANAGEMENT SYSTEM
 
-This repository contains the code for a Student Result Management System developed using the MERN (MongoDB, Express.js, React.js, Node.js) stack. The system allows administrators, faculty members, and students to perform various tasks related to managing student information, test scores, attendance, and more.
+This repository contains the code for a School Management System developed using the MERN (MongoDB, Express.js, React.js, Node.js) stack. The system allows administrators, faculty members, and students to perform various tasks related to managing student information, test scores, attendance, and more.
 
-![Image1](https://user-images.githubusercontent.com/88606641/236372609-32ce786a-3beb-4619-a777-2a038e17408f.png)
+<!-- ![Image1](https://user-images.githubusercontent.com/88606641/236372609-32ce786a-3beb-4619-a777-2a038e17408f.png)
 ![Screenshot (30)](https://user-images.githubusercontent.com/88606641/236372664-7d2af316-1d30-41e4-951a-7fd94923828f.png)
 ![Screenshot (31)](https://user-images.githubusercontent.com/88606641/236372729-e7fff02a-607b-4bb7-959b-b0fefc4b611c.png)
 ![Screenshot (32)](https://user-images.githubusercontent.com/88606641/236372769-d02b550f-7dbd-4dde-8489-cb731fea0a8e.png)
-![Screenshot (33)](https://user-images.githubusercontent.com/88606641/236373082-8afce15e-1de2-47ab-852e-8f24534095c3.png)
+![Screenshot (33)](https://user-images.githubusercontent.com/88606641/236373082-8afce15e-1de2-47ab-852e-8f24534095c3.png) -->
 
 # TechStack
 

@@ -3,37 +3,43 @@ import { Avatar } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import SchoolIcon from '@mui/icons-material/School';
+
 const Header = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   const logout = () => {
     dispatch({ type: "LOGOUT" });
     navigate("/login/facultylogin");
   };
+
   return (
-    <div className="flex-[0.05] flex justify-between items-center mx-5 my-2">
-      <div className="flex items-center ">
-        <img
-          src="https://www.freeiconspng.com/thumbs/results-icon-png/results-icon-png-7.png"
-          alt=""
-          className="h-7"
-        />
-        <h1 className="font-bold text-blue-600 text-sm m-2">SRMS</h1>
+    <div className="flex items-center justify-between p-4 bg-white shadow-sm border-b border-gray-200">
+      <div className="flex items-center space-x-2">
+        <SchoolIcon className="text-indigo-600" fontSize="large" />
+        <h1 className="text-xl font-bold text-indigo-800">Faculty Portal</h1>
       </div>
-      <h1 className="font-semibold text-black">Welcome</h1>
-      <div className="flex items-center space-x-3">
+      
+      <div className="flex items-center space-x-4">
+        <div className="text-right hidden md:block">
+          <p className="font-medium text-gray-800">{user.result.name}</p>
+          <p className="text-xs text-gray-500">Faculty Member</p>
+        </div>
         <Avatar
           src={user.result.avatar}
           alt={user.result.name.charAt(0)}
-          sx={{ width: 24, height: 24 }}
-          className="border-blue-600 border-2"
+          sx={{ width: 40, height: 40 }}
+          className="border-2 border-indigo-500"
         />
-        <h1>{user.result.name.split(" ")[0]}</h1>
-        <LogoutIcon
+        <button 
           onClick={logout}
-          className="cursor-pointer hover:scale-125 transition-all "
-        />
+          className="p-2 text-gray-500 hover:text-red-600 transition-colors"
+          title="Logout"
+        >
+          <LogoutIcon />
+        </button>
       </div>
     </div>
   );

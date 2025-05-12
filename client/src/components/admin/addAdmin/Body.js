@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from "react";
-import EngineeringIcon from "@mui/icons-material/Engineering";
+import { 
+  Engineering as AdminIcon,
+  Person,
+  Cake,
+  Email,
+  Phone,
+  School,
+  Image
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
 import { addAdmin } from "../../../redux/actions/adminActions";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import { Select, MenuItem, Button, Avatar, Box, Typography } from "@mui/material";
 import Spinner from "../../../utils/Spinner";
-import * as classes from "../../../utils/styles";
 import { ADD_ADMIN, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const departments = useSelector((state) => state.admin.allDepartment);
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const [value, setValue] = useState({
@@ -22,12 +29,15 @@ const Body = () => {
     department: "",
     contactNumber: "",
     avatar: "",
-    joiningYear: Date().split(" ")[3],
+    joiningYear: new Date().getFullYear().toString(),
+    password: "",
+    username: "",
   });
+
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
-      setValue({ ...value, email: "" });
+      setValue(prev => ({ ...prev, email: "" }));
     }
   }, [store.errors]);
 
@@ -42,17 +52,7 @@ const Body = () => {
     if (store.errors || store.admin.adminAdded) {
       setLoading(false);
       if (store.admin.adminAdded) {
-        setValue({
-          name: "",
-          dob: "",
-          email: "",
-          department: "",
-          contactNumber: "",
-          avatar: "",
-          joiningYear: Date().split(" ")[3],
-          password: "",
-          username: "",
-        });
+        resetForm();
         dispatch({ type: SET_ERRORS, payload: {} });
         dispatch({ type: ADD_ADMIN, payload: false });
       }
@@ -65,74 +65,111 @@ const Body = () => {
     dispatch({ type: SET_ERRORS, payload: {} });
   }, []);
 
-  return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
-          <EngineeringIcon />
-          <h1>Add Admin</h1>
-        </div>
-        <div className=" mr-10 bg-white flex flex-col rounded-xl ">
-          <form className={classes.adminForm0} onSubmit={handleSubmit}>
-            <div className={classes.adminForm1}>
-              <div className={classes.adminForm2l}>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Name :</h1>
+  const resetForm = () => {
+    setValue({
+      name: "",
+      dob: "",
+      email: "",
+      department: "",
+      contactNumber: "",
+      avatar: "",
+      joiningYear: new Date().getFullYear().toString(),
+      password: "",
+      username: "",
+    });
+    setError({});
+  };
 
+  return (
+    <div className="flex-1 p-6 bg-gray-50">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center mb-8">
+          <AdminIcon className="text-indigo-600 mr-3" fontSize="large" />
+          <h1 className="text-2xl font-bold text-gray-800">Add New Admin</h1>
+        </div>
+
+        {/* Form Card */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+          <form onSubmit={handleSubmit} className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left Column */}
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Person className="text-gray-500 mr-2" fontSize="small" />
+                    Full Name
+                  </label>
                   <input
-                    placeholder="Full Name"
+                    placeholder="Enter full name"
                     required
-                    className={classes.adminInput}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.name}
-                    onChange={(e) =>
-                      setValue({ ...value, name: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, name: e.target.value })}
                   />
                 </div>
 
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>DOB :</h1>
-
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Cake className="text-gray-500 mr-2" fontSize="small" />
+                    Date of Birth
+                  </label>
                   <input
-                    placeholder="DD/MM/YYYY"
-                    className={classes.adminInput}
+                    placeholder="Select date"
                     required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="date"
                     value={value.dob}
-                    onChange={(e) =>
-                      setValue({ ...value, dob: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, dob: e.target.value })}
                   />
                 </div>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Email :</h1>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Email className="text-gray-500 mr-2" fontSize="small" />
+                    Email Address
+                  </label>
                   <input
-                    placeholder="Email"
+                    placeholder="Enter email"
                     required
-                    className={classes.adminInput}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="email"
                     value={value.email}
-                    onChange={(e) =>
-                      setValue({ ...value, email: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, email: e.target.value })}
                   />
+                  {error.emailError && (
+                    <p className="text-red-500 text-xs mt-1">{error.emailError}</p>
+                  )}
                 </div>
               </div>
-              <div className={classes.adminForm2r}>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Department :</h1>
+
+              {/* Right Column */}
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <School className="text-gray-500 mr-2" fontSize="small" />
+                    Department
+                  </label>
                   <Select
                     required
                     displayEmpty
-                    sx={{ height: 36 }}
-                    inputProps={{ "aria-label": "Without label" }}
+                    className="w-full"
                     value={value.department}
-                    onChange={(e) =>
-                      setValue({ ...value, department: e.target.value })
-                    }>
-                    <MenuItem value="">None</MenuItem>
+                    onChange={(e) => setValue({ ...value, department: e.target.value })}
+                    sx={{
+                      borderRadius: '8px',
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#d1d5db',
+                      },
+                      '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#6366f1',
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Select department</em>
+                    </MenuItem>
                     {departments?.map((dp, idx) => (
                       <MenuItem key={idx} value={dp.department}>
                         {dp.department}
@@ -140,73 +177,90 @@ const Body = () => {
                     ))}
                   </Select>
                 </div>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Contact Number :</h1>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Phone className="text-gray-500 mr-2" fontSize="small" />
+                    Contact Number
+                  </label>
                   <input
+                    placeholder="Enter phone number"
                     required
-                    placeholder="Contact Number"
-                    className={classes.adminInput}
-                    type="number"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    type="tel"
                     value={value.contactNumber}
-                    onChange={(e) =>
-                      setValue({ ...value, contactNumber: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, contactNumber: e.target.value })}
                   />
                 </div>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Avatar :</h1>
 
-                  <FileBase
-                    type="file"
-                    multiple={false}
-                    onDone={({ base64 }) =>
-                      setValue({ ...value, avatar: base64 })
-                    }
-                  />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Image className="text-gray-500 mr-2" fontSize="small" />
+                    Profile Picture
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-1">
+                      <FileBase
+                        type="file"
+                        multiple={false}
+                        onDone={({ base64 }) => setValue({ ...value, avatar: base64 })}
+                        className="block w-full text-sm text-gray-500
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-lg file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-indigo-50 file:text-indigo-700
+                          hover:file:bg-indigo-100"
+                      />
+                    </div>
+                    {value.avatar && (
+                      <Avatar
+                        src={value.avatar}
+                        sx={{ width: 48, height: 48 }}
+                        className="border-2 border-white shadow-sm"
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className={classes.adminFormButton}>
-              <button className={classes.adminFormSubmitButton} type="submit">
-                Submit
-              </button>
-              <button
-                onClick={() => {
-                  setValue({
-                    name: "",
-                    dob: "",
-                    email: "",
-                    department: "",
-                    contactNumber: "",
-                    avatar: "",
-                    joiningYear: Date().split(" ")[3],
-                    password: "",
-                    username: "",
-                  });
-                  setError({});
-                }}
-                className={classes.adminFormClearButton}
-                type="button">
-                Clear
-              </button>
+
+            {/* Form Actions */}
+            <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
+              <Button
+                variant="outlined"
+                onClick={resetForm}
+                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                Clear Form
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Spinner
+                    message="Creating Admin..."
+                    height={24}
+                    width={140}
+                    color="#ffffff"
+                    messageColor="#ffffff"
+                  />
+                ) : (
+                  "Create Admin"
+                )}
+              </Button>
             </div>
-            <div className={classes.loadingAndError}>
-              {loading && (
-                <Spinner
-                  message="Adding Admin"
-                  height={30}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
-              )}
-              {(error.emailError || error.backendError) && (
-                <p className="text-red-500">
-                  {error.emailError || error.backendError}
-                </p>
-              )}
-            </div>
+
+            {/* Error Display */}
+            {error.backendError && (
+              <Box className="mt-4 p-3 bg-red-50 rounded-lg">
+                <Typography className="text-red-600 text-sm">
+                  {error.backendError}
+                </Typography>
+              </Box>
+            )}
           </form>
         </div>
       </div>
