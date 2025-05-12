@@ -45,12 +45,12 @@ const FacultyLogin = () => {
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center relative"
-      style={{ backgroundImage: "url('/asset/bg-admin.avif')" }}
+      style={{ backgroundImage: "url('/asset/top.avif')" }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
       <div className="relative flex w-3/4 max-w-7xl bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Left Panel */}
-        <div className="hidden md:flex md:w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/asset/bg-admin.avif')" }}>
+        <div className="hidden md:flex md:w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/asset/top.avif')" }}>
           {/* Empty for background image */}
         </div>
  
@@ -131,6 +131,13 @@ const FacultyLogin = () => {
                 />
               </div>
             )}
+
+            <p className="mt-8 text-sm text-gray-600 text-center">
+              Don't have an account? 
+              <a href="/register/faculty-register" className="text-yellow-500 hover:underline">
+                Register here
+              </a>
+            </p>
           </form>
         </div>
       </div>

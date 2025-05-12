@@ -1,47 +1,78 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  const handleLoginRedirect = () => {
+    navigate("/admin-login");
+  };
+
   return (
     <div
-      className="min-h-screen w-full flex justify-center items-center p-4"
-      style={{
-        backgroundImage: `url("https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }}
+      className="flex items-center justify-center min-h-screen bg-cover bg-center relative"
+      style={{ backgroundImage: "url('/assets/bg-admin.avif')" }}
     >
-      <div className="w-full max-w-7xl bg-black bg-opacity-50 p-8 rounded-xl shadow-2xl backdrop-blur-lg">
-        <h1 className="text-white text-2xl sm:text-3xl md:text-4xl text-center font-bold mb-10">
-          School Management system
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Card Component */}
-          {[
-            { title: "Admin", color: "bg-[#E91E63]", register: "/register/admin-register", login: "/login/adminlogin" },
-            { title: "Faculty", color: "bg-[#5a51d6]", register: "/register/faculty-register", login: "/login/facultylogin" },
-            { title: "Student", color: "bg-[#d65158]", register: "/register/student-register", login: "/login/studentlogin" }
-          ].map(({ title, color, register, login }) => (
-            <div
-              key={title}
-              className={`h-96 flex flex-col justify-center items-center text-white p-6 rounded-xl shadow-xl ${color} bg-opacity-70 backdrop-blur-md transition-transform transform hover:scale-105 hover:shadow-2xl`}
-            >
-              <h2 className="text-3xl font-extrabold mb-6">{title}</h2>
-              <Link
-                to={register}
-                className="bg-blue-500 hover:bg-blue-600 transition-colors duration-200 w-32 h-10 flex items-center justify-center rounded-lg mb-4"
-              >
-                Register
-              </Link>
-              <Link
-                to={login}
-                className="bg-blue-500 hover:bg-blue-600 transition-colors duration-200 w-32 h-10 flex items-center justify-center rounded-lg"
-              >
-                Login
-              </Link>
+      <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
+      <div className="relative flex w-3/4 max-w-7xl bg-white rounded-lg shadow-lg overflow-hidden">
+        {/* Left Panel */}
+        <div
+          className="hidden md:flex md:w-1/2 bg-cover bg-center"
+          style={{ backgroundImage: "url('/asset/bg-admin.avif')" }}
+        >
+          {/* Empty for background image */}
+        </div>
+
+        {/* Right Panel */}
+        <div className="w-full md:w-1/2 p-16">
+          <h2 className="text-4xl font-bold text-gray-800">Register</h2>
+          <p className="mt-4 text-lg text-gray-600">Please create your account</p>
+
+          <form className="mt-10 space-y-6">
+            <div>
+              <label className="block text-base font-semibold text-gray-600">Full Name</label>
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
             </div>
-          ))}
+
+            <div>
+              <label className="block text-base font-semibold text-gray-600">Email</label>
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
+
+            <div>
+              <label className="block text-base font-semibold text-gray-600">Password</label>
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full px-4 py-2 mt-4 text-white bg-yellow-500 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            >
+              Register
+            </button>
+
+            <p className="mt-4 text-sm text-gray-600">
+              Already have an account? 
+              <span
+                onClick={handleLoginRedirect}
+                className="text-yellow-500 hover:underline cursor-pointer"
+              >
+                Login here
+              </span>
+            </p>
+          </form>
         </div>
       </div>
     </div>
