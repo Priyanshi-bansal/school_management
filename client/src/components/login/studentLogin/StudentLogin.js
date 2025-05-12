@@ -52,9 +52,14 @@ const StudentLogin = () => {
       <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
       <div className="relative flex w-3/4 max-w-7xl bg-white rounded-lg shadow-lg overflow-hidden">
         {/* Left Panel */}
-        <div className="hidden md:flex md:w-1/2 bg-cover bg-center" style={{ backgroundImage: "url('/asset/bg-admin.avif')" }}>
-          {/* Empty for background image */}
-        </div>
+        <div className="hidden md:block md:w-1/2 bg-cover bg-center">
+        <img
+          src="/asset/top.avif"
+          alt="Admin background"
+          className="h-full w-full object-fill"
+          style={{ backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}
+        />
+      </div>
  
         {/* Right Panel */}
         <div className="w-full md:w-1/2 p-16">
