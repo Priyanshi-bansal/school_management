@@ -51,11 +51,12 @@ const AdminLogin = () => {
   
     <div className="relative w-full max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row">
       {/* Left Panel */}
-      <div className="hidden md:block md:w-1/2">
+      <div className="hidden md:block md:w-1/2 bg-cover bg-center">
         <img
           src="/asset/top.avif"
           alt="Admin background"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-fill"
+          style={{ backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}
         />
       </div>
   
