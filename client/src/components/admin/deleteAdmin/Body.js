@@ -1,10 +1,36 @@
 import React, { useEffect, useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { 
+  Delete as DeleteIcon,
+  Search,
+  Person,
+  Email,
+  Badge,
+  FilterList,
+  ClearAll
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { getAdmin, deleteAdmin } from "../../../redux/actions/adminActions";
-import { MenuItem, Select } from "@mui/material";
-import Spinner from "../../../utils/Spinner";
-import * as classes from "../../../utils/styles";
+import { getAdmin, deleteAdmin, getAllAdmin } from "../../../redux/actions/adminActions";
+import { 
+  Select, 
+  MenuItem, 
+  Button, 
+  Box, 
+  Typography,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Chip,
+  TextField,
+  IconButton
+} from "@mui/material";
 import { DELETE_ADMIN, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
@@ -13,12 +39,16 @@ const Body = () => {
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
-  const [checkedValue, setCheckedValue] = useState([]);
-
-  const [value, setValue] = useState({
-    department: "",
+  const [selectedAdmins, setSelectedAdmins] = useState([]);
+  const [filter, setFilter] = useState({
+    department: "all",
+    searchQuery: ""
   });
-  const [search, setSearch] = useState(false);
+
+  // Get all admins by default on component mount
+  useEffect(() => {
+    dispatch(getAllAdmin());
+  }, []);
 
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
@@ -27,169 +57,262 @@ const Body = () => {
     }
   }, [store.errors]);
 
-  const handleInputChange = (e) => {
-    const tempCheck = checkedValue;
-    let index;
-    if (e.target.checked) {
-      tempCheck.push(e.target.value);
-    } else {
-      index = tempCheck.indexOf(e.target.value);
-      tempCheck.splice(index, 1);
+  const handleCheckboxChange = (adminId) => {
+    setSelectedAdmins(prev => 
+      prev.includes(adminId) 
+        ? prev.filter(id => id !== adminId) 
+        : [...prev, adminId]
+    );
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilter(prev => ({ ...prev, [name]: value }));
+    
+    if (name === "department") {
+      setLoading(true);
+      if (value === "all") {
+        dispatch(getAllAdmin());
+      } else {
+        dispatch(getAdmin({ department: value }));
+      }
     }
-    setCheckedValue(tempCheck);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSearch(true);
+  const handleSearch = () => {
     setLoading(true);
-    setError({});
-    dispatch(getAdmin(value));
+    if (filter.department === "all") {
+      dispatch(getAllAdmin());
+    } else {
+      dispatch(getAdmin({ department: filter.department }));
+    }
   };
-  const students = useSelector((state) => state.admin.students.result);
 
-  const dltAdmin = (e) => {
-    setError({});
+  const handleClearFilters = () => {
+    setFilter({
+      department: "all",
+      searchQuery: ""
+    });
+    dispatch(getAllAdmin());
+  };
+
+  const admins = useSelector((state) => 
+    filter.department === "all" 
+      ? state.admin.allAdmin 
+      : state.admin.students.result
+  );
+
+  const filteredAdmins = admins?.filter(admin => 
+    admin.name.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+    admin.email.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+    admin.username.toLowerCase().includes(filter.searchQuery.toLowerCase())
+  );
+
+  const handleDelete = () => {
+    if (selectedAdmins.length === 0) return;
+    
     setLoading(true);
-    dispatch(deleteAdmin(checkedValue));
+    setError({});
+    dispatch(deleteAdmin(selectedAdmins));
   };
 
   useEffect(() => {
     if (store.admin.adminDeleted) {
-      setValue({ department: "", year: "" });
+      setSelectedAdmins([]);
       setLoading(false);
-      setSearch(false);
       dispatch({ type: DELETE_ADMIN, payload: false });
+      // Refresh the list after deletion
+      if (filter.department === "all") {
+        dispatch(getAllAdmin());
+      } else {
+        dispatch(getAdmin({ department: filter.department }));
+      }
     }
   }, [store.admin.adminDeleted]);
 
   useEffect(() => {
-    if (students?.length !== 0) setLoading(false);
-  }, [students]);
+    if (admins !== undefined) {
+      setLoading(false);
+    }
+  }, [admins]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
   }, []);
 
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
-          <DeleteIcon />
-          <h1>All Students</h1>
-        </div>
-        <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
-          <form
-            className="flex flex-col space-y-2 col-span-1"
-            onSubmit={handleSubmit}>
-            <label htmlFor="department">Department</label>
-            <Select
-              required
-              displayEmpty
-              sx={{ height: 36, width: 224 }}
-              inputProps={{ "aria-label": "Without label" }}
-              value={value.department}
-              onChange={(e) =>
-                setValue({ ...value, department: e.target.value })
-              }>
-              <MenuItem value="">None</MenuItem>
-              {departments?.map((dp, idx) => (
-                <MenuItem key={idx} value={dp.department}>
-                  {dp.department}
-                </MenuItem>
-              ))}
-            </Select>
+    <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
+      <Box sx={{ mb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Person color="primary" sx={{ mr: 1 }} />
+          <Typography variant="h5" color="textPrimary">
+            Admin Management
+          </Typography>
+          <Chip 
+            label={`Total Admins: ${admins?.length || 0}`} 
+            color="primary" 
+            variant="outlined"
+            sx={{ ml: 2 }}
+          />
+        </Box>
 
-            <button
-              className={`${classes.adminFormSubmitButton} w-56`}
-              type="submit">
-              Search
-            </button>
-          </form>
-          <div className="col-span-3 mr-6">
-            <div className={classes.loadingAndError}>
-              {loading && (
-                <Spinner
-                  message="Loading"
-                  height={50}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
-              )}
-              {(error.noAdminError || error.backendError) && (
-                <p className="text-red-500 text-2xl font-bold">
-                  {error.noAdminError || error.backendError}
-                </p>
-              )}
-            </div>
-            {search &&
-              !loading &&
-              Object.keys(error).length === 0 &&
-              students?.length !== 0 && (
-                <div className={`${classes.adminData} h-[20rem]`}>
-                  <div className="grid grid-cols-8">
-                    <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
-                      Select
-                    </h1>
-                    <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
-                      Sr no.
-                    </h1>
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Name
-                    </h1>
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Username
-                    </h1>
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexWrap: 'wrap', 
+            gap: 2, 
+            mb: 3,
+            alignItems: 'center'
+          }}>
+            <FormControl sx={{ minWidth: 200 }}>
+              <InputLabel>Department</InputLabel>
+              <Select
+                name="department"
+                value={filter.department}
+                onChange={handleFilterChange}
+                label="Department"
+              >
+                <MenuItem value="all">All Departments</MenuItem>
+                {departments?.map((dp, idx) => (
+                  <MenuItem key={idx} value={dp.department}>
+                    {dp.department}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Email
-                    </h1>
-                  </div>
-                  {students?.map((adm, idx) => (
-                    <div
-                      key={idx}
-                      className={`${classes.adminDataBody} grid-cols-8`}>
-                      <input
-                        onChange={handleInputChange}
-                        value={adm._id}
-                        className="col-span-1 border-2 w-16 h-4 mt-3 px-2 "
-                        type="checkbox"
-                      />
-                      <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
-                        {idx + 1}
-                      </h1>
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {adm.name}
-                      </h1>
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {adm.username}
-                      </h1>
+            <TextField
+              name="searchQuery"
+              value={filter.searchQuery}
+              onChange={handleFilterChange}
+              label="Search Admins"
+              variant="outlined"
+              size="small"
+              sx={{ flexGrow: 1 }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearch}>
+                    <Search />
+                  </IconButton>
+                )
+              }}
+            />
 
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {adm.email}
-                      </h1>
-                    </div>
-                  ))}
-                </div>
-              )}
-            {search && Object.keys(error).length === 0 && (
-              <div className="space-x-3 flex items-center justify-center mt-5">
-                <button
-                  onClick={dltAdmin}
-                  className={`${classes.adminFormSubmitButton} bg-blue-500`}>
-                  Delete
-                </button>
-              </div>
-            )}{" "}
-          </div>
-        </div>
-      </div>
-    </div>
+            <Button
+              variant="outlined"
+              startIcon={<ClearAll />}
+              onClick={handleClearFilters}
+            >
+              Clear Filters
+            </Button>
+          </Box>
+
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          <TableContainer component={Paper} sx={{ mb: 3 }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={
+                        selectedAdmins.length > 0 && 
+                        selectedAdmins.length < (filteredAdmins?.length || 0)
+                      }
+                      checked={
+                        (filteredAdmins?.length || 0) > 0 && 
+                        selectedAdmins.length === (filteredAdmins?.length || 0)
+                      }
+                      onChange={() => {
+                        if (selectedAdmins.length === (filteredAdmins?.length || 0)) {
+                          setSelectedAdmins([]);
+                        } else {
+                          setSelectedAdmins(filteredAdmins?.map(admin => admin._id) || []);
+                        }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>#</TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Person sx={{ mr: 1 }} /> Name
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Badge sx={{ mr: 1 }} /> Username
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Email sx={{ mr: 1 }} /> Email
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <FilterList sx={{ mr: 1 }} /> Department
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredAdmins?.length > 0 ? (
+                  filteredAdmins.map((admin, idx) => (
+                    <TableRow key={admin._id} hover>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedAdmins.includes(admin._id)}
+                          onChange={() => handleCheckboxChange(admin._id)}
+                        />
+                      </TableCell>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{admin.name}</TableCell>
+                      <TableCell>{admin.username}</TableCell>
+                      <TableCell>{admin.email}</TableCell>
+                      <TableCell>{admin.department}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} sx={{ textAlign: 'center', py: 4 }}>
+                      {loading ? '' : 'No admins found matching your criteria'}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {selectedAdmins.length > 0 && (
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              p: 1,
+              backgroundColor: 'action.selected',
+              borderRadius: 1
+            }}>
+              <Typography>
+                {selectedAdmins.length} admin(s) selected
+              </Typography>
+              <Button
+                variant="contained"
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+                disabled={loading}
+              >
+                Delete Selected
+              </Button>
+            </Box>
+          )}
+        </Paper>
+      </Box>
+    </Box>
   );
 };
 

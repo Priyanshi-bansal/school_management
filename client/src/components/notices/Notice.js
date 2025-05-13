@@ -7,11 +7,6 @@ const Notice = ({ idx, notice, notFor }) => {
         ⚫
         <h1 className="font-bold ml-3 overflow-hidden text-ellipsis w-[15rem]">
           {notice.topic}
-          {notice.topic}
-          {notice.topic}
-          {notice.topic}
-          {notice.topic}
-          {notice.topic}
         </h1>
         <p className="text-ellipsis w-[25rem] overflow-hidden">
           {notice.content}

@@ -1,18 +1,37 @@
-import React, { useEffect, useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
+import React, { useEffect, useState, useRef } from "react";
+import { 
+  Add as AddIcon,
+  Book,
+  Code,
+  CalendarToday,
+  Class,
+  Clear,
+  School
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { addSubject } from "../../../redux/actions/adminActions";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import { 
+  Select, 
+  MenuItem, 
+  Button, 
+  TextField, 
+  Box, 
+  Typography,
+  FormControl,
+  InputLabel,
+  Divider
+} from "@mui/material";
 import Spinner from "../../../utils/Spinner";
 import { ADD_SUBJECT, SET_ERRORS } from "../../../redux/actionTypes";
-import * as classes from "../../../utils/styles";
+
 const Body = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const departments = useSelector((state) => state.admin.allDepartment);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
+  const errorRef = useRef();
+
   const [value, setValue] = useState({
     subjectName: "",
     subjectCode: "",
@@ -24,13 +43,7 @@ const Body = () => {
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
-      setValue({
-        subjectName: "",
-        subjectCode: "",
-        year: "",
-        totalLectures: "",
-        department: "",
-      });
+      errorRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [store.errors]);
 
@@ -41,23 +54,25 @@ const Body = () => {
     dispatch(addSubject(value));
   };
 
+  const resetForm = () => {
+    setValue({
+      subjectName: "",
+      subjectCode: "",
+      year: "",
+      totalLectures: "",
+      department: "",
+    });
+    setError({});
+  };
+
   useEffect(() => {
     if (store.errors || store.admin.subjectAdded) {
       setLoading(false);
       if (store.admin.subjectAdded) {
-        setValue({
-          subjectName: "",
-          subjectCode: "",
-          year: "",
-          totalLectures: "",
-          department: "",
-        });
-
+        resetForm();
         dispatch({ type: SET_ERRORS, payload: {} });
         dispatch({ type: ADD_SUBJECT, payload: false });
       }
-    } else {
-      setLoading(true);
     }
   }, [store.errors, store.admin.subjectAdded]);
 
@@ -66,135 +81,175 @@ const Body = () => {
   }, []);
 
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
-          <AddIcon />
-          <h1>Add Subject</h1>
+    <div className="flex-1 p-6 bg-gray-50">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center mb-8">
+          <AddIcon className="text-indigo-600 mr-3" fontSize="large" />
+          <h1 className="text-2xl font-bold text-gray-800">Add New Subject</h1>
         </div>
-        <div className=" mr-10 bg-white flex flex-col rounded-xl ">
-          <form className={classes.adminForm0} onSubmit={handleSubmit}>
-            <div className={classes.adminForm1}>
-              <div className={classes.adminForm2l}>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Subject Name :</h1>
 
+        {/* Form Card */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+          <form onSubmit={handleSubmit} className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left Column - Basic Subject Info */}
+              <div className="space-y-5">
+                <Typography variant="h6" className="text-gray-700 mb-4 flex items-center">
+                  <Book className="text-indigo-600 mr-2" />
+                  Subject Details
+                </Typography>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Book className="text-gray-500 mr-2" fontSize="small" />
+                    Subject Name
+                  </label>
                   <input
-                    placeholder="Subject Name"
+                    placeholder="Enter subject name"
                     required
-                    className={classes.adminInput}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.subjectName}
-                    onChange={(e) =>
-                      setValue({ ...value, subjectName: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, subjectName: e.target.value })}
                   />
                 </div>
 
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Subject Code :</h1>
-
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Code className="text-gray-500 mr-2" fontSize="small" />
+                    Subject Code
+                  </label>
                   <input
+                    placeholder="Enter subject code"
                     required
-                    placeholder="Subject Code"
-                    className={classes.adminInput}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.subjectCode}
-                    onChange={(e) =>
-                      setValue({ ...value, subjectCode: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, subjectCode: e.target.value })}
                   />
-                </div>
-
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Year :</h1>
-                  <Select
-                    required
-                    displayEmpty
-                    sx={{ height: 36 }}
-                    inputProps={{ "aria-label": "Without label" }}
-                    value={value.year}
-                    onChange={(e) =>
-                      setValue({ ...value, year: e.target.value })
-                    }>
-                    <MenuItem value="">None</MenuItem>
-                    <MenuItem value="1">1</MenuItem>
-                    <MenuItem value="2">2</MenuItem>
-                    <MenuItem value="3">3</MenuItem>
-                    <MenuItem value="4">4</MenuItem>
-                  </Select>
                 </div>
               </div>
-              <div className={classes.adminForm2r}>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Total Lectures :</h1>
 
-                  <input
-                    required
-                    placeholder="Total Lectures"
-                    className={classes.adminInput}
-                    type="number"
-                    value={value.totalLectures}
-                    onChange={(e) =>
-                      setValue({ ...value, totalLectures: e.target.value })
-                    }
-                  />
+              {/* Right Column - Academic Info */}
+              <div className="space-y-5">
+                <Typography variant="h6" className="text-gray-700 mb-4 flex items-center">
+                  <School className="text-indigo-600 mr-2" />
+                  Academic Information
+                </Typography>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                      <CalendarToday className="text-gray-500 mr-2" fontSize="small" />
+                      Year
+                    </label>
+                    <FormControl fullWidth>
+                      <Select
+                        required
+                        value={value.year}
+                        onChange={(e) => setValue({ ...value, year: e.target.value })}
+                        sx={{
+                          borderRadius: '8px',
+                          height: '42px',
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#d1d5db',
+                          },
+                        }}
+                      >
+                        <MenuItem value="">Select year</MenuItem>
+                        <MenuItem value="1">1st Year</MenuItem>
+                        <MenuItem value="2">2nd Year</MenuItem>
+                        <MenuItem value="3">3rd Year</MenuItem>
+                        <MenuItem value="4">4th Year</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Total Lectures
+                    </label>
+                    <input
+                      placeholder="Enter total lectures"
+                      required
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                      type="number"
+                      value={value.totalLectures}
+                      onChange={(e) => setValue({ ...value, totalLectures: e.target.value })}
+                    />
+                  </div>
                 </div>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Department :</h1>
-                  <Select
-                    required
-                    displayEmpty
-                    sx={{ height: 36 }}
-                    inputProps={{ "aria-label": "Without label" }}
-                    value={value.department}
-                    onChange={(e) =>
-                      setValue({ ...value, department: e.target.value })
-                    }>
-                    <MenuItem value="">None</MenuItem>
-                    {departments?.map((dp, idx) => (
-                      <MenuItem key={idx} value={dp.department}>
-                        {dp.department}
-                      </MenuItem>
-                    ))}
-                  </Select>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Class className="text-gray-500 mr-2" fontSize="small" />
+                    Department
+                  </label>
+                  <FormControl fullWidth>
+                    <Select
+                      required
+                      value={value.department}
+                      onChange={(e) => setValue({ ...value, department: e.target.value })}
+                      sx={{
+                        borderRadius: '8px',
+                        height: '42px',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#d1d5db',
+                        },
+                      }}
+                    >
+                      <MenuItem value="">Select department</MenuItem>
+                      {departments?.map((dp, idx) => (
+                        <MenuItem key={idx} value={dp.department}>
+                          {dp.department}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </div>
               </div>
             </div>
-            <div className={classes.adminFormButton}>
-              <button className={classes.adminFormSubmitButton} type="submit">
-                Submit
-              </button>
-              <button
-                onClick={() => {
-                  setValue({
-                    subjectName: "",
-                    subjectCode: "",
-                    year: "",
-                    totalLectures: "",
-                    department: "",
-                  });
-                  setError({});
-                }}
-                className={classes.adminFormClearButton}
-                type="button">
-                Clear
-              </button>
+
+            {/* Form Actions */}
+            <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
+              <Button
+                variant="outlined"
+                startIcon={<Clear />}
+                onClick={resetForm}
+                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                Clear Form
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                startIcon={<AddIcon />}
+                className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Spinner
+                    message="Adding Subject..."
+                    height={24}
+                    width={120}
+                    color="#ffffff"
+                    messageColor="#ffffff"
+                  />
+                ) : (
+                  "Add Subject"
+                )}
+              </Button>
             </div>
-            <div className={classes.loadingAndError}>
-              {loading && (
-                <Spinner
-                  message="Adding Subject"
-                  height={30}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
-              )}
+
+            {/* Error Display */}
+            <div ref={errorRef}>
               {(error.subjectError || error.backendError) && (
-                <p className="text-red-500">
-                  {error.subjectError || error.backendError}
-                </p>
+                <Box className="mt-4 p-3 bg-red-50 rounded-lg">
+                  <Typography className="text-red-600 text-sm">
+                    {error.subjectError || error.backendError}
+                  </Typography>
+                </Box>
               )}
             </div>
           </form>

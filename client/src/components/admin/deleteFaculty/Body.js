@@ -1,10 +1,38 @@
 import React, { useEffect, useState } from "react";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { 
+  Engineering as EngineeringIcon,
+  Delete as DeleteIcon,
+  Search,
+  ClearAll
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFaculty, getFaculty } from "../../../redux/actions/adminActions";
-import { MenuItem, Select } from "@mui/material";
-import Spinner from "../../../utils/Spinner";
-import * as classes from "../../../utils/styles";
+import { 
+  deleteFaculty, 
+  getFaculty, 
+  getAllFaculty 
+} from "../../../redux/actions/adminActions";
+import { 
+  Select, 
+  MenuItem, 
+  Button, 
+  Box, 
+  Typography,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Chip,
+  TextField,
+  IconButton,
+  Alert
+} from "@mui/material";
 import { DELETE_FACULTY, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
@@ -13,183 +41,277 @@ const Body = () => {
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
-  const [checkedValue, setCheckedValue] = useState([]);
-
-  const [value, setValue] = useState({
-    department: "",
+  const [selectedFaculty, setSelectedFaculty] = useState([]);
+  const [filter, setFilter] = useState({
+    department: "all",
+    searchQuery: ""
   });
-  const [search, setSearch] = useState(false);
+
+  // Get all faculty by default on component mount
+  useEffect(() => {
+    dispatch(getAllFaculty());
+  }, []);
 
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
       setLoading(false);
+    } else {
+      setError({});
     }
   }, [store.errors]);
 
-  const handleInputChange = (e) => {
-    const tempCheck = checkedValue;
-    let index;
-    if (e.target.checked) {
-      tempCheck.push(e.target.value);
-    } else {
-      index = tempCheck.indexOf(e.target.value);
-      tempCheck.splice(index, 1);
+  const handleCheckboxChange = (facultyId) => {
+    setSelectedFaculty(prev => 
+      prev.includes(facultyId) 
+        ? prev.filter(id => id !== facultyId) 
+        : [...prev, facultyId]
+    );
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilter(prev => ({ ...prev, [name]: value }));
+    
+    if (name === "department") {
+      setLoading(true);
+      if (value === "all") {
+        dispatch(getAllFaculty());
+      } else {
+        dispatch(getFaculty({ department: value }));
+      }
     }
-    setCheckedValue(tempCheck);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSearch(true);
+  const handleSearch = () => {
     setLoading(true);
-    setError({});
-    dispatch(getFaculty(value));
+    if (filter.department === "all") {
+      dispatch(getAllFaculty());
+    } else {
+      dispatch(getFaculty({ department: filter.department }));
+    }
   };
-  const faculties = useSelector((state) => state.admin.faculties.result);
 
-  const dltFaculty = (e) => {
+  const handleClearFilters = () => {
+    setFilter({
+      department: "all",
+      searchQuery: ""
+    });
     setError({});
-    setLoading(true);
-    dispatch(deleteFaculty(checkedValue));
+    dispatch(getAllFaculty());
+  };
+
+  const allFaculty = useSelector((state) => state.admin.allFaculty);
+  const filteredFaculty = useSelector((state) => state.admin.faculties.result);
+  
+  const faculty = filter.department === "all" ? allFaculty : filteredFaculty;
+
+  const searchedFaculty = faculty?.filter(fac => 
+    fac.name.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+    fac.email.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+    fac.username.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+    fac.designation?.toLowerCase().includes(filter.searchQuery.toLowerCase())
+  );
+
+  const handleDelete = () => {
+    if (selectedFaculty.length === 0) return;
+    
+    if (window.confirm(`Are you sure you want to delete ${selectedFaculty.length} faculty member(s)?`)) {
+      setLoading(true);
+      setError({});
+      dispatch(deleteFaculty(selectedFaculty));
+    }
   };
 
   useEffect(() => {
     if (store.admin.facultyDeleted) {
+      setSelectedFaculty([]);
       setLoading(false);
-      setValue({ department: "" });
       dispatch({ type: DELETE_FACULTY, payload: false });
-      setSearch(false);
+      // Refresh the list after deletion
+      if (filter.department === "all") {
+        dispatch(getAllFaculty());
+      } else {
+        dispatch(getFaculty({ department: filter.department }));
+      }
     }
   }, [store.admin.facultyDeleted]);
 
   useEffect(() => {
-    if (faculties?.length !== 0) setLoading(false);
-  }, [faculties]);
+    if (faculty !== undefined) {
+      setLoading(false);
+    }
+  }, [faculty]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
   }, []);
 
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
-          <DeleteIcon />
-          <h1>Delete Faculty</h1>
-        </div>
-        <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
-          <form
-            className="flex flex-col space-y-2 col-span-1"
-            onSubmit={handleSubmit}>
-            <label htmlFor="department">Department</label>
-            <Select
-              required
-              displayEmpty
-              sx={{ height: 36, width: 224 }}
-              inputProps={{ "aria-label": "Without label" }}
-              value={value.department}
-              onChange={(e) =>
-                setValue({ ...value, department: e.target.value })
-              }>
-              <MenuItem value="">None</MenuItem>
-              {departments?.map((dp, idx) => (
-                <MenuItem key={idx} value={dp.department}>
-                  {dp.department}
-                </MenuItem>
-              ))}
-            </Select>
+    <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
+      <Box sx={{ mb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <EngineeringIcon color="primary" sx={{ mr: 1 }} />
+          <Typography variant="h5" color="textPrimary">
+            Faculty Management
+          </Typography>
+          <Chip 
+            label={`Total Faculty: ${faculty?.length || 0}`} 
+            color="primary" 
+            variant="outlined"
+            sx={{ ml: 2 }}
+          />
+        </Box>
 
-            <button
-              className={`${classes.adminFormSubmitButton} w-56`}
-              type="submit">
-              Search
-            </button>
-          </form>
-          <div className="col-span-3 mr-6">
-            <div className={classes.loadingAndError}>
-              {loading && (
-                <Spinner
-                  message="Loading"
-                  height={50}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
-              )}
-              {(error.noFacultyError || error.backendError) && (
-                <p className="text-red-500 text-2xl font-bold">
-                  {error.noFacultyError || error.backendError}
-                </p>
-              )}
-            </div>
-            {search &&
-              !loading &&
-              Object.keys(error).length === 0 &&
-              faculties?.length !== 0 && (
-                <div className={`${classes.adminData} h-[20rem]`}>
-                  <div className="grid grid-cols-8">
-                    <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
-                      Select
-                    </h1>
-                    <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
-                      Sr no.
-                    </h1>
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Name
-                    </h1>
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Username
-                    </h1>
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexWrap: 'wrap', 
+            gap: 2, 
+            mb: 3,
+            alignItems: 'center'
+          }}>
+            <FormControl sx={{ minWidth: 200 }}>
+              <InputLabel>Department</InputLabel>
+              <Select
+                name="department"
+                value={filter.department}
+                onChange={handleFilterChange}
+                label="Department"
+              >
+                <MenuItem value="all">All Departments</MenuItem>
+                {departments?.map((dp, idx) => (
+                  <MenuItem key={idx} value={dp.department}>
+                    {dp.department}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Email
-                    </h1>
-                  </div>
-                  {faculties?.map((adm, idx) => (
-                    <div
-                      key={idx}
-                      className={`${classes.adminDataBody} grid-cols-8`}>
-                      <input
-                        onChange={handleInputChange}
-                        value={adm._id}
-                        className="col-span-1 border-2 w-16 h-4 mt-3 px-2 "
-                        type="checkbox"
-                      />
-                      <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
-                        {idx + 1}
-                      </h1>
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {adm.name}
-                      </h1>
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {adm.username}
-                      </h1>
+            <TextField
+              name="searchQuery"
+              value={filter.searchQuery}
+              onChange={handleFilterChange}
+              label="Search Faculty"
+              variant="outlined"
+              size="small"
+              sx={{ flexGrow: 1 }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearch}>
+                    <Search />
+                  </IconButton>
+                )
+              }}
+            />
 
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {adm.email}
-                      </h1>
-                    </div>
-                  ))}
-                </div>
-              )}
-            {search && Object.keys(error).length === 0 && (
-              <div className="space-x-3 flex items-center justify-center mt-5">
-                <button
-                  onClick={dltFaculty}
-                  className={`${classes.adminFormSubmitButton} bg-blue-500`}>
-                  Delete
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+            <Button
+              variant="outlined"
+              startIcon={<ClearAll />}
+              onClick={handleClearFilters}
+            >
+              Clear Filters
+            </Button>
+          </Box>
+
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {(error.noFacultyError || error.backendError) && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error.noFacultyError || error.backendError}
+            </Alert>
+          )}
+
+          <TableContainer component={Paper} sx={{ mb: 3 }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={
+                        selectedFaculty.length > 0 && 
+                        selectedFaculty.length < (searchedFaculty?.length || 0)
+                      }
+                      checked={
+                        (searchedFaculty?.length || 0) > 0 && 
+                        selectedFaculty.length === (searchedFaculty?.length || 0)
+                      }
+                      onChange={() => {
+                        if (selectedFaculty.length === (searchedFaculty?.length || 0)) {
+                          setSelectedFaculty([]);
+                        } else {
+                          setSelectedFaculty(searchedFaculty?.map(fac => fac._id) || []);
+                        }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>#</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Username</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Department</TableCell>
+                  <TableCell>Designation</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {searchedFaculty?.length > 0 ? (
+                  searchedFaculty.map((fac, idx) => (
+                    <TableRow key={fac._id} hover>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedFaculty.includes(fac._id)}
+                          onChange={() => handleCheckboxChange(fac._id)}
+                        />
+                      </TableCell>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{fac.name}</TableCell>
+                      <TableCell>{fac.username}</TableCell>
+                      <TableCell>{fac.email}</TableCell>
+                      <TableCell>{fac.department}</TableCell>
+                      <TableCell>{fac.designation}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
+                      {loading ? '' : 'No faculty found matching your criteria'}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {selectedFaculty.length > 0 && (
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              p: 1,
+              backgroundColor: 'action.selected',
+              borderRadius: 1
+            }}>
+              <Typography>
+                {selectedFaculty.length} faculty member(s) selected
+              </Typography>
+              <Button
+                variant="contained"
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+                disabled={loading}
+              >
+                Delete Selected
+              </Button>
+            </Box>
+          )}
+        </Paper>
+      </Box>
+    </Box>
   );
 };
 

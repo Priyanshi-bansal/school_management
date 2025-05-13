@@ -334,7 +334,7 @@ const Body = () => {
               
               <div className="p-4">
                 {!open ? (
-                  <div className="space-y-3 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50">
+                  <div className="space-y-3 max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50">
                     {notices?.length > 0 ? (
                       notices.slice(0, 4).map((notice, idx) => (
                         <div
