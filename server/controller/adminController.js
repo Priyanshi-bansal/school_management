@@ -619,6 +619,7 @@ export const getAllAdmin = async (req, res) => {
     console.log("Backend Error", error);
   }
 };
+
 export const getAllDepartment = async (req, res) => {
   try {
     const departments = await Department.find();

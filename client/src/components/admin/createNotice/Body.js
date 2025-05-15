@@ -1,19 +1,36 @@
-import React, { useEffect, useState } from "react";
-import EngineeringIcon from "@mui/icons-material/Engineering";
+import React, { useEffect, useState, useRef } from "react";
+import { 
+  Engineering as EngineeringIcon,
+  Clear,
+  Send,
+  Today,
+  Subject,
+  People,
+  Person
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { createNotice } from "../../../redux/actions/adminActions";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import { 
+  Select, 
+  MenuItem, 
+  Button, 
+  TextField, 
+  Box, 
+  Typography,
+  FormControl,
+  InputLabel,
+  Divider
+} from "@mui/material";
 import Spinner from "../../../utils/Spinner";
-import * as classes from "../../../utils/styles";
 import { CREATE_NOTICE, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
-  const departments = useSelector((state) => state.admin.allDepartment);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
+  const errorRef = useRef();
+
   const [value, setValue] = useState({
     date: "",
     noticeFor: "",
@@ -21,10 +38,11 @@ const Body = () => {
     content: "",
     from: "",
   });
+
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
-      setValue({ date: "", noticeFor: "", topic: "", content: "", from: "" });
+      errorRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [store.errors]);
 
@@ -35,22 +53,25 @@ const Body = () => {
     dispatch(createNotice(value));
   };
 
+  const resetForm = () => {
+    setValue({
+      date: "",
+      noticeFor: "",
+      topic: "",
+      content: "",
+      from: "",
+    });
+    setError({});
+  };
+
   useEffect(() => {
     if (store.errors || store.admin.noticeCreated) {
       setLoading(false);
       if (store.admin.noticeCreated) {
-        setValue({
-          date: "",
-          noticeFor: "",
-          topic: "",
-          content: "",
-          from: "",
-        });
+        resetForm();
         dispatch({ type: CREATE_NOTICE, payload: false });
         dispatch({ type: SET_ERRORS, payload: {} });
       }
-    } else {
-      setLoading(true);
     }
   }, [store.errors, store.admin.noticeCreated]);
 
@@ -59,133 +80,158 @@ const Body = () => {
   }, []);
 
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
-          <EngineeringIcon />
-          <h1>Create Notice</h1>
+    <div className="flex-1 p-6 bg-gray-50">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center mb-8">
+          <EngineeringIcon className="text-indigo-600 mr-3" fontSize="large" />
+          <h1 className="text-2xl font-bold text-gray-800">Create New Notice</h1>
         </div>
-        <div className=" mr-10 bg-white flex flex-col rounded-xl ">
-          <form className={classes.adminForm0} onSubmit={handleSubmit}>
-            <div className={classes.adminForm1}>
-              <div className={classes.adminForm2l}>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Date :</h1>
 
+        {/* Form Card */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+          <form onSubmit={handleSubmit} className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left Column - Basic Info */}
+              <div className="space-y-5">
+                <Typography variant="h6" className="text-gray-700 mb-4 flex items-center">
+                  <Today className="text-indigo-600 mr-2" />
+                  Notice Details
+                </Typography>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Today className="text-gray-500 mr-2" fontSize="small" />
+                    Date
+                  </label>
                   <input
-                    placeholder="Date"
                     required
-                    className={classes.adminInput}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="date"
                     value={value.date}
-                    onChange={(e) =>
-                      setValue({ ...value, date: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, date: e.target.value })}
                   />
                 </div>
 
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Topic :</h1>
-
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Subject className="text-gray-500 mr-2" fontSize="small" />
+                    Topic
+                  </label>
                   <input
+                    placeholder="Enter notice topic"
                     required
-                    placeholder="Topic"
-                    className={classes.adminInput}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.topic}
-                    onChange={(e) =>
-                      setValue({ ...value, topic: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, topic: e.target.value })}
                   />
                 </div>
 
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>To :</h1>
-                  <Select
-                    required
-                    displayEmpty
-                    sx={{ height: 36 }}
-                    inputProps={{ "aria-label": "Without label" }}
-                    value={value.noticeFor}
-                    onChange={(e) =>
-                      setValue({ ...value, noticeFor: e.target.value })
-                    }>
-                    <MenuItem value="">None</MenuItem>
-                    <MenuItem value="all">All</MenuItem>
-                    <MenuItem value="faculty">Faculty</MenuItem>
-                    <MenuItem value="student">Student</MenuItem>
-                  </Select>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <People className="text-gray-500 mr-2" fontSize="small" />
+                    Recipient
+                  </label>
+                  <FormControl fullWidth>
+                    <Select
+                      required
+                      value={value.noticeFor}
+                      onChange={(e) => setValue({ ...value, noticeFor: e.target.value })}
+                      sx={{
+                        borderRadius: '8px',
+                        height: '42px',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#d1d5db',
+                        },
+                      }}
+                    >
+                      <MenuItem value="">Select recipient</MenuItem>
+                      <MenuItem value="all">All (Students & Faculty)</MenuItem>
+                      <MenuItem value="faculty">Faculty Only</MenuItem>
+                      <MenuItem value="student">Students Only</MenuItem>
+                    </Select>
+                  </FormControl>
                 </div>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>From :</h1>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Person className="text-gray-500 mr-2" fontSize="small" />
+                    From
+                  </label>
                   <input
+                    placeholder="Sender's name/position"
                     required
-                    placeholder="From"
-                    className={classes.adminInput}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.from}
-                    onChange={(e) =>
-                      setValue({ ...value, from: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, from: e.target.value })}
                   />
                 </div>
               </div>
-              <div className={classes.adminForm2r}>
-                <div className={classes.adminForm3}>
-                  <h1 className={`self-start  ${classes.adminLabel}`}>
-                    Content :
-                  </h1>
 
+              {/* Right Column - Content */}
+              <div className="space-y-5">
+                <Typography variant="h6" className="text-gray-700 mb-4 flex items-center">
+                  <Subject className="text-indigo-600 mr-2" />
+                  Notice Content
+                </Typography>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Message
+                  </label>
                   <textarea
                     rows={10}
-                    cols={40}
                     required
-                    placeholder="Content...."
-                    className={classes.adminInput}
+                    placeholder="Enter notice content..."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     value={value.content}
-                    onChange={(e) =>
-                      setValue({ ...value, content: e.target.value })
-                    }
+                    onChange={(e) => setValue({ ...value, content: e.target.value })}
                   />
                 </div>
-                <div className={classes.adminForm3}></div>
               </div>
             </div>
-            <div className={classes.adminFormButton}>
-              <button className={classes.adminFormSubmitButton} type="submit">
-                Submit
-              </button>
-              <button
-                onClick={() => {
-                  setValue({
-                    date: "",
-                    noticeFor: "",
-                    topic: "",
-                    content: "",
-                    from: "",
-                  });
-                  setError({});
-                }}
-                className={classes.adminFormClearButton}
-                type="button">
-                Clear
-              </button>
+
+            {/* Form Actions */}
+            <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
+              <Button
+                variant="outlined"
+                startIcon={<Clear />}
+                onClick={resetForm}
+                className="border-gray-300 text-gray-700 hover:bg-gray-50"
+              >
+                Clear Form
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                startIcon={<Send />}
+                className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Spinner
+                    message="Creating Notice..."
+                    height={24}
+                    width={120}
+                    color="#ffffff"
+                    messageColor="#ffffff"
+                  />
+                ) : (
+                  "Publish Notice"
+                )}
+              </Button>
             </div>
-            <div className={classes.loadingAndError}>
-              {loading && (
-                <Spinner
-                  message="Creating Notice"
-                  height={30}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
-              )}
+
+            {/* Error Display */}
+            <div ref={errorRef}>
               {(error.noticeError || error.backendError) && (
-                <p className="text-red-500">
-                  {error.noticeError || error.backendError}
-                </p>
+                <Box className="mt-4 p-3 bg-red-50 rounded-lg">
+                  <Typography className="text-red-600 text-sm">
+                    {error.noticeError || error.backendError}
+                  </Typography>
+                </Box>
               )}
             </div>
           </form>

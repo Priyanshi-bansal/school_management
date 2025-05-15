@@ -1,42 +1,145 @@
 import React, { useEffect, useState } from "react";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
+import { 
+  MenuBook as MenuBookIcon,
+  Delete as DeleteIcon,
+  Search,
+  ClearAll
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { getSubject } from "../../../redux/actions/adminActions";
-import { MenuItem, Select } from "@mui/material";
-import Spinner from "../../../utils/Spinner";
-import { SET_ERRORS } from "../../../redux/actionTypes";
-import * as classes from "../../../utils/styles";
+import { 
+  deleteSubject, 
+  getSubject, 
+  getAllSubject 
+} from "../../../redux/actions/adminActions";
+import { 
+  Select, 
+  MenuItem, 
+  Button, 
+  Box, 
+  Typography,
+  FormControl,
+  InputLabel,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Chip,
+  TextField,
+  IconButton,
+  Alert
+} from "@mui/material";
+import { DELETE_SUBJECT, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
   const dispatch = useDispatch();
-  const [error, setError] = useState({});
   const departments = useSelector((state) => state.admin.allDepartment);
+  const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
-  const [value, setValue] = useState({
-    department: "",
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [filter, setFilter] = useState({
+    department: "all",
     year: "",
+    searchQuery: ""
   });
-  const [search, setSearch] = useState(false);
+
+  // Get all subjects by default on component mount
+  useEffect(() => {
+    dispatch(getAllSubject());
+  }, []);
 
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
       setLoading(false);
+    } else {
+      setError({});
     }
   }, [store.errors]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSearch(true);
-    setLoading(true);
-    setError({});
-    dispatch(getSubject(value));
+  const handleCheckboxChange = (subjectId) => {
+    setSelectedSubjects(prev => 
+      prev.includes(subjectId) 
+        ? prev.filter(id => id !== subjectId) 
+        : [...prev, subjectId]
+    );
   };
-  const subjects = useSelector((state) => state.admin.subjects.result);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilter(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSearch = () => {
+    setLoading(true);
+    if (filter.department === "all" && filter.year === "") {
+      dispatch(getAllSubject());
+    } else {
+      dispatch(getSubject({ 
+        department: filter.department === "all" ? "" : filter.department,
+        year: filter.year 
+      }));
+    }
+  };
+
+  const handleClearFilters = () => {
+    setFilter({
+      department: "all",
+      year: "",
+      searchQuery: ""
+    });
+    setError({});
+    dispatch(getAllSubject());
+  };
+
+  const allSubjects = useSelector((state) => state.admin.allSubject);
+  const filteredSubjects = useSelector((state) => state.admin.subjects.result);
+  
+  const subjects = filter.department === "all" && filter.year === "" 
+    ? allSubjects 
+    : filteredSubjects;
+
+  const searchedSubjects = subjects?.filter(sub => 
+    sub.subjectCode.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+    sub.subjectName.toLowerCase().includes(filter.searchQuery.toLowerCase())
+  );
+
+  const handleDelete = () => {
+    if (selectedSubjects.length === 0) return;
+    
+    if (window.confirm(`Are you sure you want to delete ${selectedSubjects.length} subject(s)?`)) {
+      setLoading(true);
+      setError({});
+      dispatch(deleteSubject(selectedSubjects));
+    }
+  };
 
   useEffect(() => {
-    if (subjects?.length !== 0) setLoading(false);
+    if (store.admin.subjectDeleted) {
+      setSelectedSubjects([]);
+      setLoading(false);
+      dispatch({ type: DELETE_SUBJECT, payload: false });
+      // Refresh the list after deletion
+      if (filter.department === "all" && filter.year === "") {
+        dispatch(getAllSubject());
+      } else {
+        dispatch(getSubject({ 
+          department: filter.department === "all" ? "" : filter.department,
+          year: filter.year 
+        }));
+      }
+    }
+  }, [store.admin.subjectDeleted]);
+
+  useEffect(() => {
+    if (subjects !== undefined) {
+      setLoading(false);
+    }
   }, [subjects]);
 
   useEffect(() => {
@@ -44,118 +147,186 @@ const Body = () => {
   }, []);
 
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
-          <MenuBookIcon />
-          <h1>All Subjects</h1>
-        </div>
-        <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
-          <form
-            className="flex flex-col space-y-2 col-span-1"
-            onSubmit={handleSubmit}>
-            <label htmlFor="department">Department</label>
-            <Select
-              required
-              displayEmpty
-              sx={{ height: 36, width: 224 }}
-              inputProps={{ "aria-label": "Without label" }}
-              value={value.department}
-              onChange={(e) =>
-                setValue({ ...value, department: e.target.value })
-              }>
-              <MenuItem value="">None</MenuItem>
-              {departments?.map((dp, idx) => (
-                <MenuItem key={idx} value={dp.department}>
-                  {dp.department}
-                </MenuItem>
-              ))}
-            </Select>
-            <label htmlFor="year">Year</label>
-            <Select
-              required
-              displayEmpty
-              sx={{ height: 36, width: 224 }}
-              inputProps={{ "aria-label": "Without label" }}
-              value={value.year}
-              onChange={(e) => setValue({ ...value, year: e.target.value })}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-              <MenuItem value="4">4</MenuItem>
-            </Select>
-            <button
-              className={`${classes.adminFormSubmitButton} w-56`}
-              type="submit">
-              Search
-            </button>
-          </form>
+    <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
+      <Box sx={{ mb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <MenuBookIcon color="primary" sx={{ mr: 1 }} />
+          <Typography variant="h5" color="textPrimary">
+            Subject Management
+          </Typography>
+          <Chip 
+            label={`Total Subjects: ${subjects?.length || 0}`} 
+            color="primary" 
+            variant="outlined"
+            sx={{ ml: 2 }}
+          />
+        </Box>
 
-          <div className="col-span-3 mr-6">
-            <div className={classes.loadingAndError}>
-              {loading && (
-                <Spinner
-                  message="Loading"
-                  height={50}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
-              )}
-              {(error.noSubjectError || error.backendError) && (
-                <p className="text-red-500 text-2xl font-bold">
-                  {error.noSubjectError || error.backendError}
-                </p>
-              )}
-            </div>
-            {search &&
-              !loading &&
-              Object.keys(error).length === 0 &&
-              subjects?.length !== 0 && (
-                <div className={classes.adminData}>
-                  <div className="grid grid-cols-7">
-                    <h1 className={`${classes.adminDataHeading} col-span-1`}>
-                      Sr no.
-                    </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-2`}>
-                      Subject Code
-                    </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-3`}>
-                      Subject Name
-                    </h1>
-                    <h1 className={`${classes.adminDataHeading} col-span-1`}>
-                      Total Lectures
-                    </h1>
-                  </div>
-                  {subjects?.map((sub, idx) => (
-                    <div
-                      key={idx}
-                      className={`${classes.adminDataBody} grid-cols-7`}>
-                      <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
-                        {idx + 1}
-                      </h1>
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {sub.subjectCode}
-                      </h1>
-                      <h1
-                        className={`col-span-3 ${classes.adminDataBodyFields}`}>
-                        {sub.subjectName}
-                      </h1>
-                      <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
-                        {sub.totalLectures}
-                      </h1>
-                    </div>
-                  ))}
-                </div>
-              )}
-          </div>
-        </div>
-      </div>
-    </div>
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexWrap: 'wrap', 
+            gap: 2, 
+            mb: 3,
+            alignItems: 'center'
+          }}>
+            <FormControl sx={{ minWidth: 200 }}>
+              <InputLabel>Department</InputLabel>
+              <Select
+                name="department"
+                value={filter.department}
+                onChange={handleFilterChange}
+                label="Department"
+              >
+                <MenuItem value="all">All Departments</MenuItem>
+                {departments?.map((dp, idx) => (
+                  <MenuItem key={idx} value={dp.department}>
+                    {dp.department}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl sx={{ minWidth: 120 }}>
+              <InputLabel>Year</InputLabel>
+              <Select
+                name="year"
+                value={filter.year}
+                onChange={handleFilterChange}
+                label="Year"
+              >
+                <MenuItem value="">All Years</MenuItem>
+                <MenuItem value="1">1</MenuItem>
+                <MenuItem value="2">2</MenuItem>
+                <MenuItem value="3">3</MenuItem>
+                <MenuItem value="4">4</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              name="searchQuery"
+              value={filter.searchQuery}
+              onChange={handleFilterChange}
+              label="Search Subjects"
+              variant="outlined"
+              size="small"
+              sx={{ flexGrow: 1 }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={handleSearch}>
+                    <Search />
+                  </IconButton>
+                )
+              }}
+            />
+
+            <Button
+              variant="outlined"
+              startIcon={<ClearAll />}
+              onClick={handleClearFilters}
+            >
+              Clear Filters
+            </Button>
+          </Box>
+
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {(error.noSubjectError || error.backendError) && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error.noSubjectError || error.backendError}
+            </Alert>
+          )}
+
+          <TableContainer component={Paper} sx={{ mb: 3 }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={
+                        selectedSubjects.length > 0 && 
+                        selectedSubjects.length < (searchedSubjects?.length || 0)
+                      }
+                      checked={
+                        (searchedSubjects?.length || 0) > 0 && 
+                        selectedSubjects.length === (searchedSubjects?.length || 0)
+                      }
+                      onChange={() => {
+                        if (selectedSubjects.length === (searchedSubjects?.length || 0)) {
+                          setSelectedSubjects([]);
+                        } else {
+                          setSelectedSubjects(searchedSubjects?.map(sub => sub._id) || []);
+                        }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>#</TableCell>
+                  <TableCell>Subject Code</TableCell>
+                  <TableCell>Subject Name</TableCell>
+                  <TableCell>Department</TableCell>
+                  <TableCell>Year</TableCell>
+                  <TableCell>Total Lectures</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {searchedSubjects?.length > 0 ? (
+                  searchedSubjects.map((sub, idx) => (
+                    <TableRow key={sub._id} hover>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedSubjects.includes(sub._id)}
+                          onChange={() => handleCheckboxChange(sub._id)}
+                        />
+                      </TableCell>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{sub.subjectCode}</TableCell>
+                      <TableCell>{sub.subjectName}</TableCell>
+                      <TableCell>{sub.department}</TableCell>
+                      <TableCell>{sub.year}</TableCell>
+                      <TableCell>{sub.totalLectures}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
+                      {loading ? '' : 'No subjects found matching your criteria'}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {selectedSubjects.length > 0 && (
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              p: 1,
+              backgroundColor: 'action.selected',
+              borderRadius: 1
+            }}>
+              <Typography>
+                {selectedSubjects.length} subject(s) selected
+              </Typography>
+              <Button
+                variant="contained"
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+                disabled={loading}
+              >
+                Delete Selected
+              </Button>
+            </Box>
+          )}
+        </Paper>
+      </Box>
+    </Box>
   );
 };
 

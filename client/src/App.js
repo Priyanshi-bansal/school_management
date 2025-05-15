@@ -67,9 +67,9 @@ const App = () => {
       />
       <Route path="/admin/createnotice" element={<CreateNotice />} />
       <Route path="/admin/addadmin" element={<AddAdmin />} />
-      <Route path="/admin/deleteadmin" element={<DeleteAdmin />} />
+      <Route path="/admin/manageadmin" element={<DeleteAdmin />} />
       <Route path="/admin/adddepartment" element={<AddDepartment />} />
-      <Route path="/admin/deletedepartment" element={<DeleteDepartment />} />
+      <Route path="/admin/managedepartment" element={<DeleteDepartment />} />
       <Route path="/admin/addfaculty" element={<AddFaculty />} />
       <Route path="/admin/deletefaculty" element={<DeleteFaculty />} />
       <Route path="/admin/deletestudent" element={<DeleteStudent />} />
