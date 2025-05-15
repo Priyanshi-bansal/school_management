@@ -49,22 +49,22 @@ const Sidebar = () => {
       header: "Admin Management",
       items: [
         { icon: <Add />, label: "Add Admin", path: "/admin/addadmin" },
-        { icon: <Delete />, label: "Delete Admin", path: "/admin/deleteadmin" }
+        { icon: <Delete />, label: "Manage Admin", path: "/admin/manageadmin" }
       ]
     },
     { 
       header: "Department Management",
       items: [
         { icon: <Add />, label: "Add Department", path: "/admin/adddepartment" },
-        { icon: <Delete />, label: "Delete Department", path: "/admin/deletedepartment" }
+        // { icon: <Delete />, label: "Manage Department", path: "/admin/managedepartment" }
       ]
     },
     { 
       header: "Faculty Management",
       items: [
-        { icon: <Engineering />, label: "Our Faculty", path: "/admin/allfaculty" },
+        { icon: <Engineering />, label: "Manage Faculty", path: "/admin/allfaculty" },
         { icon: <Add />, label: "Add Faculty", path: "/admin/addfaculty" },
-        { icon: <Delete />, label: "Delete Faculty", path: "/admin/deletefaculty" }
+        // { icon: <Delete />, label: "Delete Faculty", path: "/admin/deletefaculty" }
       ]
     },
     { 
@@ -72,7 +72,7 @@ const Sidebar = () => {
       items: [
         { icon: <Groups />, label: "Our Students", path: "/admin/allstudent" },
         { icon: <Add />, label: "Add Students", path: "/admin/addstudent" },
-        { icon: <Delete />, label: "Delete Student", path: "/admin/deletestudent" }
+        // { icon: <Delete />, label: "Delete Student", path: "/admin/deletestudent" }
       ]
     },
     { 
@@ -80,7 +80,7 @@ const Sidebar = () => {
       items: [
         { icon: <MenuBook />, label: "Subjects", path: "/admin/allsubject" },
         { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
-        { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
     }
   ];
