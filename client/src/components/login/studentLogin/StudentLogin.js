@@ -47,7 +47,7 @@ const StudentLogin = () => {
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center relative"
-      style={{ backgroundImage: "url('/asset/bg-admin.avif')" }}
+      style={{ backgroundImage: "url('/asset/bbb.jpg')" }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-30 backdrop-blur-sm"></div>
       <div className="absolute top-4 left-4 cursor-pointer text-white" onClick={() => navigate(-1)}>
@@ -59,7 +59,7 @@ const StudentLogin = () => {
         {/* Left Panel */}
         <div className="hidden md:block md:w-1/2 bg-cover bg-center">
         <img
-          src="/asset/top.avif"
+          src="/asset/bbb.jpg"
           alt="Admin background"
           className="h-full w-full object-fill"
           style={{ backgroundSize: "contain", backgroundRepeat: "no-repeat", backgroundPosition: "center" }}
