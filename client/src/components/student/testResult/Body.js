@@ -46,13 +46,18 @@ const Body = () => {
         <div className="mr-10 bg-white rounded-xl pt-6 pl-6 h-[29.5rem]">
           {/* Search Bar */}
           <div className="flex flex-col md:flex-row md:items-end md:space-x-4 mb-4 mr-6">
-            <input
-              type="text"
-              placeholder="Search by subject name, code, or test..."
-              className="w-full md:w-72 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2 md:mb-0"
-              value={search || ""}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <div className="relative w-full md:w-72">
+              <input
+                type="text"
+                placeholder="Subject Name"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2 md:mb-0 pr-10"
+                value={search || ""}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <span className="absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" fill="none"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+              </span>
+            </div>
           </div>
           <div className="col-span-3 mr-6 overflow-x-auto">
             <div className={classes.loadingAndError}>
@@ -81,12 +86,12 @@ const Body = () => {
                         <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                           <input type="checkbox" className="form-checkbox" />
                         </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject Code</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject Name</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Test</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marks Obtained</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Marks</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-500  tracking-wider">#</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-500  tracking-wider">Subject Code</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-500  tracking-wider">Subject Name</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-500  tracking-wider">Test</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-500  tracking-wider">Marks Obtained</th>
+                        <th className="px-4 py-3 text-left text-xs font-bold text-gray-500  tracking-wider">Total Marks</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
