@@ -51,90 +51,106 @@ const Body = () => {
   }, [store.errors]);
 
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
+    <div className="flex-[0.8] mt-6 px-4">
+      <div className="space-y-6">
+        <div className="flex items-center text-gray-500 space-x-2">
           <VisibilityOffIcon />
-          <h1>Password</h1>
+          <h1 className="text-lg font-semibold">Update Password</h1>
         </div>
 
-        <div className=" mr-10 bg-white flex flex-col rounded-xl ">
-          <form
-            onSubmit={update}
-            className="flex flex-col space-y-6 items-center my-8">
-            <h1 className="text-black text-3xl font-bold">Update Password</h1>
-            <div className="space-y-1">
-              <p className="text-[#515966] font-bold text-sm">New Password</p>
-              <div className="border-2 rounded-lg px-3 flex items-center space-x-3 w-full">
+        <div className="bg-white shadow-md rounded-xl p-8 max-w-xl mx-auto">
+          <form onSubmit={update} className="space-y-6">
+            <h2 className="text-2xl font-bold text-center text-gray-800">
+              Change Your Password
+            </h2>
+
+            {/* New Password Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                New Password
+              </label>
+              <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2">
                 <input
-                  onChange={(e) => setNewPassword(e.target.value)}
+                  type={showPassword ? "text" : "password"}
                   value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Enter new password"
+                  className="flex-grow outline-none text-sm"
                   required
-                  type={showPassword ? "text" : "password"}
-                  className="rounded-lg outline-none py-2  placeholder:text-sm"
-                  placeholder="New Password"
                 />
                 {showPassword ? (
                   <VisibilityIcon
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="cursor-pointer"
+                    onClick={() => setShowPassword(false)}
+                    className="cursor-pointer text-gray-500"
                   />
                 ) : (
                   <VisibilityOffIcon
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="cursor-pointer"
+                    onClick={() => setShowPassword(true)}
+                    className="cursor-pointer text-gray-500"
                   />
                 )}
               </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-[#515966] font-bold text-sm">
+
+            {/* Confirm Password Field */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Confirm Password
-              </p>
-              <div className="border-2 rounded-lg px-3 flex items-center space-x-3 w-full">
+              </label>
+              <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2">
                 <input
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  value={confirmPassword}
-                  required
                   type={showPassword ? "text" : "password"}
-                  className="rounded-lg outline-none py-2  placeholder:text-sm"
-                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm new password"
+                  className="flex-grow outline-none text-sm"
+                  required
                 />
                 {showPassword ? (
                   <VisibilityIcon
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="cursor-pointer"
+                    onClick={() => setShowPassword(false)}
+                    className="cursor-pointer text-gray-500"
                   />
                 ) : (
                   <VisibilityOffIcon
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="cursor-pointer"
+                    onClick={() => setShowPassword(true)}
+                    className="cursor-pointer text-gray-500"
                   />
                 )}
               </div>
             </div>
-            <div className={classes.adminFormButton}>
-              <button className={classes.adminFormSubmitButton} type="submit">
+
+            {/* Buttons */}
+            <div className="flex justify-between space-x-4 pt-4">
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+              >
                 Update
               </button>
               <button
+                type="button"
                 onClick={() => navigate("/admin/profile")}
-                className={classes.adminFormClearButton}
-                type="button">
+                className="bg-gray-300 text-black px-6 py-2 rounded-md hover:bg-gray-400 transition"
+              >
                 Cancel
               </button>
             </div>
+
+            {/* Loading & Errors */}
             {loading && (
               <Spinner
                 message="Updating"
                 height={30}
                 width={150}
                 color="#111111"
-                messageColor="#blue"
+                messageColor="blue"
               />
             )}
-            {error.mismatchError && (
-              <p className="text-red-500">{error.mismatchError}</p>
+            {(error.mismatchError || error.backendError) && (
+              <p className="text-red-500 text-sm text-center mt-2">
+                {error.mismatchError || error.backendError}
+              </p>
             )}
           </form>
         </div>

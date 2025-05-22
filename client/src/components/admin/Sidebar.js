@@ -48,14 +48,14 @@ const Sidebar = () => {
     { 
       header: "Admin Management",
       items: [
-        { icon: <Add />, label: "Add Admin", path: "/admin/addadmin" },
-        { icon: <Delete />, label: "Manage Admin", path: "/admin/manageadmin" }
+        // { icon: <Add />, label: "Add Admin", path: "/admin/addadmin" },
+        { icon: <Engineering />, label: "Manage Admin", path: "/admin/manageadmin" }
       ]
     },
     { 
       header: "Department Management",
       items: [
-        { icon: <Add />, label: "Add Department", path: "/admin/adddepartment" },
+        { icon: <Engineering />, label: "Manage Department", path: "/admin/adddepartment" },
         // { icon: <Delete />, label: "Manage Department", path: "/admin/managedepartment" }
       ]
     },
@@ -63,23 +63,23 @@ const Sidebar = () => {
       header: "Faculty Management",
       items: [
         { icon: <Engineering />, label: "Manage Faculty", path: "/admin/allfaculty" },
-        { icon: <Add />, label: "Add Faculty", path: "/admin/addfaculty" },
+        // { icon: <Add />, label: "Add Faculty", path: "/admin/addfaculty" },
         // { icon: <Delete />, label: "Delete Faculty", path: "/admin/deletefaculty" }
       ]
     },
     { 
       header: "Student Management",
       items: [
-        { icon: <Groups />, label: "Our Students", path: "/admin/allstudent" },
-        { icon: <Add />, label: "Add Students", path: "/admin/addstudent" },
+        { icon: <Groups />, label: "Manage Students", path: "/admin/allstudent" },
+        // { icon: <Add />, label: "Add Students", path: "/admin/addstudent" },
         // { icon: <Delete />, label: "Delete Student", path: "/admin/deletestudent" }
       ]
     },
     { 
       header: "Subject Management",
       items: [
-        { icon: <MenuBook />, label: "Subjects", path: "/admin/allsubject" },
-        { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        { icon: <MenuBook />, label: "Manage Subjects", path: "/admin/allsubject" },
+        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
     }

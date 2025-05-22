@@ -49,73 +49,93 @@ const Body = () => {
   }, [store.errors]);
 
   return (
-    <div className="flex flex-col items-center w-full space-y-10 mt-24">
-      <form onSubmit={update} className="flex flex-col space-y-6 items-center">
-        <h1 className="text-black text-3xl font-bold">Update Password</h1>
+    <div className="flex flex-col items-center w-full px-4 mt-24">
+      <form
+        onSubmit={update}
+        className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 space-y-6"
+      >
+        <h1 className="text-2xl font-bold text-center text-gray-800">
+          Update Password
+        </h1>
+
+        {/* New Password */}
         <div className="space-y-1">
-          <p className="text-[#515966] font-bold text-sm">New Password</p>
-          <div className="bg-[#515966] rounded-lg px-3 flex items-center space-x-3 w-full">
+          <label className="text-sm font-medium text-gray-700">
+            New Password
+          </label>
+          <div className="bg-gray-800 rounded-lg px-3 flex items-center space-x-3">
             <input
               onChange={(e) => setNewPassword(e.target.value)}
               value={newPassword}
               required
               type={showPassword ? "text" : "password"}
-              className=" bg-[#515966] text-white rounded-lg outline-none py-2  placeholder:text-sm"
+              className="bg-gray-800 text-white w-full py-2 placeholder:text-sm outline-none"
               placeholder="New Password"
             />
             {showPassword ? (
               <VisibilityOffIcon
-                onClick={() => setShowPassword(!showPassword)}
-                className="cursor-pointer"
+                onClick={() => setShowPassword(false)}
+                className="cursor-pointer text-white"
               />
             ) : (
               <VisibilityIcon
-                onClick={() => setShowPassword(!showPassword)}
-                className="cursor-pointer"
+                onClick={() => setShowPassword(true)}
+                className="cursor-pointer text-white"
               />
             )}
           </div>
         </div>
+
+        {/* Confirm Password */}
         <div className="space-y-1">
-          <p className="text-[#515966] font-bold text-sm">Confirm Password</p>
-          <div className="bg-[#515966] rounded-lg px-3 flex items-center space-x-3 w-full">
+          <label className="text-sm font-medium text-gray-700">
+            Confirm Password
+          </label>
+          <div className="bg-gray-800 rounded-lg px-3 flex items-center space-x-3">
             <input
               onChange={(e) => setConfirmPassword(e.target.value)}
               value={confirmPassword}
               required
               type={showPassword ? "text" : "password"}
-              className=" bg-[#515966] text-white rounded-lg outline-none py-2  placeholder:text-sm"
+              className="bg-gray-800 text-white w-full py-2 placeholder:text-sm outline-none"
               placeholder="Confirm Password"
             />
             {showPassword ? (
               <VisibilityOffIcon
-                onClick={() => setShowPassword(!showPassword)}
-                className="cursor-pointer"
+                onClick={() => setShowPassword(false)}
+                className="cursor-pointer text-white"
               />
             ) : (
               <VisibilityIcon
-                onClick={() => setShowPassword(!showPassword)}
-                className="cursor-pointer"
+                onClick={() => setShowPassword(true)}
+                className="cursor-pointer text-white"
               />
             )}
           </div>
         </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#04bd7d]">
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition-all duration-150"
+        >
           Update
         </button>
+
+        {/* Feedback */}
         {loading && (
           <Spinner
             message="Updating"
             height={30}
             width={150}
             color="#111111"
-            messageColor="#blue"
+            messageColor="blue"
           />
         )}
-        {error.mismatchError && (
-          <p className="text-red-500">{error.mismatchError}</p>
+        {(error.mismatchError || error.backendError) && (
+          <p className="text-red-500 text-center text-sm">
+            {error.mismatchError || error.backendError}
+          </p>
         )}
       </form>
     </div>

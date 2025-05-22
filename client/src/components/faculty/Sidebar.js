@@ -42,14 +42,14 @@ const Sidebar = () => {
       items: [
         { icon: <Assignment />, label: "Create Test", path: "/faculty/createtest" },
         { icon: <Add />, label: "Upload Marks", path: "/faculty/uploadmarks" },
-        { icon: <Event />, label: "Mark Attendance", path: "#" }
+        { icon: <Event />, label: "Mark Attendance", path: "/faculty/markattendance" }
       ]
     },
     { 
       header: "Results",
       items: [
         { icon: <Assessment />, label: "View Results", path: "/faculty/result" },
-        { icon: <School />, label: "Class Performance", path: "#" }
+        { icon: <School />, label: "Class Performance", path: "/faculty/classperformance" }
       ]
     }
   ];

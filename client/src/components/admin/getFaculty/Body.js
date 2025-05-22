@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { 
+import { useNavigate } from "react-router-dom";
+import {
   Engineering as EngineeringIcon,
   Delete as DeleteIcon,
   Search,
-  ClearAll
+  ClearAll,
+  Add,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { 
-  deleteFaculty, 
-  getFaculty, 
-  getAllFaculty 
+import {
+  deleteFaculty,
+  getFaculty,
+  getAllFaculty,
 } from "../../../redux/actions/adminActions";
-import { 
-  Select, 
-  MenuItem, 
-  Button, 
-  Box, 
+import {
+  Select,
+  MenuItem,
+  Button,
+  Box,
   Typography,
   FormControl,
   InputLabel,
@@ -31,11 +33,12 @@ import {
   Chip,
   TextField,
   IconButton,
-  Alert
+  Alert,
 } from "@mui/material";
 import { DELETE_FACULTY, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.admin.allDepartment);
   const [error, setError] = useState({});
@@ -44,7 +47,7 @@ const Body = () => {
   const [selectedFaculty, setSelectedFaculty] = useState([]);
   const [filter, setFilter] = useState({
     department: "all",
-    searchQuery: ""
+    searchQuery: "",
   });
 
   // Get all faculty by default on component mount
@@ -62,17 +65,17 @@ const Body = () => {
   }, [store.errors]);
 
   const handleCheckboxChange = (facultyId) => {
-    setSelectedFaculty(prev => 
-      prev.includes(facultyId) 
-        ? prev.filter(id => id !== facultyId) 
+    setSelectedFaculty((prev) =>
+      prev.includes(facultyId)
+        ? prev.filter((id) => id !== facultyId)
         : [...prev, facultyId]
     );
   };
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilter(prev => ({ ...prev, [name]: value }));
-    
+    setFilter((prev) => ({ ...prev, [name]: value }));
+
     if (name === "department") {
       setLoading(true);
       if (value === "all") {
@@ -95,7 +98,7 @@ const Body = () => {
   const handleClearFilters = () => {
     setFilter({
       department: "all",
-      searchQuery: ""
+      searchQuery: "",
     });
     setError({});
     dispatch(getAllFaculty());
@@ -103,20 +106,25 @@ const Body = () => {
 
   const allFaculty = useSelector((state) => state.admin.allFaculty);
   const filteredFaculty = useSelector((state) => state.admin.faculties.result);
-  
+
   const faculty = filter.department === "all" ? allFaculty : filteredFaculty;
 
-  const searchedFaculty = faculty?.filter(fac => 
-    fac.name.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
-    fac.email.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
-    fac.username.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
-    fac.designation?.toLowerCase().includes(filter.searchQuery.toLowerCase())
+  const searchedFaculty = faculty?.filter(
+    (fac) =>
+      fac.name.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+      fac.email.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+      fac.username.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+      fac.designation?.toLowerCase().includes(filter.searchQuery.toLowerCase())
   );
 
   const handleDelete = () => {
     if (selectedFaculty.length === 0) return;
-    
-    if (window.confirm(`Are you sure you want to delete ${selectedFaculty.length} faculty member(s)?`)) {
+
+    if (
+      window.confirm(
+        `Are you sure you want to delete ${selectedFaculty.length} faculty member(s)?`
+      )
+    ) {
       setLoading(true);
       setError({});
       dispatch(deleteFaculty(selectedFaculty));
@@ -150,27 +158,47 @@ const Body = () => {
   return (
     <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
       <Box sx={{ mb: 4 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
           <EngineeringIcon color="primary" sx={{ mr: 1 }} />
           <Typography variant="h5" color="textPrimary">
             Faculty Management
           </Typography>
-          <Chip 
-            label={`Total Faculty: ${faculty?.length || 0}`} 
-            color="primary" 
+          <Chip
+            label={`Total Faculty: ${faculty?.length || 0}`}
+            color="primary"
             variant="outlined"
             sx={{ ml: 2 }}
           />
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Add />}
+            onClick={() => navigate("/admin/addfaculty")}
+            sx={{
+              ml: "auto",
+              px: 3,
+              py: 1.5,
+              fontWeight: "bold",
+              fontSize: "16px",
+              borderRadius: "8px",
+              boxShadow: 2,
+              textTransform: "none",
+            }}
+          >
+            Add Faculty
+          </Button>
         </Box>
 
         <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-          <Box sx={{ 
-            display: 'flex', 
-            flexWrap: 'wrap', 
-            gap: 2, 
-            mb: 3,
-            alignItems: 'center'
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 2,
+              mb: 3,
+              alignItems: "center",
+            }}
+          >
             <FormControl sx={{ minWidth: 200 }}>
               <InputLabel>Department</InputLabel>
               <Select
@@ -201,7 +229,7 @@ const Body = () => {
                   <IconButton onClick={handleSearch}>
                     <Search />
                   </IconButton>
-                )
+                ),
               }}
             />
 
@@ -215,7 +243,7 @@ const Body = () => {
           </Box>
 
           {loading && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
               <CircularProgress />
             </Box>
           )}
@@ -228,23 +256,29 @@ const Body = () => {
 
           <TableContainer component={Paper} sx={{ mb: 3 }}>
             <Table>
-              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
                 <TableRow>
                   <TableCell padding="checkbox">
                     <Checkbox
                       indeterminate={
-                        selectedFaculty.length > 0 && 
+                        selectedFaculty.length > 0 &&
                         selectedFaculty.length < (searchedFaculty?.length || 0)
                       }
                       checked={
-                        (searchedFaculty?.length || 0) > 0 && 
-                        selectedFaculty.length === (searchedFaculty?.length || 0)
+                        (searchedFaculty?.length || 0) > 0 &&
+                        selectedFaculty.length ===
+                          (searchedFaculty?.length || 0)
                       }
                       onChange={() => {
-                        if (selectedFaculty.length === (searchedFaculty?.length || 0)) {
+                        if (
+                          selectedFaculty.length ===
+                          (searchedFaculty?.length || 0)
+                        ) {
                           setSelectedFaculty([]);
                         } else {
-                          setSelectedFaculty(searchedFaculty?.map(fac => fac._id) || []);
+                          setSelectedFaculty(
+                            searchedFaculty?.map((fac) => fac._id) || []
+                          );
                         }
                       }}
                     />
@@ -277,8 +311,8 @@ const Body = () => {
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
-                      {loading ? '' : 'No faculty found matching your criteria'}
+                    <TableCell colSpan={7} sx={{ textAlign: "center", py: 4 }}>
+                      {loading ? "" : "No faculty found matching your criteria"}
                     </TableCell>
                   </TableRow>
                 )}
@@ -287,14 +321,16 @@ const Body = () => {
           </TableContainer>
 
           {selectedFaculty.length > 0 && (
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              p: 1,
-              backgroundColor: 'action.selected',
-              borderRadius: 1
-            }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                p: 1,
+                backgroundColor: "action.selected",
+                borderRadius: 1,
+              }}
+            >
               <Typography>
                 {selectedFaculty.length} faculty member(s) selected
               </Typography>

@@ -73,6 +73,15 @@ export const getStudent = (formData) => async (dispatch) => {
   }
 };
 
+export const getAllTest = () => async (dispatch) => {
+  try {
+    const { data } = await api.getAllTest();
+    dispatch({ type: GET_TEST, payload: data });
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+}
+
 export const uploadMark =
   (marks, department, section, year, test) => async (dispatch) => {
     try {

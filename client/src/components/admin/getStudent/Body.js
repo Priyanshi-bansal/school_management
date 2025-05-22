@@ -9,7 +9,8 @@ import {
   Class as SectionIcon,
   Event as BatchIcon,
   Search,
-  ClearAll
+  ClearAll,
+  Add
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudent, getAllStudent } from "../../../redux/actions/adminActions";
@@ -36,8 +37,10 @@ import {
   Divider
 } from "@mui/material";
 import { SET_ERRORS } from "../../../redux/actionTypes";
+import { useNavigate } from "react-router-dom";
 
 const Body = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.admin.allDepartment);
   const [error, setError] = useState({});
@@ -149,6 +152,24 @@ const Body = () => {
             variant="outlined"
             sx={{ ml: 2 }}
           />
+          <Button
+                      variant="contained"
+                      color="primary"
+                      startIcon={<Add />}
+                      onClick={() => navigate("/admin/addstudent")}
+                      sx={{
+                        ml: "auto",
+                        px: 3,
+                        py: 1.5,
+                        fontWeight: "bold",
+                        fontSize: "16px",
+                        borderRadius: "8px",
+                        boxShadow: 2,
+                        textTransform: "none",
+                      }}
+                    >
+                      Add Student
+                    </Button>
         </Box>
 
         <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>

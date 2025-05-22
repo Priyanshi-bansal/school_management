@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Login = () => {
   return (
     <div
-      className="min-h-screen w-full flex justify-center items-center p-4 bg-cover bg-center"
+      className="h-screen w-full flex justify-center items-center p-4 bg-cover bg-center"
       style={{
         backgroundImage: `url("https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")`,
       }}

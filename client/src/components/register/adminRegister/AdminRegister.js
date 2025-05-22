@@ -6,6 +6,7 @@ import Spinner from "../../../utils/Spinner";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 // Validation schema
 const schema = yup.object({
@@ -63,6 +64,13 @@ const AdminRegister = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen" style={{ backgroundImage: "url('/asset/top.avif')", backgroundSize: "cover", backgroundPosition: "center" }}>
+      <Link to="/login/adminlogin" className="">
+          <button className="absolute top-4 left-4 cursor-pointer text-white" >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+          </Link>
       {/* Left Side Content */}
       <div className="hidden md:flex w-1/2 flex-col justify-center items-center bg-white p-8" style={{ backgroundColor: "inherit" }}>
         <h1 className="text-4xl font-bold text-gray-800 mb-2"></h1>

@@ -1,14 +1,31 @@
 import React, { useEffect, useState } from "react";
-import SecurityUpdateIcon from "@mui/icons-material/SecurityUpdate";
+import {
+  SecurityUpdate as UpdateIcon,
+  VisibilityOff as PasswordIcon,
+  Person as NameIcon,
+  Cake as DobIcon,
+  Email as EmailIcon,
+  School as DepartmentIcon,
+  Phone as ContactIcon,
+  Work as DesignationIcon
+} from "@mui/icons-material";
 import FileBase from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
 import { updateFaculty } from "../../../../redux/actions/facultyActions";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
-import { MenuItem, Select } from "@mui/material";
+import { 
+  MenuItem, 
+  Select,
+  Button,
+  Typography,
+  Box,
+  Paper,
+  Avatar,
+  Divider,
+  TextField
+} from "@mui/material";
 import Spinner from "../../../../utils/Spinner";
 import { SET_ERRORS } from "../../../../redux/actionTypes";
-import * as classes from "../../../../utils/styles";
 
 const Body = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -16,6 +33,7 @@ const Body = () => {
   const navigate = useNavigate();
   const store = useSelector((state) => state);
   const departments = useSelector((state) => state.admin.allDepartment);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const [value, setValue] = useState({
@@ -25,7 +43,7 @@ const Body = () => {
     department: "",
     contactNumber: "",
     avatar: "",
-    designation: "",
+    designation: ""
   });
 
   useEffect(() => {
@@ -38,6 +56,7 @@ const Body = () => {
     e.preventDefault();
     setError({});
     setLoading(true);
+
     if (
       value.name === "" &&
       value.dob === "" &&
@@ -46,7 +65,7 @@ const Body = () => {
       value.avatar === "" &&
       value.designation === ""
     ) {
-      alert("Enter atleast one value");
+      alert("Enter at least one value");
       setLoading(false);
     } else {
       dispatch(updateFaculty(value));
@@ -67,152 +86,196 @@ const Body = () => {
   }, []);
 
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex  items-center justify-between mr-8">
-          <div className="flex space-x-2 text-gray-400">
-            <SecurityUpdateIcon />
-            <h1>Update</h1>
-          </div>
-
-          <div
+    <Box sx={{ flex: 1, p: 4, bgcolor: 'background.default' }}>
+      <Box sx={{ maxWidth: 800, mx: 'auto' }}>
+        {/* Header */}
+        <Box sx={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          mb: 4
+        }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <UpdateIcon color="primary" sx={{ mr: 2, fontSize: 32 }} />
+            <Typography variant="h4" component="h1">
+              Update Faculty Profile
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={<PasswordIcon />}
             onClick={() => navigate("/faculty/update/password")}
-            className="flex space-x-2 cursor-pointer">
-            <VisibilityOffIcon />
-            <h1 className="font-bold">Password</h1>
-          </div>
-        </div>
+            sx={{
+              bgcolor: 'primary.main',
+              '&:hover': { bgcolor: 'primary.dark' }
+            }}
+          >
+            Update Password
+          </Button>
+        </Box>
 
-        <div className=" mr-10 bg-white flex flex-col rounded-xl ">
-          <form className={classes.adminForm0} onSubmit={handleSubmit}>
-            <div className={classes.adminForm1}>
-              <div className={classes.adminForm2l}>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Name :</h1>
-                  <input
-                    placeholder={user.result?.name}
-                    className={classes.adminInput}
-                    type="text"
-                    value={value.name}
-                    onChange={(e) =>
-                      setValue({ ...value, name: e.target.value })
-                    }
-                  />
-                </div>
+        {/* Form */}
+        <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
+          <form onSubmit={handleSubmit}>
+            <Box sx={{ 
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+              gap: 3,
+              mb: 4
+            }}>
+              {/* Left Column */}
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <TextField
+                  label="Full Name"
+                  placeholder={user.result?.name}
+                  value={value.name}
+                  onChange={(e) => setValue({ ...value, name: e.target.value })}
+                  InputProps={{
+                    startAdornment: <NameIcon color="action" sx={{ mr: 1 }} />
+                  }}
+                  fullWidth
+                />
 
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>DOB :</h1>
-                  <input
-                    placeholder={user.result?.dob}
-                    className={classes.adminInput}
-                    type="text"
-                    value={value.dob}
-                    onChange={(e) =>
-                      setValue({ ...value, dob: e.target.value })
-                    }
-                  />
-                </div>
+                <TextField
+                  label="Date of Birth"
+                  type="date"
+                  placeholder={user.result?.dob}
+                  value={value.dob}
+                  onChange={(e) => setValue({ ...value, dob: e.target.value })}
+                  InputProps={{
+                    startAdornment: <DobIcon color="action" sx={{ mr: 1 }} />
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  fullWidth
+                />
 
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Email :</h1>
-                  <input
-                    placeholder={user.result?.email}
-                    disabled
-                    className={classes.adminInput}
-                    type="text"
-                  />
-                </div>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Designation :</h1>
-                  <input
-                    placeholder={user.result?.designation}
-                    className={classes.adminInput}
-                    value={value.designation}
-                    onChange={(e) =>
-                      setValue({ ...value, designation: e.target.value })
-                    }
-                    type="text"
-                  />
-                </div>
-              </div>
+                <TextField
+                  label="Email"
+                  value={user.result?.email}
+                  disabled
+                  InputProps={{
+                    startAdornment: <EmailIcon color="action" sx={{ mr: 1 }} />
+                  }}
+                  fullWidth
+                />
+              </Box>
 
-              <div className={classes.adminForm2r}>
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Department :</h1>
+              {/* Right Column */}
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <Box>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    Department
+                  </Typography>
                   <Select
-                    displayEmpty
-                    sx={{ height: 36 }}
-                    inputProps={{ "aria-label": "Without label" }}
                     value={value.department}
-                    onChange={(e) =>
+                    onChange={(e) => 
                       setValue({ ...value, department: e.target.value })
-                    }>
-                    <MenuItem value="">None</MenuItem>
+                    }
+                    displayEmpty
+                    fullWidth
+                    startAdornment={<DepartmentIcon color="action" sx={{ mr: 1 }} />}
+                  >
+                    <MenuItem value="">Select Department</MenuItem>
                     {departments?.map((dp, idx) => (
                       <MenuItem key={idx} value={dp.department}>
                         {dp.department}
                       </MenuItem>
                     ))}
                   </Select>
-                </div>
+                </Box>
 
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Contact Number :</h1>
-                  <input
-                    placeholder={user.result?.contactNumber}
-                    className={classes.adminInput}
-                    type="text"
-                    value={value.contactNumber}
-                    onChange={(e) =>
-                      setValue({ ...value, contactNumber: e.target.value })
-                    }
-                  />
-                </div>
+                <TextField
+                  label="Contact Number"
+                  placeholder={user.result?.contactNumber}
+                  value={value.contactNumber}
+                  onChange={(e) => 
+                    setValue({ ...value, contactNumber: e.target.value })
+                  }
+                  InputProps={{
+                    startAdornment: <ContactIcon color="action" sx={{ mr: 1 }} />
+                  }}
+                  fullWidth
+                />
 
-                <div className={classes.adminForm3}>
-                  <h1 className={classes.adminLabel}>Avatar :</h1>
+                <TextField
+                  label="Designation"
+                  placeholder={user.result?.designation}
+                  value={value.designation}
+                  onChange={(e) => 
+                    setValue({ ...value, designation: e.target.value })
+                  }
+                  InputProps={{
+                    startAdornment: <DesignationIcon color="action" sx={{ mr: 1 }} />
+                  }}
+                  fullWidth
+                />
+
+                <Box>
+                  <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                    Profile Picture
+                  </Typography>
                   <FileBase
                     type="file"
                     multiple={false}
-                    onDone={({ base64 }) =>
+                    onDone={({ base64 }) => 
                       setValue({ ...value, avatar: base64 })
                     }
                   />
-                </div>
-              </div>
-            </div>
+                  {value.avatar && (
+                    <Avatar
+                      src={value.avatar}
+                      sx={{ width: 80, height: 80, mt: 2 }}
+                    />
+                  )}
+                </Box>
+              </Box>
+            </Box>
 
-            <div className={classes.adminFormButton}>
-              <button className={classes.adminFormSubmitButton} type="submit">
-                Submit
-              </button>
+            <Divider sx={{ my: 3 }} />
 
-              <button
-                onClick={() => navigate("/admin/profile")}
-                className={classes.adminFormClearButton}
-                type="button">
+            {/* Buttons */}
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+              <Button
+                variant="outlined"
+                onClick={() => navigate("/faculty/profile")}
+              >
                 Cancel
-              </button>
-            </div>
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  bgcolor: 'primary.main',
+                  '&:hover': { bgcolor: 'primary.dark' }
+                }}
+              >
+                Update Profile
+              </Button>
+            </Box>
 
-            <div className={classes.loadingAndError}>
+            {/* Loading & Errors */}
+            <Box sx={{ mt: 3 }}>
               {loading && (
-                <Spinner
-                  message="Updating"
-                  height={30}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Spinner
+                    message="Updating Profile..."
+                    height={30}
+                    width={150}
+                    color="#111111"
+                    messageColor="blue"
+                  />
+                </Box>
               )}
               {error.backendError && (
-                <p className="text-red-500">{error.backendError}</p>
+                <Typography color="error" sx={{ mt: 2 }}>
+                  {error.backendError}
+                </Typography>
               )}
-            </div>
+            </Box>
           </form>
-        </div>
-      </div>
-    </div>
+        </Paper>
+      </Box>
+    </Box>
   );
 };
 
