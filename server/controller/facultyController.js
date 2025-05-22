@@ -164,6 +164,18 @@ export const getTest = async (req, res) => {
   }
 };
 
+export const getAllTest = async (req, res) => {
+  try {
+    const tests = await Test.find();
+
+    res.status(200).json({ result: tests });
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error;
+    res.status(500).json(errors);
+  }
+};
+
 export const getStudent = async (req, res) => {
   try {
     const { department, year, section } = req.body;

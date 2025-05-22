@@ -25,6 +25,7 @@ export const ATTENDANCE_MARKED = "ATTENDANCE_MARKED";
 export const STUDENT_LOGIN = "STUDENT_LOGIN";
 export const UPDATE_STUDENT = "UPDATE_STUDENT";
 export const TEST_RESULT = "TEST_RESULT";
+export const GET_ALL_TEST = "GET_ALL_TEST";
 export const ATTENDANCE = "ATTENDANCE";
 export const GET_ADMIN = "GET_ADMIN";
 export const DELETE_ADMIN = "DELETE_ADMIN";

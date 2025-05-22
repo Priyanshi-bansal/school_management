@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Avatar } from "@mui/material";
+import { Avatar, Button } from "@mui/material";
 
 // Icons
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import SecurityUpdateIcon from "@mui/icons-material/SecurityUpdate";
+import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
 import BadgeIcon from "@mui/icons-material/Badge";
 import SchoolIcon from "@mui/icons-material/School";
@@ -12,51 +12,144 @@ import CakeIcon from "@mui/icons-material/Cake";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CallIcon from "@mui/icons-material/Call";
 import FamilyRestroomIcon from "@mui/icons-material/FamilyRestroom";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Body = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
+  const profileData = [
+    {
+      icon: <PersonIcon className="text-gray-600" />,
+      label: "Name",
+      value: user?.result?.name,
+    },
+    {
+      icon: <EmailIcon className="text-gray-600" />,
+      label: "Email",
+      value: user?.result?.email,
+    },
+    {
+      icon: <BadgeIcon className="text-gray-600" />,
+      label: "Username",
+      value: user?.result?.username,
+    },
+    {
+      icon: <SchoolIcon className="text-gray-600" />,
+      label: "Department",
+      value: user?.result?.department,
+    },
+    {
+      icon: <BadgeIcon className="text-gray-600" />,
+      label: "Section",
+      value: user?.result?.section,
+    },
+    {
+      icon: <SchoolIcon className="text-gray-600" />,
+      label: "Batch",
+      value: user?.result?.batch,
+    },
+    {
+      icon: <FamilyRestroomIcon className="text-gray-600" />,
+      label: "Father's Name",
+      value: user?.result?.fatherName,
+    },
+    {
+      icon: <CallIcon className="text-gray-600" />,
+      label: "Father's Contact",
+      value: user?.result?.fatherContactNumber,
+    },
+    {
+      icon: <FamilyRestroomIcon className="text-gray-600" />,
+      label: "Mother's Name",
+      value: user?.result?.motherName,
+    },
+    {
+      icon: <CakeIcon className="text-gray-600" />,
+      label: "DOB",
+      value: user?.result?.dob,
+    },
+    {
+      icon: <CalendarTodayIcon className="text-gray-600" />,
+      label: "Joining Year",
+      value: user?.result?.year,
+    },
+    {
+      icon: <CallIcon className="text-gray-600" />,
+      label: "Contact Number",
+      value: user?.result?.contactNumber,
+    },
+  ];
+
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
+    <div className="flex-1 p-6 bg-gray-50">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mr-8">
-          <div className="flex space-x-2 text-gray-400">
-            <AssignmentIndIcon />
-            <h1 className="text-lg font-semibold">Profile</h1>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
+          <div className="flex items-center mb-4 md:mb-0">
+            <AssignmentIndIcon className="text-indigo-600 mr-3" fontSize="large" />
+            <h1 className="text-2xl font-bold text-gray-800">Student Profile</h1>
           </div>
-          <div
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
             onClick={() => navigate("/student/update")}
-            className="flex space-x-2 cursor-pointer text-blue-600 hover:underline"
+            className="bg-indigo-600 hover:bg-indigo-700 shadow-md normal-case text-sm md:text-base"
           >
-            <SecurityUpdateIcon />
-            <h1 className="font-bold">Update</h1>
-          </div>
+            Update Profile
+          </Button>
         </div>
 
         {/* Profile Card */}
-        <div className="w-[98%] bg-white relative rounded-xl shadow-md">
-          {/* Avatar */}
-          <div className="absolute left-1/2 -top-10 transform -translate-x-1/2">
-            <Avatar src={user?.result?.avatar} sx={{ width: 70, height: 70 }} />
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+          {/* Profile Header */}
+          <div className="bg-gradient-to-r from-indigo-500 to-purple-600 h-32 relative">
+            <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
+              <Avatar
+                src={user?.result?.avatar}
+                sx={{
+                  width: 120,
+                  height: 120,
+                  border: "4px solid white",
+                }}
+                className="shadow-lg"
+              />
+            </div>
           </div>
 
-          {/* Info Grid */}
-          <div className="overflow-y-scroll h-[36rem] py-10 px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-              <InfoCard icon={<BadgeIcon />} label="Name" value={user?.result?.name} />
-              <InfoCard icon={<EmailIcon />} label="Email" value={user?.result?.email} />
-              <InfoCard icon={<BadgeIcon />} label="Username" value={user?.result?.username} />
-              <InfoCard icon={<SchoolIcon />} label="Department" value={user?.result?.department} />
-              <InfoCard icon={<FamilyRestroomIcon />} label="Father's Name" value={user?.result?.fatherName} />
-              <InfoCard icon={<FamilyRestroomIcon />} label="Mother's Name" value={user?.result?.motherName} />
-              <InfoCard icon={<CakeIcon />} label="DOB" value={user?.result?.dob} />
-              <InfoCard icon={<CalendarTodayIcon />} label="Joining Year" value={user?.result?.year} />
-              <InfoCard icon={<CallIcon />} label="Contact Number" value={user?.result?.contactNumber} />
-              <InfoCard icon={<BadgeIcon />} label="Section" value={user?.result?.section} />
-              <InfoCard icon={<CallIcon />} label="Father's Contact Number" value={user?.result?.fatherContactNumber} />
-              <InfoCard icon={<SchoolIcon />} label="Batch" value={user?.result?.batch} />
+          {/* Profile Content */}
+          <div className="pt-20 pb-8 px-6 md:px-10">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-800">
+                {user?.result?.name}
+              </h2>
+              <p className="text-indigo-600 font-medium">
+                {user?.result?.department} Student
+              </p>
+            </div>
+
+            {/* Profile Details Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {profileData.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-4 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex items-start">
+                    <div className="mr-3 mt-1 text-gray-500">
+                      {item.icon}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-500 font-medium mb-1">
+                        {item.label}
+                      </p>
+                      <p className="text-gray-800 font-medium">
+                        {item.value || "N/A"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -65,18 +158,4 @@ const Body = () => {
   );
 };
 
-// InfoCard Component — Icon left, label above value, value in input-style box
-const InfoCard = ({ icon, label, value }) => (
-  <div className="bg-white rounded-xl border border-gray-100 p-1 flex flex-col h-full justify-between shadow-sm">
-    <div className="flex items-center mb-3">
-      <div className="text-gray-500 text-3xl mr-2 flex-shrink-0 flex items-center justify-center">{icon}</div>
-      <span className="text-sm text-gray-500 font-medium">{label}</span>
-    </div>
-    <div className="mt-2">
-      <div className="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 text-gray-800 text-lg font-medium">
-        {value || "N/A"}
-      </div>
-    </div>
-  </div>
-);
 export default Body;

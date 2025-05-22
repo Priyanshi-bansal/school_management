@@ -1,244 +1,374 @@
 import React, { useEffect, useState } from "react";
-import BoyIcon from "@mui/icons-material/Boy";
+import {
+  Assignment as TestIcon,
+  Search,
+  Upload,
+  Clear,
+  Person,
+  CheckCircle,
+  Error as ErrorIcon
+} from "@mui/icons-material";
+import {
+  Button,
+  Select,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TextField,
+  Box,
+  Typography,
+  FormControl,
+  InputLabel,
+  Card,
+  CardContent,
+  Avatar,
+  CircularProgress,
+  Alert,
+  Chip
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getStudent, uploadMark } from "../../../redux/actions/facultyActions";
-import { MenuItem, Select } from "@mui/material";
-import Spinner from "../../../utils/Spinner";
-import * as classes from "../../../utils/styles";
+import { getStudent, uploadMark, getTest } from "../../../redux/actions/facultyActions";
 import { MARKS_UPLOADED, SET_ERRORS } from "../../../redux/actionTypes";
-import { getTest } from "../../../redux/actions/facultyActions";
+
+// Development mode flag
+const isDevMode = true;
+
+// Dummy data for testing
+const dummyStudents = [
+  { _id: "1", name: "Alice Johnson", username: "PRN001", section: "1", marks: 75 },
+  { _id: "2", name: "Bob Smith", username: "PRN002", section: "1", marks: 82 },
+  { _id: "3", name: "Charlie Lee", username: "PRN003", section: "1", marks: 68 },
+];
+
+const dummyTests = [
+  { test: "Midterm", subjectCode: "MTH101" },
+  { test: "Final", subjectCode: "PHY102" },
+];
+
 const Body = () => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("user"));
-
-  const [error, setError] = useState({});
-  const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
-  const tests = store.faculty.tests.result;
-  const [marks, setMarks] = useState([]);
 
-  const [value, setValue] = useState({
-    department: "",
+  const [loading, setLoading] = useState(false);
+  const [testsLoading, setTestsLoading] = useState(false);
+  const [error, setError] = useState({});
+  const [success, setSuccess] = useState(false);
+  const [marks, setMarks] = useState([]);
+  const [localStudents, setLocalStudents] = useState([]);
+
+  const [filters, setFilters] = useState({
+    department: user.result.department,
     year: "",
     section: "",
-    test: "",
+    test: ""
   });
-  const [search, setSearch] = useState(false);
+
+  // const students = isDevMode ? localStudents : useSelector((state) => state.admin.students.result);
+  // const tests = isDevMode ? dummyTests : store.faculty.tests.result;
+  const reduxStudents = useSelector((state) => state.admin.students.result);
+const students = isDevMode ? localStudents : reduxStudents;
+
+
+const tests = isDevMode ? dummyTests : store.faculty.tests.result;
+
 
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
       setLoading(false);
-      setValue({ department: "", year: "", section: "", test: "" });
+      setTestsLoading(false);
+      setSuccess(false);
     }
   }, [store.errors]);
 
-  const handleInputChange = (value, _id) => {
-    const newMarks = [...marks];
-    let index = newMarks.findIndex((m) => m._id === _id);
-    if (index === -1) {
-      newMarks.push({ _id, value });
-    } else {
-      newMarks[index].value = value;
-    }
-    setMarks(newMarks);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSearch(true);
-    setLoading(true);
-    setError({});
-    dispatch(getStudent(value));
-  };
-  const students = useSelector((state) => state.admin.students.result);
-
-  const uploadMarks = (e) => {
-    setError({});
-    dispatch(
-      uploadMark(marks, value.department, value.section, value.year, value.test)
-    );
-  };
-
-  useEffect(() => {
-    if (students?.length !== 0) setLoading(false);
-  }, [students]);
-
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
-    setValue({ ...value, department: user.result.department });
   }, []);
 
   useEffect(() => {
-    if (store.errors || store.faculty.marksUploaded) {
+    if (store.faculty.marksUploaded) {
       setLoading(false);
-      if (store.faculty.marksUploaded) {
-        setValue({ department: "", year: "", test: "", section: "" });
-        setSearch(false);
-        dispatch({ type: SET_ERRORS, payload: {} });
-        dispatch({ type: MARKS_UPLOADED, payload: false });
-      }
-    } else {
-      setLoading(true);
+      setSuccess(true);
+      setFilters(prev => ({ ...prev, test: "" }));
+      setMarks([]);
+      setTimeout(() => setSuccess(false), 3000);
+      dispatch({ type: MARKS_UPLOADED, payload: false });
     }
-  }, [store.errors, store.faculty.marksUploaded]);
+  }, [store.faculty.marksUploaded]);
 
   useEffect(() => {
-    if (value.year !== "" && value.section !== "") {
-      dispatch(getTest(value));
+    if (!isDevMode && filters.year && filters.section) {
+      setTestsLoading(true);
+      dispatch(getTest({
+        department: filters.department,
+        year: filters.year,
+        section: filters.section
+      })).finally(() => setTestsLoading(false));
+    } else {
+      setFilters(prev => ({ ...prev, test: "" }));
     }
-  }, [value.year, value.section]);
+  }, [filters.year, filters.section]);
+
+  const handleMarkChange = (value, studentId) => {
+    setMarks(prev => {
+      const existingIndex = prev.findIndex(m => m._id === studentId);
+      if (existingIndex >= 0) {
+        const updated = [...prev];
+        updated[existingIndex] = { _id: studentId, value };
+        return updated;
+      }
+      return [...prev, { _id: studentId, value }];
+    });
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!filters.test && !isDevMode) return;
+
+    setLoading(true);
+    setError({});
+    setMarks([]);
+
+    if (isDevMode) {
+      setTimeout(() => {
+        setLocalStudents(dummyStudents);
+        setLoading(false);
+      }, 500);
+    } else {
+      dispatch(getStudent(filters));
+    }
+  };
+
+  const handleUpload = () => {
+    if (marks.length === 0) return;
+
+    if (isDevMode) {
+      console.log("Uploading marks (dev mode):", marks);
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 3000);
+      return;
+    }
+
+    setLoading(true);
+    dispatch(uploadMark({
+      marks,
+      department: filters.department,
+      section: filters.section,
+      year: filters.year,
+      test: filters.test
+    }));
+  };
+
+  const handleReset = () => {
+    setFilters({ ...filters, year: "", section: "", test: "" });
+    setError({});
+    setMarks([]);
+    if (isDevMode) setLocalStudents([]);
+  };
 
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
-          <BoyIcon />
-          <h1>All Students</h1>
-        </div>
-        <div className=" mr-10 bg-white grid grid-cols-4 rounded-xl pt-6 pl-6 h-[29.5rem]">
-          <form
-            className="flex flex-col space-y-2 col-span-1"
-            onSubmit={handleSubmit}>
-            <label htmlFor="year">Year</label>
-            <Select
-              required
-              displayEmpty
-              sx={{ height: 36, width: 224 }}
-              inputProps={{ "aria-label": "Without label" }}
-              value={value.year}
-              onChange={(e) => setValue({ ...value, year: e.target.value })}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-              <MenuItem value="4">4</MenuItem>
-            </Select>
-            <label htmlFor="section">Section</label>
-            <Select
-              required
-              displayEmpty
-              sx={{ height: 36, width: 224 }}
-              inputProps={{ "aria-label": "Without label" }}
-              value={value.section}
-              onChange={(e) => setValue({ ...value, section: e.target.value })}>
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-            </Select>
-            <label htmlFor="year">Test</label>
-            <Select
-              required
-              displayEmpty
-              sx={{ height: 36, width: 224 }}
-              inputProps={{ "aria-label": "Without label" }}
-              value={value.test}
-              onChange={(e) => setValue({ ...value, test: e.target.value })}>
-              <MenuItem value="">None</MenuItem>
-              {tests?.map((test, idx) => (
-                <MenuItem value={test.test} key={idx}>
-                  {test.test}
-                </MenuItem>
-              ))}
-            </Select>
-            <button
-              className={`${classes.adminFormSubmitButton} w-56`}
-              type="submit">
-              Search
-            </button>
-          </form>
-          <div className="col-span-3 mr-6">
-            <div className={classes.loadingAndError}>
-              {loading && (
-                <Spinner
-                  message="Loading"
-                  height={50}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
-              )}
-              {(error.noStudentError || error.backendError) && (
-                <p className="text-red-500 text-2xl font-bold">
-                  {error.noStudentError || error.backendError}
-                </p>
-              )}
-            </div>
-            {search &&
-              !loading &&
-              Object.keys(error).length === 0 &&
-              students?.length !== 0 && (
-                <div className={`${classes.adminData} h-[20rem]`}>
-                  <div className="grid grid-cols-8">
-                    <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
-                      Sr no.
-                    </h1>
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Name
-                    </h1>
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Username
-                    </h1>
+    <Box sx={{ p: 3, bgcolor: '#f8f9fa', minHeight: '100vh' }}>
+      <Box sx={{ maxWidth: 1200, mx: 'auto' }}>
+        {/* Header */}
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+          <TestIcon color="primary" sx={{ fontSize: 32, mr: 2 }} />
+          <Typography variant="h4" fontWeight="bold">Upload Test Marks</Typography>
+        </Box>
 
-                    <h1 className={`col-span-1 ${classes.adminDataHeading}`}>
-                      Section
-                    </h1>
-                    <h1 className={`col-span-2 ${classes.adminDataHeading}`}>
-                      Marks
-                    </h1>
-                  </div>
-                  {students?.map((stu, idx) => (
-                    <div
-                      key={idx}
-                      className={`${classes.adminDataBody} grid-cols-8`}>
-                      <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
-                        {idx + 1}
-                      </h1>
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {stu.name}
-                      </h1>
-                      <h1
-                        className={`col-span-2 ${classes.adminDataBodyFields}`}>
-                        {stu.username}
-                      </h1>
+        {/* Alerts */}
+        {success && (
+          <Alert severity="success" sx={{ mb: 3 }} icon={<CheckCircle />}>
+            Marks uploaded successfully!
+          </Alert>
+        )}
+        {(error.noStudentError || error.backendError) && (
+          <Alert severity="error" sx={{ mb: 3 }} icon={<ErrorIcon />}>
+            {error.noStudentError || error.backendError}
+          </Alert>
+        )}
 
-                      <h1
-                        className={`col-span-1 ${classes.adminDataBodyFields}`}>
-                        {stu.section}
-                      </h1>
-                      <input
-                        onChange={(e) =>
-                          handleInputChange(e.target.value, stu._id)
-                        }
-                        value={stu.marks}
-                        className="col-span-2 border-2 w-24 px-2 h-8"
-                        type="text"
-                      />
-                    </div>
+        {/* Filter Form */}
+        <Card sx={{ mb: 3, borderRadius: 2, boxShadow: 3 }}>
+          <CardContent>
+            <Typography variant="h6" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+              <Search color="primary" sx={{ mr: 1 }} />
+              Search Criteria
+            </Typography>
+
+            <Box sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' },
+              gap: 2
+            }}>
+              <FormControl size="small" fullWidth>
+                <InputLabel className="bg-white">Department</InputLabel>
+                <Select value={filters.department} disabled>
+                  <MenuItem value={filters.department}>{filters.department}</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl size="small" fullWidth>
+                <InputLabel className="bg-white">Year</InputLabel>
+                <Select
+                  value={filters.year}
+                  onChange={(e) => setFilters({ ...filters, year: e.target.value, test: "" })}
+                >
+                  <MenuItem value="">Select Year</MenuItem>
+                  {[1, 2, 3, 4].map(year => (
+                    <MenuItem key={year} value={year.toString()}>Year {year}</MenuItem>
                   ))}
-                </div>
-              )}
-            {search && Object.keys(error).length === 0 && (
-              <div className="">
-                <button
-                  onClick={uploadMarks}
-                  className={`${classes.adminFormSubmitButton} bg-blue-500 mt-5 ml-[22rem]`}>
-                  Upload
-                </button>
-              </div>
-            )}
-            {(error.examError || error.backendError) && (
-              <p className="text-red-500 text-2xl font-bold ml-32">
-                {error.examError || error.backendError}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
+                </Select>
+              </FormControl>
+
+              <FormControl size="small" fullWidth>
+                <InputLabel className="bg-white">Section</InputLabel>
+                <Select
+                  value={filters.section}
+                  onChange={(e) => setFilters({ ...filters, section: e.target.value, test: "" })}
+                >
+                  <MenuItem value="">Select Section</MenuItem>
+                  {[1, 2, 3].map(section => (
+                    <MenuItem key={section} value={section.toString()}>Section {section}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl size="small" fullWidth>
+                <InputLabel className="bg-white">Test</InputLabel>
+                <Select
+                  value={filters.test}
+                  onChange={(e) => setFilters({ ...filters, test: e.target.value })}
+                  disabled={!filters.year || !filters.section || testsLoading}
+                  endAdornment={testsLoading && <CircularProgress size={20} sx={{ mr: 2 }} />}
+                >
+                  <MenuItem value="">Select Test</MenuItem>
+                  {tests?.map((test, idx) => (
+                    <MenuItem key={idx} value={test.test}>
+                      {test.test} ({test.subjectCode})
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              mt: 3,
+              pt: 2,
+              borderTop: 1,
+              borderColor: 'divider'
+            }}>
+              <Button
+                variant="outlined"
+                startIcon={<Clear />}
+                onClick={handleReset}
+                sx={{ mr: 2 }}
+              >
+                Clear
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<Search />}
+                onClick={handleSearch}
+                disabled={!filters.year || !filters.section || !filters.test || loading}
+              >
+                {loading ? <CircularProgress size={20} color="inherit" /> : "Search Students"}
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Students List */}
+        {loading && !students?.length ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : students?.length > 0 ? (
+          <Card sx={{ borderRadius: 2, boxShadow: 3 }}>
+            <CardContent>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h6">Students List - {filters.test}</Typography>
+                <Chip
+                  label={`${marks.length} marks entered`}
+                  color={marks.length === students.length ? "success" : "warning"}
+                />
+              </Box>
+
+              <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                <Table stickyHeader>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>#</TableCell>
+                      <TableCell>Student</TableCell>
+                      <TableCell>PRN</TableCell>
+                      <TableCell>Section</TableCell>
+                      <TableCell align="right">Marks</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {students.map((student, idx) => (
+                      <TableRow key={student._id} hover>
+                        <TableCell>{idx + 1}</TableCell>
+                        <TableCell>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Avatar sx={{ width: 32, height: 32, mr: 1.5 }}>
+                              {student.name.charAt(0)}
+                            </Avatar>
+                            {student.name}
+                          </Box>
+                        </TableCell>
+                        <TableCell>{student.username}</TableCell>
+                        <TableCell>Sec {student.section}</TableCell>
+                        <TableCell align="right">
+                          <TextField
+                            type="number"
+                            size="small"
+                            sx={{ width: 100 }}
+                            inputProps={{ min: 0, max: 100, step: "0.01" }}
+                            onChange={(e) => handleMarkChange(e.target.value, student._id)}
+                            defaultValue={student.marks || ""}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
+                <Button
+                  variant="contained"
+                  startIcon={<Upload />}
+                  onClick={handleUpload}
+                  disabled={marks.length === 0 || loading}
+                  size="large"
+                  sx={{ px: 4 }}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : "Upload Marks"}
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card sx={{ textAlign: 'center', p: 4, borderRadius: 2, boxShadow: 3 }}>
+            <Person sx={{ fontSize: 60, color: 'text.disabled', mb: 2 }} />
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              No students to display
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Please select search criteria and click "Search Students"
+            </Typography>
+          </Card>
+        )}
+      </Box>
+    </Box>
   );
 };
 

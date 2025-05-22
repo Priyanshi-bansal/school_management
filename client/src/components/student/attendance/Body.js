@@ -1,21 +1,41 @@
 import React, { useEffect, useState } from "react";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
+import { 
+  MenuBook as MenuBookIcon,
+  Delete as DeleteIcon,
+  Search as SearchIcon,
+  ClearAll as ClearAllIcon
+} from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubject } from "../../../redux/actions/adminActions";
-import { MenuItem, Select } from "@mui/material";
-import Spinner from "../../../utils/Spinner";
+import { 
+  Button, 
+  Box, 
+  Typography,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Chip,
+  TextField,
+  IconButton,
+  Alert
+} from "@mui/material";
 import { SET_ERRORS } from "../../../redux/actionTypes";
-import * as classes from "../../../utils/styles";
 
 const Body = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState({});
-  const attendance = useSelector((state) => state.student.attendance.result);
-
   const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [search, setSearch] = useState("");
+  const attendance = useSelector((state) => state.student.attendance.result);
 
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
@@ -24,119 +44,181 @@ const Body = () => {
     }
   }, [store.errors]);
 
-  const subjects = useSelector((state) => state.admin.subjects.result);
-
-  useEffect(() => {
-    if (subjects?.length !== 0) setLoading(false);
-  }, [subjects]);
-
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
   }, []);
 
+  const handleCheckboxChange = (subjectId) => {
+    setSelectedSubjects(prev => 
+      prev.includes(subjectId) 
+        ? prev.filter(id => id !== subjectId) 
+        : [...prev, subjectId]
+    );
+  };
+
+  const filteredAttendance = attendance?.filter(item => 
+    item.subjectName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    item.subjectCode?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setError({});
+    setSelectedSubjects([]);
+  };
+
   return (
-    <div className="flex-[0.8] mt-3">
-      <div className="space-y-5">
-        <div className="flex text-gray-400 items-center space-x-2">
-          <MenuBookIcon />
-          <h1>Attendance</h1>
-        </div>
-        <div className="mr-8 bg-white rounded-xl pt-6 pl-6 h-[29.5rem]">
-          {/* Filter and Search Bar */}
-          <div className="flex flex-col md:flex-row md:items-end md:space-x-4 mb-4 mr-6">
-            <div className="mb-2 md:mb-0 w-full md:w-auto">
-              <label className="block text-gray-500 text-sm mb-1" htmlFor="department-select">Department</label>
-              <Select
-                id="department-select"
-                displayEmpty
-                value={""}
-                className="w-full md:w-56 bg-white border border-gray-300 rounded-lg"
-                inputProps={{ 'aria-label': 'Department' }}
-                disabled
+    <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
+      <Box sx={{ mb: 4 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <MenuBookIcon color="primary" sx={{ mr: 1 }} />
+          <Typography variant="h5" color="textPrimary">
+            Attendance
+          </Typography>
+          <Chip 
+            label={`Total Subjects: ${filteredAttendance?.length || 0}`} 
+            color="primary" 
+            variant="outlined"
+            sx={{ ml: 2 }}
+          />
+        </Box>
+
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              gap: 2, 
+              mb: 3,
+              alignItems: 'center'
+            }}
+          >
+            <TextField
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              label="Search Subjects"
+              variant="outlined"
+              size="small"
+              sx={{ flexGrow: 1 }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                )
+              }}
+            />
+
+            <Button
+              variant="outlined"
+              startIcon={<ClearAllIcon />}
+              onClick={handleClearFilters}
+            >
+              Clear Filters
+            </Button>
+          </Box>
+
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {(error.noSubjectError || error.backendError) && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error.noSubjectError || error.backendError}
+            </Alert>
+          )}
+
+          <TableContainer component={Paper} sx={{ mb: 3 }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={
+                        selectedSubjects.length > 0 && 
+                        selectedSubjects.length < (filteredAttendance?.length || 0)
+                      }
+                      checked={
+                        (filteredAttendance?.length || 0) > 0 && 
+                        selectedSubjects.length === (filteredAttendance?.length || 0)
+                      }
+                      onChange={() => {
+                        if (selectedSubjects.length === (filteredAttendance?.length || 0)) {
+                          setSelectedSubjects([]);
+                        } else {
+                          setSelectedSubjects(filteredAttendance?.map(item => item._id) || []);
+                        }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>#</TableCell>
+                  <TableCell>Subject Code</TableCell>
+                  <TableCell>Subject Name</TableCell>
+                  <TableCell>Attended</TableCell>
+                  <TableCell>Total</TableCell>
+                  <TableCell>Percentage</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredAttendance?.length > 0 ? (
+                  filteredAttendance.map((item, idx) => (
+                    <TableRow key={item._id} hover>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedSubjects.includes(item._id)}
+                          onChange={() => handleCheckboxChange(item._id)}
+                        />
+                      </TableCell>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{item.subjectCode}</TableCell>
+                      <TableCell>{item.subjectName}</TableCell>
+                      <TableCell>{item.attended}</TableCell>
+                      <TableCell>{item.total}</TableCell>
+                      <TableCell>{item.percentage}%</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
+                      {loading ? '' : 'No attendance records found'}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {selectedSubjects.length > 0 && (
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              p: 1,
+              backgroundColor: 'action.selected',
+              borderRadius: 1
+            }}>
+              <Typography>
+                {selectedSubjects.length} subject(s) selected
+              </Typography>
+              <Button
+                variant="contained"
+                color="error"
+                startIcon={<DeleteIcon />}
+                onClick={() => {
+                  // Add delete functionality here
+                  console.log("Delete selected records:", selectedSubjects);
+                }}
+                disabled={loading}
               >
-                <MenuItem value="">All Departments</MenuItem>
-              </Select>
-            </div>
-            <div className="flex w-full md:w-auto items-end space-x-2">
-              <input
-                type="text"
-                placeholder="Search Subject"
-                className="w-full md:w-72 px-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={search || ""}
-                onChange={e => setSearch(e.target.value)}
-              />
-              <button className="flex items-center justify-center border border-gray-300 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-150 transition" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4-4m0 0A7 7 0 104 4a7 7 0 0013 13z" /></svg>
-              </button>
-            </div>
-            <button className="border border-blue-400 text-blue-600 font-semibold rounded-lg px-4 py-2 w-full md:w-auto mt-2 md:mt-0 hover:bg-blue-50 transition" type="button" onClick={() => setSearch("")}>CLEAR FILTERS</button>
-          </div>
-          <div className="col-span-3 mr-6 overflow-x-auto">
-            <div className={classes.loadingAndError}>
-              {loading && (
-                <Spinner
-                  message="Loading"
-                  height={50}
-                  width={150}
-                  color="#111111"
-                  messageColor="blue"
-                />
-              )}
-              {error.noSubjectError && (
-                <p className="text-red-500 text-2xl font-bold">
-                  {error.noSubjectError}
-                </p>
-              )}
-            </div>
-            {!loading &&
-              Object.keys(error).length === 0 &&
-              subjects?.length !== 0 && (
-                <div className="bg-white rounded-xl overflow-x-auto shadow">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          <input type="checkbox" className="form-checkbox" />
-                        </th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject Code</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject Name</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attended</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {attendance
-                        ?.filter((res) => {
-                          if (!search) return true;
-                          const s = search.toLowerCase();
-                          return (
-                            res.subjectName?.toLowerCase().includes(s) ||
-                            res.subjectCode?.toLowerCase().includes(s)
-                          );
-                        })
-                        .map((res, idx) => (
-                          <tr key={idx} className="hover:bg-gray-50 transition">
-                            <td className="px-4 py-3 whitespace-nowrap">
-                              <input type="checkbox" className="form-checkbox" />
-                            </td>
-                            <td className="px-4 py-3 whitespace-nowrap">{idx + 1}</td>
-                            <td className="px-4 py-3 whitespace-nowrap">{res.subjectCode}</td>
-                            <td className="px-4 py-3 whitespace-nowrap">{res.subjectName}</td>
-                            <td className="px-4 py-3 whitespace-nowrap">{res.attended}</td>
-                            <td className="px-4 py-3 whitespace-nowrap">{res.total}</td>
-                            <td className="px-4 py-3 whitespace-nowrap">{res.percentage}</td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-          </div>
-        </div>
-      </div>
-    </div>
+                Delete Selected
+              </Button>
+            </Box>
+          )}
+        </Paper>
+      </Box>
+    </Box>
   );
 };
 

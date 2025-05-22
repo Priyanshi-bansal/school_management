@@ -1,17 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Body from "./Body";
 import Header from "../Header";
 import Sidebar from "../Sidebar";
-import { useDispatch } from "react-redux";
-import {
-  getAllDepartment
-} from "../../../redux/actions/adminActions";
 
-const Result = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAllDepartment());
-  }, [dispatch]);
+const ClassPerformance = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="flex flex-col h-screen">
@@ -27,4 +19,4 @@ const Result = () => {
   );
 };
 
-export default Result;
+export default ClassPerformance;

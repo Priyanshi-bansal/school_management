@@ -31,7 +31,9 @@ const Body = () => {
   const [openNotice, setOpenNotice] = useState({});
   const notices = useSelector((state) => state.admin.notices.result);
   const testResult = useSelector((state) => state.student.testResult.result);
+  console.log("test result is: ", testResult);
   const attendance = useSelector((state) => state.student.attendance.result);
+  console.log("attendance is: ", attendance);
   const user = JSON.parse(localStorage.getItem("user"));
   const subjects = useSelector((state) => state.admin.subjects.result);
 
@@ -95,28 +97,28 @@ const Body = () => {
       icon: <Class sx={{ fontSize: 30 }} className="text-purple-500" />,
       title: "Subjects",
       value: subjects?.length || 0,
-      color: "bg-purple-50 border-l-4 border-purple-500",
+      color: "bg-purple-100 border border-purple-200",
       trend: "text-green-500"
     },
     {
       icon: <Assignment sx={{ fontSize: 30 }} className="text-blue-500" />,
       title: "Tests Taken",
       value: testResult?.length || 0,
-      color: "bg-blue-50 border-l-4 border-blue-500",
+      color: "bg-blue-100 border border-blue-200",
       trend: "text-green-500"
     },
     {
       icon: <CheckCircle sx={{ fontSize: 30 }} className="text-green-500" />,
       title: "Attendance",
       value: `${attendancePercentage}%`,
-      color: "bg-green-50 border-l-4 border-green-500",
+      color: "bg-green-100 border border-green-200",
       trend: attendancePercentage > 75 ? "text-green-500" : "text-red-500"
     },
     {
       icon: <School sx={{ fontSize: 30 }} className="text-orange-500" />,
       title: "Year",
       value: user.result.year,
-      color: "bg-orange-50 border-l-4 border-orange-500",
+      color: "bg-orange-100 border border-orange-200",
       trend: "text-blue-500"
     }
   ];
@@ -164,7 +166,7 @@ const Body = () => {
         </div>
 
         {/* Welcome Banner */}
-        <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-6 text-white shadow-lg animate-gradient-x">
+        <div className="bg-gradient-to-r from-indigo-600 to-blue-800 rounded-2xl p-6 text-white shadow-lg animate-gradient-x">
           <h2 className="text-3xl font-bold mb-2">Welcome back, {user.result.name.split(' ')[0]}!</h2>
           <div className="flex flex-wrap items-center gap-4">
             <span className="bg-white/20 px-3 py-1 rounded-full text-sm">

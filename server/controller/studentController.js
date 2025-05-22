@@ -143,9 +143,9 @@ export const testResult = async (req, res) => {
     console.log(req.body);
     const errors = { notestError: String };
     const student = await Student.findOne({ department, year, section });
-    // console.log(student)
+    console.log(student)
     const test = await Test.find({ department, year, section });
-    // console.log(test)
+    console.log(test)
     if (test.length === 0) {
       errors.notestError = "No Test Found";
       return res.status(404).json(errors);
