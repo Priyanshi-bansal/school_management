@@ -68,10 +68,13 @@ export const getStudent = (formData) => async (dispatch) => {
   try {
     const { data } = await api.getMarksStudent(formData);
     dispatch({ type: GET_STUDENT, payload: data });
+    return Promise.resolve(); // <- return success
   } catch (error) {
     dispatch({ type: SET_ERRORS, payload: error.response.data });
+    return Promise.reject(error); // <- return failure
   }
 };
+
 
 export const getAllTest = () => async (dispatch) => {
   try {
@@ -95,10 +98,20 @@ export const uploadMark =
       const { data } = await api.uploadMarks(formData);
       alert("Marks Uploaded Successfully");
       dispatch({ type: MARKS_UPLOADED, payload: true });
+      return Promise.resolve(); // <- return success
     } catch (error) {
       dispatch({ type: SET_ERRORS, payload: error.response.data });
+      return Promise.reject(error); // <- return failure
     }
   };
+export const getAttendance = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.getAttendance(formData);
+    dispatch({ type: GET_TEST, payload: data });
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+}
 
 export const markAttendance =
   (checkedValue, subjectName, department, year, section) =>

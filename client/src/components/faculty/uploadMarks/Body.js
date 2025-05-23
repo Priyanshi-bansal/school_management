@@ -35,21 +35,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getStudent, uploadMark, getTest } from "../../../redux/actions/facultyActions";
 import { MARKS_UPLOADED, SET_ERRORS } from "../../../redux/actionTypes";
 
-// Development mode flag
-const isDevMode = true;
-
-// Dummy data for testing
-const dummyStudents = [
-  { _id: "1", name: "Alice Johnson", username: "PRN001", section: "1", marks: 75 },
-  { _id: "2", name: "Bob Smith", username: "PRN002", section: "1", marks: 82 },
-  { _id: "3", name: "Charlie Lee", username: "PRN003", section: "1", marks: 68 },
-];
-
-const dummyTests = [
-  { test: "Midterm", subjectCode: "MTH101" },
-  { test: "Final", subjectCode: "PHY102" },
-];
-
 const Body = () => {
   const dispatch = useDispatch();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -60,7 +45,6 @@ const Body = () => {
   const [error, setError] = useState({});
   const [success, setSuccess] = useState(false);
   const [marks, setMarks] = useState([]);
-  const [localStudents, setLocalStudents] = useState([]);
 
   const [filters, setFilters] = useState({
     department: user.result.department,
@@ -69,14 +53,8 @@ const Body = () => {
     test: ""
   });
 
-  // const students = isDevMode ? localStudents : useSelector((state) => state.admin.students.result);
-  // const tests = isDevMode ? dummyTests : store.faculty.tests.result;
-  const reduxStudents = useSelector((state) => state.admin.students.result);
-const students = isDevMode ? localStudents : reduxStudents;
-
-
-const tests = isDevMode ? dummyTests : store.faculty.tests.result;
-
+  const students = useSelector((state) => state.admin.students.result);
+  const tests = useSelector((state) => state.faculty.tests.result);
 
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
@@ -103,17 +81,18 @@ const tests = isDevMode ? dummyTests : store.faculty.tests.result;
   }, [store.faculty.marksUploaded]);
 
   useEffect(() => {
-    if (!isDevMode && filters.year && filters.section) {
+    if (filters.year && filters.section) {
       setTestsLoading(true);
       dispatch(getTest({
         department: filters.department,
         year: filters.year,
         section: filters.section
-      })).finally(() => setTestsLoading(false));
+      }))
+      .finally(() => setTestsLoading(false));
     } else {
       setFilters(prev => ({ ...prev, test: "" }));
     }
-  }, [filters.year, filters.section]);
+  }, [filters.year, filters.section, dispatch]);
 
   const handleMarkChange = (value, studentId) => {
     setMarks(prev => {
@@ -127,49 +106,53 @@ const tests = isDevMode ? dummyTests : store.faculty.tests.result;
     });
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!filters.test && !isDevMode) return;
+ const handleSearch = (e) => {
+  e.preventDefault();
+  if (!filters.test) return;
 
-    setLoading(true);
-    setError({});
-    setMarks([]);
+  setLoading(true);
+  setError({});
+  setMarks([]);
 
-    if (isDevMode) {
-      setTimeout(() => {
-        setLocalStudents(dummyStudents);
-        setLoading(false);
-      }, 500);
-    } else {
-      dispatch(getStudent(filters));
-    }
-  };
+  dispatch(getStudent({
+    department: filters.department,
+    year: filters.year,
+    section: filters.section
+  }))
+    .then(() => {
+      setLoading(false);
+    })
+    .catch((err) => {
+      setError(err.response?.data || {});
+      setLoading(false);
+    });
+};
 
-  const handleUpload = () => {
-    if (marks.length === 0) return;
+const handleUpload = () => {
+  if (marks.length === 0) return;
 
-    if (isDevMode) {
-      console.log("Uploading marks (dev mode):", marks);
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
-      return;
-    }
+  setLoading(true);
 
-    setLoading(true);
-    dispatch(uploadMark({
-      marks,
-      department: filters.department,
-      section: filters.section,
-      year: filters.year,
-      test: filters.test
-    }));
-  };
+  dispatch(uploadMark(
+    marks,
+    filters.department,
+    filters.section,
+    filters.year,
+    filters.test
+  ))
+    .then(() => {
+      setLoading(false);
+    })
+    .catch((err) => {
+      setError(err.response?.data || {});
+      setLoading(false);
+    });
+};
 
   const handleReset = () => {
     setFilters({ ...filters, year: "", section: "", test: "" });
     setError({});
     setMarks([]);
-    if (isDevMode) setLocalStudents([]);
   };
 
   return (
@@ -233,8 +216,8 @@ const tests = isDevMode ? dummyTests : store.faculty.tests.result;
                   onChange={(e) => setFilters({ ...filters, section: e.target.value, test: "" })}
                 >
                   <MenuItem value="">Select Section</MenuItem>
-                  {[1, 2, 3].map(section => (
-                    <MenuItem key={section} value={section.toString()}>Section {section}</MenuItem>
+                  {['A', 'B', 'C'].map(section => (
+                    <MenuItem key={section} value={section}>Section {section}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -333,7 +316,7 @@ const tests = isDevMode ? dummyTests : store.faculty.tests.result;
                             sx={{ width: 100 }}
                             inputProps={{ min: 0, max: 100, step: "0.01" }}
                             onChange={(e) => handleMarkChange(e.target.value, student._id)}
-                            defaultValue={student.marks || ""}
+                            defaultValue={student.marks?.[filters.test] || ""}
                           />
                         </TableCell>
                       </TableRow>
