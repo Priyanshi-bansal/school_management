@@ -198,35 +198,43 @@ export const uploadMarks = async (req, res) => {
   try {
     const { department, year, section, test, marks } = req.body;
 
-    const errors = { examError: String };
+     // Input validation
+    if (!department || !year || !section || !test || !marks || !Array.isArray(marks)) {
+      return res.status(400).json({ error: "All fields are required and marks must be an array" });
+    }
+
     const existingTest = await Test.findOne({
       department,
       year,
       section,
       test,
     });
+
+     if (!existingTest) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+
     const isAlready = await Marks.find({
       exam: existingTest._id,
     });
 
     if (isAlready.length !== 0) {
-      errors.examError = "You have already uploaded marks of given exam";
-      return res.status(400).json(errors);
+      return res.status(400).json({ examError: "You have already uploaded marks for the given exam" });
     }
 
-    for (var i = 0; i < marks.length; i++) {
-      const newMarks = await new Marks({
-        student: marks[i]._id,
-        exam: existingTest._id,
-        marks: marks[i].value,
-      });
-      await newMarks.save();
-    }
+   // Prepare marks documents
+    const marksDocs = marks.map((m) => ({
+      student: m._id,
+      exam: existingTest._id,
+      marks: m.value,
+    }));
+
+    // Insert all at once
+    await Marks.insertMany(marksDocs);
+
     res.status(200).json({ message: "Marks uploaded successfully" });
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+     res.status(500).json({ backendError: error.message || "Internal server error" });
   }
 };
 
