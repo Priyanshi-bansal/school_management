@@ -48,6 +48,7 @@ import DeleteSubject from "./components/admin/deleteSubject/DeleteSubject";
 import CreateNotice from "./components/admin/createNotice/CreateNotice";
 import Result from "./components/faculty/result/Result";
 import ClassPerformance from "./components/faculty/classPerformance/classPerformance";
+import GetTest from "./components/faculty/getTest/GetTest";
 
 const App = () => {
   return (
@@ -92,6 +93,7 @@ const App = () => {
       <Route path="/faculty/update" element={<FacultyUpdate />} />
       <Route path="/faculty/update/password" element={<FacultyPassword />} />
       <Route path="/faculty/createtest" element={<CreateTest />} />
+      <Route path="/faculty/gettest" element={<GetTest />} />
       <Route path="/faculty/uploadmarks" element={<UploadMarks />} />
       <Route path="/faculty/markattendance" element={<MarkAttendance />} />
       <Route path="/faculty/result" element={< Result />} />

@@ -48,80 +48,113 @@ const Body = () => {
     }
   }, [store.errors]);
 
-  return (
-    <div className="flex flex-col items-center w-full space-y-10 mt-24">
-      <form onSubmit={update} className="flex flex-col space-y-6 items-center">
-        <h1 className="text-black text-3xl font-bold">Update Password</h1>
-        <div className="space-y-1">
-          <p className="text-[#515966] font-bold text-sm">New Password</p>
-          <div className="bg-[#515966] rounded-lg px-3 flex items-center space-x-3 w-full">
-            <input
-              onChange={(e) => setNewPassword(e.target.value)}
-              value={newPassword}
-              required
-              type={showPassword ? "text" : "password"}
-              className=" bg-[#515966] text-white rounded-lg outline-none py-2  placeholder:text-sm"
-              placeholder="New Password"
-            />
-            {showPassword ? (
-              <VisibilityOffIcon
-                onClick={() => setShowPassword(!showPassword)}
-                className="cursor-pointer"
-              />
-            ) : (
-              <VisibilityIcon
-                onClick={() => setShowPassword(!showPassword)}
-                className="cursor-pointer"
-              />
-            )}
-          </div>
-        </div>
-        <div className="space-y-1">
-          <p className="text-[#515966] font-bold text-sm">Confirm Password</p>
-          <div className="bg-[#515966] rounded-lg px-3 flex items-center space-x-3 w-full">
-            <input
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              value={confirmPassword}
-              required
-              type={showPassword ? "text" : "password"}
-              className=" bg-[#515966] text-white rounded-lg outline-none py-2  placeholder:text-sm"
-              placeholder="Confirm Password"
-            />
-            {showPassword ? (
-              <VisibilityOffIcon
-                onClick={() => setShowPassword(!showPassword)}
-                className="cursor-pointer"
-              />
-            ) : (
-              <VisibilityIcon
-                onClick={() => setShowPassword(!showPassword)}
-                className="cursor-pointer"
-              />
-            )}
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="w-32 hover:scale-105 transition-all duration-150 rounded-lg flex items-center justify-center text-white text-base py-1 bg-[#04bd7d]">
-          Update
-        </button>
-        {loading && (
-          <Spinner
-            message="Updating"
-            height={30}
-            width={150}
-            color="#111111"
-            messageColor="#blue"
-          />
-        )}
-        {(error.mismatchError || error.backendError) && (
-          <p className="text-red-500">
-            {error.mismatchError || error.backendError}
-          </p>
-        )}
-      </form>
-    </div>
-  );
+ return (
+       <div className="flex-[0.8] mt-6 px-4">
+         <div className="space-y-6">
+           <div className="flex items-center text-gray-500 space-x-2">
+             <VisibilityOffIcon />
+             <h1 className="text-lg font-semibold">Update Password</h1>
+           </div>
+   
+           <div className="bg-white shadow-md rounded-xl p-8 max-w-xl mx-auto">
+             <form onSubmit={update} className="space-y-6">
+               <h2 className="text-2xl font-bold text-center text-gray-800">
+                 Change Your Password
+               </h2>
+   
+               {/* New Password Field */}
+               <div>
+                 <label className="block text-sm font-semibold text-gray-700 mb-1">
+                   New Password
+                 </label>
+                 <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2">
+                   <input
+                     type={showPassword ? "text" : "password"}
+                     value={newPassword}
+                     onChange={(e) => setNewPassword(e.target.value)}
+                     placeholder="Enter new password"
+                     className="flex-grow outline-none text-sm"
+                     required
+                   />
+                   {showPassword ? (
+                     <VisibilityIcon
+                       onClick={() => setShowPassword(false)}
+                       className="cursor-pointer text-gray-500"
+                     />
+                   ) : (
+                     <VisibilityOffIcon
+                       onClick={() => setShowPassword(true)}
+                       className="cursor-pointer text-gray-500"
+                     />
+                   )}
+                 </div>
+               </div>
+   
+               {/* Confirm Password Field */}
+               <div>
+                 <label className="block text-sm font-semibold text-gray-700 mb-1">
+                   Confirm Password
+                 </label>
+                 <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2">
+                   <input
+                     type={showPassword ? "text" : "password"}
+                     value={confirmPassword}
+                     onChange={(e) => setConfirmPassword(e.target.value)}
+                     placeholder="Confirm new password"
+                     className="flex-grow outline-none text-sm"
+                     required
+                   />
+                   {showPassword ? (
+                     <VisibilityIcon
+                       onClick={() => setShowPassword(false)}
+                       className="cursor-pointer text-gray-500"
+                     />
+                   ) : (
+                     <VisibilityOffIcon
+                       onClick={() => setShowPassword(true)}
+                       className="cursor-pointer text-gray-500"
+                     />
+                   )}
+                 </div>
+               </div>
+   
+               {/* Buttons */}
+               <div className="flex justify-between space-x-4 pt-4">
+                 <button
+                   type="submit"
+                   className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+                 >
+                   Update
+                 </button>
+                 <button
+                   type="button"
+                   onClick={() => navigate("/faculty/home")}
+                   className="bg-gray-300 text-black px-6 py-2 rounded-md hover:bg-gray-400 transition"
+                 >
+                   Cancel
+                 </button>
+               </div>
+   
+               {/* Loading & Errors */}
+               {loading && (
+                 <Spinner
+                   message="Updating"
+                   height={30}
+                   width={150}
+                   color="#111111"
+                   messageColor="blue"
+                 />
+               )}
+               {(error.mismatchError || error.backendError) && (
+                 <p className="text-red-500 text-sm text-center mt-2">
+                   {error.mismatchError || error.backendError}
+                 </p>
+               )}
+             </form>
+           </div>
+         </div>
+       </div>
+     );
 };
 
 export default Body;

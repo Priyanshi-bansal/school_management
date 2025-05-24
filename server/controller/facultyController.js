@@ -109,6 +109,24 @@ export const updateFaculty = async (req, res) => {
   }
 };
 
+export const getStudent = async (req, res) => {
+  try {
+    const { department, year, section } = req.body;
+    const errors = { noStudentError: String };
+    const students = await Student.find({ department, year, section });
+    if (students.length === 0) {
+      errors.noStudentError = "No Student Found";
+      return res.status(404).json(errors);
+    }
+
+    res.status(200).json({ result: students });
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error;
+    res.status(500).json(errors);
+  }
+};
+
 export const createTest = async (req, res) => {
   try {
     const { subjectCode, department, year, section, date, test, totalMarks } =
@@ -154,45 +172,146 @@ export const getTest = async (req, res) => {
   try {
     const { department, year, section } = req.body;
 
+    if (!department || !year || !section) {
+      return res.status(400).json({ error: "Department, year, and section are required." });
+    }
+
     const tests = await Test.find({ department, year, section });
 
-    res.status(200).json({ result: tests });
+    return res.status(200).json({ result: tests });
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+    console.error("Error fetching tests:", error);
+    return res.status(500).json({ error: "Failed to fetch tests." });
   }
 };
+
 
 export const getAllTest = async (req, res) => {
   try {
     const tests = await Test.find();
 
-    res.status(200).json({ result: tests });
+    return res.status(200).json({ result: tests });
   } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
+    console.error("Error fetching all tests:", error);
+    return res.status(500).json({ error: "Failed to fetch all tests." });
   }
 };
 
-export const getStudent = async (req, res) => {
+
+export const getMarksByTest = async (req, res) => {
   try {
-    const { department, year, section } = req.body;
-    const errors = { noStudentError: String };
-    const students = await Student.find({ department, year, section });
-    if (students.length === 0) {
-      errors.noStudentError = "No Student Found";
+    const { department, year, section, test } = req.body;
+    const errors = { noMarksError: String };
+    const existingTest = await Test.findOne({
+      department,
+      year,
+      section,
+      test,
+    });
+    if (!existingTest) {
+      errors.noMarksError = "No Marks Found";
       return res.status(404).json(errors);
     }
-
-    res.status(200).json({ result: students });
+    const marks = await Marks.find({ exam: existingTest._id }).populate(
+      "student"
+    );
+    if (marks.length === 0) {
+      errors.noMarksError = "No Marks Found";
+      return res.status(404).json(errors);
+    }
+    res.status(200).json({ result: marks });
   } catch (error) {
     const errors = { backendError: String };
     errors.backendError = error;
     res.status(500).json(errors);
   }
 };
+
+export const getMarksByStudent = async (req, res) => {
+  try {
+    const { studentId } = req.params; 
+    const errors = { noMarksError: String };
+    const marks = await Marks.find({ student: studentId }).populate("exam");
+    if (marks.length === 0) {
+      errors.noMarksError = "No Marks Found";
+      return res.status(404).json(errors);
+    }
+    res.status(200).json({ result: marks });
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error;
+    res.status(500).json(errors);
+  }
+};
+
+export const getMarksByStudentAndTest = async (req, res) => {
+  try {
+    const { studentId, testId } = req.params;
+    const errors = { noMarksError: String };
+    const marks = await Marks.findOne({
+      student: studentId,
+      exam: testId,
+    }).populate("exam");
+    if (!marks) {
+      errors.noMarksError = "No Marks Found";
+      return res.status(404).json(errors);
+    }
+    res.status(200).json({ result: marks });
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error;
+    res.status(500).json(errors);
+  }
+};
+
+export const getMarks = async (req, res) => {
+  try {
+    const { department, year, section, test } = req.body;
+
+    if (!department || !year || !section || !test) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const existingTest = await Test.findOne({
+      department,
+      year,
+      section,
+      test,
+    });
+
+    if (!existingTest) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+
+    const marks = await Marks.find({ exam: existingTest._id }).populate(
+      "student"
+    );
+
+    res.status(200).json({ result: marks });
+  } catch (error) {
+    console.error("Error fetching marks:", error);
+    return res.status(500).json({ error: "Failed to fetch marks." });
+  }
+}
+
+export const getMarksByDepartment = async (req, res) => {
+  try {
+    const { department } = req.body;
+
+    if (!department) {
+      return res.status(400).json({ error: "Department is required" });
+    }
+
+    const marks = await Marks.find({
+      department
+    }).populate("student");
+
+    res.status(200).json({ result: marks });
+  } catch (error) {
+    console.error("Error fetching marks by department:", error);
+    return res.status(500).json({ error: "Failed to fetch marks." });
+  }
+}
 
 export const uploadMarks = async (req, res) => {
   try {

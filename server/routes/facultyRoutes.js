@@ -3,12 +3,18 @@ import {
   facultyLogin,
   updatedPassword,
   updateFaculty,
+  getStudent,
   createTest,
   getTest,
-  getStudent,
+  getAllTest,
   uploadMarks,
-  markAttendance,
-  getAllTest
+  getMarksByTest,
+  getMarksByStudent,
+  getMarksByDepartment,
+  getMarksByStudentAndTest,
+  getMarks,
+  markAttendance
+
 } from "../controller/facultyController.js";
 import auth from "../middleware/auth.js";
 
@@ -22,6 +28,11 @@ router.post("/gettest", auth, getTest);
 router.post("/getstudent", auth, getStudent);
 router.get("/getalltest", auth, getAllTest);
 router.post("/uploadmarks", auth, uploadMarks);
+router.post("/getmarks", auth, getMarks);
+router.post("/getmarksbystudent", auth, getMarksByStudent);
+router.post("/getmarksbytest", auth, getMarksByTest);
+router.post("/getmarksbystudentandtest", auth, getMarksByStudentAndTest);
+router.post("/getmarksbydepartment", auth, getMarksByDepartment);
 router.post("/markattendance", auth, markAttendance);
 
 export default router;
