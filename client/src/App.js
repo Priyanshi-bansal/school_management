@@ -49,6 +49,7 @@ import CreateNotice from "./components/admin/createNotice/CreateNotice";
 import Result from "./components/faculty/result/Result";
 import ClassPerformance from "./components/faculty/classPerformance/classPerformance";
 import GetTest from "./components/faculty/getTest/GetTest";
+import Marks from "./components/faculty/Marks/Marks";
 
 const App = () => {
   return (
@@ -98,6 +99,7 @@ const App = () => {
       <Route path="/faculty/markattendance" element={<MarkAttendance />} />
       <Route path="/faculty/result" element={< Result />} />
       <Route path="/faculty/classperformance" element={<ClassPerformance />} />
+       <Route path="/faculty/Marks" element={<Marks/>} />
 
       {/* Student  */}
 
