@@ -15,6 +15,7 @@ import {
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
+import GetTest from "./StudentTest/StudentTest";
 
 const Sidebar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -44,7 +45,10 @@ const Sidebar = () => {
       items: [
         { icon: <Assignment />, label: "Test Results", path: "/student/testresult" },
         { icon: <School />, label: "Subjects", path: "/student/subjectlist" },
-        { icon: <Assessment />, label: "Attendance", path: "/student/attendance" }
+        { icon: <Assessment />, label: "Attendance", path: "/student/attendance" },
+           { icon: <Assessment />, label: "Get Test", path: "/student/StudentTest" }
+        
+
       ]
     },
     { 

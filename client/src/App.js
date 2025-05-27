@@ -50,6 +50,7 @@ import Result from "./components/faculty/result/Result";
 import ClassPerformance from "./components/faculty/classPerformance/classPerformance";
 import GetTest from "./components/faculty/getTest/GetTest";
 import Marks from "./components/faculty/Marks/Marks";
+import StudentTest from "./components/student/StudentTest/StudentTest";
 
 const App = () => {
   return (
@@ -113,6 +114,8 @@ const App = () => {
       <Route path="/student/subjectlist" element={<SubjectList />} />
       <Route path="/student/testresult" element={<TestResult />} />
       <Route path="/student/attendance" element={<Attendance />} />
+         <Route path="/student/StudentTest" element={<StudentTest/>} />
+
     </Routes>
   );
 };
