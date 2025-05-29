@@ -17,6 +17,22 @@ const attendenceSchema = new Schema({
     type: Number,
     default: 0,
   },
+  attandanceData:{
+    type: [
+      {
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+        status: {
+          type: String,
+          enum: ["present", "absent"],
+          default: "absent",
+        },
+      },
+    ],
+    default: [],
+  }
 });
 
 export default mongoose.model("attendance", attendenceSchema);
