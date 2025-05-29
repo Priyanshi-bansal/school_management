@@ -82,6 +82,17 @@ const Sidebar = () => {
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
+    },
+     { 
+      header: "Attendance",
+      items: [
+        { icon: <MenuBook />, label: "FacultyAttendance", path: "/admin/FacultyAttendance" },
+               { icon: <MenuBook />, label: "StudentAttendance", path: "/admin/StudentAttendance" },
+
+
+        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+      ]
     }
   ];
 

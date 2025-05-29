@@ -51,6 +51,8 @@ import ClassPerformance from "./components/faculty/classPerformance/classPerform
 import GetTest from "./components/faculty/getTest/GetTest";
 import Marks from "./components/faculty/Marks/Marks";
 import StudentTest from "./components/student/StudentTest/StudentTest";
+import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
+import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
 const App = () => {
   return (
@@ -84,6 +86,10 @@ const App = () => {
       <Route path="/admin/addsubject" element={<AddSubject />} />
       <Route path="/admin/allsubject" element={<GetSubject />} />
       <Route path="/admin/allstudent" element={<GetStudent />} />
+      
+
+     
+      
 
       {/* Faculty  */}
 
@@ -101,6 +107,7 @@ const App = () => {
       <Route path="/faculty/result" element={< Result />} />
       <Route path="/faculty/classperformance" element={<ClassPerformance />} />
        <Route path="/faculty/Marks" element={<Marks/>} />
+       <Route patt="/faculty/StudentAttendance" element={<StudentAttendance/>}/>
 
       {/* Student  */}
 
@@ -114,7 +121,10 @@ const App = () => {
       <Route path="/student/subjectlist" element={<SubjectList />} />
       <Route path="/student/testresult" element={<TestResult />} />
       <Route path="/student/attendance" element={<Attendance />} />
-         <Route path="/student/StudentTest" element={<StudentTest/>} />
+      <Route path="/student/StudentTest" element={<StudentTest/>} />
+         <Route path="/student/DailyAttendance" element={<DailyAttendance/>} />
+
+
 
     </Routes>
   );
