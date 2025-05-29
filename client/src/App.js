@@ -53,6 +53,9 @@ import Marks from "./components/faculty/Marks/Marks";
 import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
+import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
+import StuAttendance from "./components/admin/stuattendance/StuAttendance";
+
 
 
 const App = () => {
@@ -87,10 +90,10 @@ const App = () => {
       <Route path="/admin/addsubject" element={<AddSubject />} />
       <Route path="/admin/allsubject" element={<GetSubject />} />
       <Route path="/admin/allstudent" element={<GetStudent />} />
-      
+  <Route path="/admin/facultyattendance" element={<FacultyAttendance/>}/>
+  <Route path="/admin/stuattendance" element={<StuAttendance/>}/>
 
-     
-      
+
 
       {/* Faculty  */}
 
