@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@date-io/date-fns": "^3.2.1",
+    "@mui/lab": "^7.0.0-beta.12",
+    "@mui/x-date-pickers": "^8.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
