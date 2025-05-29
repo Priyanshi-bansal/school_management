@@ -44,7 +44,9 @@ const Sidebar = () => {
         {icon:<Assignment />, label: "Get Test", path: "/faculty/gettest"},
         { icon: <Add />, label: "Upload Marks", path: "/faculty/uploadmarks" },
         { icon:<Add />, label: " Marks", path: "/faculty/Marks" },
-        { icon: <Event />, label: "Mark Attendance", path: "/faculty/markattendance" }
+        { icon: <Event />, label: "Mark Attendance", path: "/faculty/markattendance" },
+          { icon: <Event />, label: "Student Attendance", path: "/faculty/StudentAttendance" }
+
       ]
     },
     { 

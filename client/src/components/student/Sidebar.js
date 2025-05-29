@@ -46,7 +46,8 @@ const Sidebar = () => {
         { icon: <Assignment />, label: "Test Results", path: "/student/testresult" },
         { icon: <School />, label: "Subjects", path: "/student/subjectlist" },
         { icon: <Assessment />, label: "Attendance", path: "/student/attendance" },
-           { icon: <Assessment />, label: "Get Test", path: "/student/StudentTest" }
+           { icon: <Assessment />, label: "Get Test", path: "/student/StudentTest" },
+            { icon: <Assessment />, label: "Daily Attendance", path: "/student/DailyAttendance" }
         
 
       ]
