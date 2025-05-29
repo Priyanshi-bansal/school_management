@@ -53,62 +53,61 @@ function Body() {
           Marks
         </Typography>
       </Box>
+<Grid container spacing={2} mb={3}>
+  <Grid item xs={12} md={3}>
+    <FormControl fullWidth size="small" sx={{ minHeight: 40 }}>
+      <InputLabel id="department-label">Department</InputLabel>
+      <Select labelId="department-label" label="Department">
+        <MenuItem value="">Select Department</MenuItem>
+        <MenuItem value="Computer Science">Computer Science</MenuItem>
+        <MenuItem value="Electronics">Electronics</MenuItem>
+        <MenuItem value="Mechanical">Mechanical</MenuItem>
+      </Select>
+    </FormControl>
+  </Grid>
 
-      <Grid container spacing={2} mb={3}>
-        <Grid item xs={12} md={3}>
-          <FormControl fullWidth>
-            <InputLabel id="department-label">Department</InputLabel>
-            <Select labelId="department-label" label="Department">
-              <MenuItem value="">Select Department</MenuItem>
-              <MenuItem value="Computer Science">Computer Science</MenuItem>
-              <MenuItem value="Electronics">Electronics</MenuItem>
-              <MenuItem value="Mechanical">Mechanical</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
+  <Grid item xs={12} md={3}>
+    <FormControl fullWidth size="small" sx={{ minHeight: 40 }}>
+      <InputLabel id="year-label">Year</InputLabel>
+      <Select labelId="year-label" label="Year">
+        <MenuItem value="">Select Year</MenuItem>
+        {[1, 2, 3, 4].map((yr) => (
+          <MenuItem key={yr} value={yr}>
+            {yr}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  </Grid>
 
-        <Grid item xs={12} md={3}>
-          <FormControl fullWidth>
-            <InputLabel id="year-label">Year</InputLabel>
-            <Select labelId="year-label" label="Year">
-              <MenuItem value="">Select Year</MenuItem>
-              {[1, 2, 3, 4].map((yr) => (
-                <MenuItem key={yr} value={yr}>
-                  {yr}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
+  <Grid item xs={12} md={3}>
+    <FormControl fullWidth size="small" sx={{ minHeight: 40 }}>
+      <InputLabel id="section-label">Section</InputLabel>
+      <Select labelId="section-label" label="Section">
+        <MenuItem value="">Select Section</MenuItem>
+        {['A', 'B', 'C'].map((sec) => (
+          <MenuItem key={sec} value={sec}>
+            {sec}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  </Grid>
 
-        <Grid item xs={12} md={3}>
-          <FormControl fullWidth>
-            <InputLabel id="section-label">Section</InputLabel>
-            <Select labelId="section-label" label="Section">
-              <MenuItem value="">Select Section</MenuItem>
-              {['A', 'B', 'C'].map((sec) => (
-                <MenuItem key={sec} value={sec}>
-                  {sec}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12} md={3}>
-          <FormControl fullWidth>
-            <InputLabel id="test-label">Test</InputLabel>
-            <Select labelId="test-label" label="Test">
-              <MenuItem value="">Select Test</MenuItem>
-              {['Test 1', 'Test 2', 'Test 3'].map((t) => (
-                <MenuItem key={t} value={t}>
-                  {t}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+  <Grid item xs={12} md={3}>
+    <FormControl fullWidth size="small" sx={{ minHeight: 40 }}>
+      <InputLabel id="test-label">Test</InputLabel>
+      <Select labelId="test-label" label="Test">
+        <MenuItem value="">Select Test</MenuItem>
+        {['Test 1', 'Test 2', 'Test 3'].map((t) => (
+          <MenuItem key={t} value={t}>
+            {t}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  </Grid>
+</Grid>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
         <Button variant="contained" color="primary">

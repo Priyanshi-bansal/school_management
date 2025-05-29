@@ -54,6 +54,7 @@ import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
+
 const App = () => {
   return (
     <Routes>
@@ -107,7 +108,7 @@ const App = () => {
       <Route path="/faculty/result" element={< Result />} />
       <Route path="/faculty/classperformance" element={<ClassPerformance />} />
        <Route path="/faculty/Marks" element={<Marks/>} />
-       <Route patt="/faculty/StudentAttendance" element={<StudentAttendance/>}/>
+       <Route path="/faculty/StudentAttendance" element={<StudentAttendance/>}/>
 
       {/* Student  */}
 
