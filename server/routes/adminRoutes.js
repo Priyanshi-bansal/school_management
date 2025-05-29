@@ -25,6 +25,7 @@ import {
   deleteSubject,
   createNotice,
   getNotice,
+  getOrganizationIPs, addOrganizationIP, deleteOrganizationIP
 } from "../controller/adminController.js";
 const router = express.Router();
 console.log("Routes Page");
@@ -52,5 +53,8 @@ router.post("/deletefaculty", auth, deleteFaculty);
 router.post("/deletestudent", auth, deleteStudent);
 router.post("/deletedepartment", auth, deleteDepartment);
 router.post("/deletesubject", auth, deleteSubject);
+router.get("/getorganizationips", auth, getOrganizationIPs);
+router.post("/addorganizationip", auth, addOrganizationIP); 
+router.post("/deleteorganizationip", auth, deleteOrganizationIP);
 
 export default router;

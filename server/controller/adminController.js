@@ -4,42 +4,61 @@ import Faculty from "../models/faculty.js";
 import Student from "../models/student.js";
 import Subject from "../models/subject.js";
 import Notice from "../models/notice.js";
+import Test from "../models/test.js";
+import OrganizationIP from "../models/OrganizationIP.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
+
+const getClientIp = (req) => {
+  return req.headers['x-forwarded-for']?.split(',')[0] || 
+         req.connection?.remoteAddress || 
+         req.socket?.remoteAddress || 
+         req.connection?.socket?.remoteAddress;
+};
+
 export const adminLogin = async (req, res) => {
-  
   const { username, password } = req.body;
   const errors = { usernameError: String, passwordError: String };
+  
   try {
     const existingAdmin = await Admin.findOne({ username });
-    console.log("Existing Admin:",existingAdmin)
     if (!existingAdmin) {
       errors.usernameError = "Admin doesn't exist.";
       return res.status(404).json(errors);
     }
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      existingAdmin.password
-    );
-  
-    
+
+    const isPasswordCorrect = await bcrypt.compare(password, existingAdmin.password);
     if (!isPasswordCorrect) {
       errors.passwordError = "Invalid Credentials";
       return res.status(404).json(errors);
     }
-    // console.log("Hello");
+
+    // Track admin IP
+    const clientIp = getClientIp(req);
+    const ipExists = await OrganizationIP.findOne({ ipAddress: clientIp });
+    if (!ipExists) {
+      await OrganizationIP.create({
+        ipAddress: clientIp,
+        addedBy: existingAdmin._id,
+        description: "Auto-added during admin login"
+      });
+    }
+
     const token = jwt.sign(
-      {
-        username: existingAdmin.username,
-        id: existingAdmin._id,
-      },
+      { username: existingAdmin.username, id: existingAdmin._id },
       "sEcReT",
-      { expiresIn: "2h" }
+      { expiresIn: "12h" }
     );
-    res.status(200).json({ result: existingAdmin, token: token });
+
+    res.status(200).json({ 
+      result: existingAdmin, 
+      token: token,
+      ipAddress: clientIp
+    });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -636,3 +655,77 @@ export const getAllSubject = async (req, res) => {
     console.log("Backend Error", error);
   }
 };
+
+
+
+// IP Management
+export const getOrganizationIPs = async (req, res) => {
+  try {
+    const ips = await OrganizationIP.find().populate("addedBy", "name email");
+    res.status(200).json(ips);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const addOrganizationIP = async (req, res) => {
+  try {
+    const { ipAddress, description } = req.body;
+    
+    if (!ipAddress) {
+      return res.status(400).json({ error: "IP address required" });
+    }
+
+    const newIP = await OrganizationIP.create({
+      ipAddress,
+      description,
+      addedBy: req.user.id
+    });
+
+    res.status(201).json(newIP);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const deleteOrganizationIP = async (req, res) => {
+  try {
+    const ip = await OrganizationIP.findByIdAndDelete(req.params.id);
+    if (!ip) return res.status(404).json({ error: "IP not found" });
+    res.status(200).json({ message: "IP removed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+export const getFacultyAttendance = async (req, res) => {
+  try {
+    const { facultyId, startDate, endDate } = req.query;
+    
+    let query = {};
+    if (facultyId) query.faculty = facultyId;
+    if (startDate && endDate) {
+      query.date = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate)
+      };
+    }
+
+    const attendance = await FacultyAttendance.find(query)
+      .populate("faculty", "name email department")
+      .sort({ date: -1 });
+
+    res.status(200).json(attendance);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+
+

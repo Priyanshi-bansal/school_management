@@ -4,8 +4,17 @@ import Student from "../models/student.js";
 import Subject from "../models/subject.js";
 import Marks from "../models/marks.js";
 import Attendence from "../models/attendance.js";
+import OrganizationIP from "../models/OrganizationIP.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+
+
+const getClientIp = (req) => {
+  return req.headers['x-forwarded-for']?.split(',')[0] || 
+         req.connection?.remoteAddress || 
+         req.socket?.remoteAddress || 
+         req.connection?.socket?.remoteAddress;
+};
 
 export const studentLogin = async (req, res) => {
   const { username, password } = req.body;
@@ -31,7 +40,7 @@ export const studentLogin = async (req, res) => {
         id: existingStudent._id,
       },
       "sEcReT",
-      { expiresIn: "1h" }
+      { expiresIn: "12h" }
     );
 
     res.status(200).json({ result: existingStudent, token: token });
@@ -183,7 +192,50 @@ export const testResult = async (req, res) => {
   }
 };
 
-export const attendance = async (req, res) => {
+export const getTest = async (req, res) => {
+  try {
+    const { department, year, section } = req.body;
+    const errors = { notestError: String };
+    const test = await Test.find({ department, year, section });
+    if (test.length === 0) {
+      errors.notestError = "No Test Found";
+      return res.status(404).json(errors);
+    }
+    res.status(200).json({ result: test });
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error;
+    res.status(500).json(errors);
+  }
+}
+
+export const getAttendanceBySubject = async (req, res) => {
+  try {
+    const { department, year, section, subjectName } = req.query;
+
+    // Find the subject
+    const subject = await Subject.findOne({ subjectName });
+    if (!subject) {
+      return res.status(404).json({ message: "Subject not found" });
+    }
+
+    // Get all students in the given criteria
+    const students = await Student.find({ department, year, section });
+
+    const attendanceRecords = await Attendence.find({
+      student: { $in: students.map((s) => s._id) },
+      subject: subject._id,
+    })
+      .populate("student")
+      .populate("subject");
+
+    res.status(200).json({ attendance: attendanceRecords });
+  } catch (error) {
+    res.status(500).json({ backendError: error.message });
+  }
+};
+
+export const getAttendance = async (req, res) => {
   try {
     const { department, year, section } = req.body;
     const errors = { notestError: String };
@@ -212,6 +264,41 @@ export const attendance = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json(error);
+  }
+};
+
+export const getAttendanceByStudent = async (req, res) => {
+  try {
+    const { studentId } = req.params; // Get studentId from request parameters
+    const { subjectName } = req.query; // Get subjectName from query parameters
+    const errors = { noAttendanceError: String };
+    // Find the subject
+    const subject = await Subject.findOne({ subjectName });
+    if (!subject) {
+      errors.noAttendanceError = "Subject not found";
+      return res.status(404).json(errors);
+    }
+    // Find the attendance record for the student and subject
+    const attendanceRecord = await Attendence.findOne({
+      student: studentId,
+      subject: subject._id,
+    });
+    if (!attendanceRecord) {
+      errors.noAttendanceError = "No attendance record found for this student";
+      return res.status(404).json(errors);
+    }
+    // Return the attendance data
+    res.status(200).json({
+      student: attendanceRecord.student,
+      subject: attendanceRecord.subject,
+      totalLecturesByFaculty: attendanceRecord.totalLecturesByFaculty,
+      lectureAttended: attendanceRecord.lectureAttended,
+      attandanceData: attendanceRecord.attandanceData,
+    }); 
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error.message || "Internal server error";
+    res.status(500).json(errors);
   }
 };
 
