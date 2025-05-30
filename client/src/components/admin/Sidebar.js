@@ -84,6 +84,22 @@ const Sidebar = () => {
       ]
     },
      { 
+      header: "section Management",
+      items: [
+        { icon: <MenuBook />, label: "Manage section", path: "/admin/managesection" },
+        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+      ]
+    },
+     { 
+      header: "class Management",
+      items: [
+        { icon: <MenuBook />, label: "Manage Class", path: "/admin/GetClass" },
+        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+      ]
+    },
+     { 
       header: "Attendance",
       items: [
         { icon: <MenuBook />, label: "FacultyAttendance", path: "/admin/facultyattendance" },
