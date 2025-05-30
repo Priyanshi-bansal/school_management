@@ -32,12 +32,21 @@ const adminSchema = mongoose.Schema(
     contactNumber: {
       type: Number,
     },
+    role: {
+      type: String,
+      enum: ["superadmin", "admin", "subadmin"],
+      default: "admin",
+    },
     passwordUpdated: {
       type: Boolean,
       default: false,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
-  { strict: false }
+  { timestamps: true }
 );
 
 export default mongoose.model("admin", adminSchema);
