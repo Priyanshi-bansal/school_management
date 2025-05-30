@@ -32,7 +32,7 @@ function Body() {
 
         }}
       >
-        <HailIconc sx={{ color: 'text.primary', fontSize: 28 }} />
+        <HailIcon sx={{ color: 'text.primary', fontSize: 28 }} />
         <Typography variant="h5" component="h1" color="text.primary" fontWeight={600}>
         
          DailyAttendance
