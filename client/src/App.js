@@ -57,7 +57,7 @@ import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAtten
 import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
 
 
-
+import Test from "./components/test";
 
 const App = () => {
   return (
@@ -93,6 +93,8 @@ const App = () => {
       <Route path="/admin/allstudent" element={<GetStudent />} />
       <Route path="/admin/facultyattendance" element={<FacultyAttendance />} />
       <Route path="/admin/stuattendance" element={<StuAttendance />} />
+
+      <Route path="/admin/test" element={<Test />} />
 
       {/* Faculty  */}
 
