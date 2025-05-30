@@ -61,7 +61,7 @@ import GetClass from "./components/admin/GetClass/GetClass";
 import AddClass from "./components/admin/addclass/AddClass";
 
 
-
+import Test from "./components/test";
 
 const App = () => {
   return (
@@ -103,6 +103,8 @@ const App = () => {
 <Route path="/admin/addclass" element={<AddClass/>}/>
 
 
+
+      <Route path="/admin/test" element={<Test />} />
 
       {/* Faculty  */}
 
