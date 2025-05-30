@@ -53,8 +53,9 @@ import Marks from "./components/faculty/Marks/Marks";
 import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
-import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
-import StuAttendance from "./components/admin/stuattendance/StuAttendance";
+import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
+import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
+
 
 
 
@@ -90,10 +91,8 @@ const App = () => {
       <Route path="/admin/addsubject" element={<AddSubject />} />
       <Route path="/admin/allsubject" element={<GetSubject />} />
       <Route path="/admin/allstudent" element={<GetStudent />} />
-  <Route path="/admin/facultyattendance" element={<FacultyAttendance/>}/>
-  <Route path="/admin/stuattendance" element={<StuAttendance/>}/>
-
-
+      <Route path="/admin/facultyattendance" element={<FacultyAttendance />} />
+      <Route path="/admin/stuattendance" element={<StuAttendance />} />
 
       {/* Faculty  */}
 
@@ -108,10 +107,13 @@ const App = () => {
       <Route path="/faculty/gettest" element={<GetTest />} />
       <Route path="/faculty/uploadmarks" element={<UploadMarks />} />
       <Route path="/faculty/markattendance" element={<MarkAttendance />} />
-      <Route path="/faculty/result" element={< Result />} />
+      <Route path="/faculty/result" element={<Result />} />
       <Route path="/faculty/classperformance" element={<ClassPerformance />} />
-       <Route path="/faculty/Marks" element={<Marks/>} />
-       <Route path="/faculty/StudentAttendance" element={<StudentAttendance/>}/>
+      <Route path="/faculty/Marks" element={<Marks />} />
+      <Route
+        path="/faculty/StudentAttendance"
+        element={<StudentAttendance />}
+      />
 
       {/* Student  */}
 
@@ -125,11 +127,8 @@ const App = () => {
       <Route path="/student/subjectlist" element={<SubjectList />} />
       <Route path="/student/testresult" element={<TestResult />} />
       <Route path="/student/attendance" element={<Attendance />} />
-      <Route path="/student/StudentTest" element={<StudentTest/>} />
-         <Route path="/student/DailyAttendance" element={<DailyAttendance/>} />
-
-
-
+      <Route path="/student/StudentTest" element={<StudentTest />} />
+      <Route path="/student/DailyAttendance" element={<DailyAttendance />} />
     </Routes>
   );
 };
