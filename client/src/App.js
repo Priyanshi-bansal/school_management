@@ -55,6 +55,9 @@ import DailyAttendance from "./components/student/DailyAttendance/DailyAttendanc
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
 import StuAttendance from "./components/admin/stuattendance/StuAttendance";
+import ManageSection from "./components/admin/managesection/ManageSection";
+import GetClass from "./components/admin/GetClass/GetClass";
+import AddClass from "./components/admin/addclass/AddClass";
 
 
 
@@ -92,6 +95,11 @@ const App = () => {
       <Route path="/admin/allstudent" element={<GetStudent />} />
   <Route path="/admin/facultyattendance" element={<FacultyAttendance/>}/>
   <Route path="/admin/stuattendance" element={<StuAttendance/>}/>
+<Route path="/admin/managesection" element={<ManageSection/>}/>
+<Route path="/admin/getclass" element={<GetClass/>}/>
+<Route path="/admin/addclass" element={<AddClass/>}/>
+
+
 
 
 
