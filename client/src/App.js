@@ -53,8 +53,12 @@ import Marks from "./components/faculty/Marks/Marks";
 import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
-import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
-import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
+
+import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
+import StuAttendance from "./components/admin/stuattendance/StuAttendance";
+import ManageSection from "./components/admin/managesection/ManageSection";
+import GetClass from "./components/admin/GetClass/GetClass";
+import AddClass from "./components/admin/addclass/AddClass";
 
 
 
@@ -91,8 +95,14 @@ const App = () => {
       <Route path="/admin/addsubject" element={<AddSubject />} />
       <Route path="/admin/allsubject" element={<GetSubject />} />
       <Route path="/admin/allstudent" element={<GetStudent />} />
-      <Route path="/admin/facultyattendance" element={<FacultyAttendance />} />
-      <Route path="/admin/stuattendance" element={<StuAttendance />} />
+
+  <Route path="/admin/facultyattendance" element={<FacultyAttendance/>}/>
+  <Route path="/admin/stuattendance" element={<StuAttendance/>}/>
+<Route path="/admin/managesection" element={<ManageSection/>}/>
+<Route path="/admin/getclass" element={<GetClass/>}/>
+<Route path="/admin/addclass" element={<AddClass/>}/>
+
+
 
       {/* Faculty  */}
 
