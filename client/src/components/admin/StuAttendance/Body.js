@@ -70,9 +70,9 @@ function Body() {
                 </Typography>
               </Box>
               
-             <Grid container spacing={2}>
-        {/* Student Name Dropdown */}
-        <Grid item xs={12} md={2}>
+             <Grid container spacing={1} >
+     
+        <Grid item xs={12} md={2.4}>
           <FormControl fullWidth size="small">
             <InputLabel id="student-name-label">Student Name</InputLabel>
             <Select labelId="student-name-label" label="Student Name" defaultValue="">
@@ -84,8 +84,7 @@ function Body() {
           </FormControl>
         </Grid>
 
-        {/* Year Dropdown */}
-        <Grid item xs={12} md={2}>
+        <Grid item xs={12} md={2.4}>
           <FormControl fullWidth size="small">
             <InputLabel id="year-label">Year</InputLabel>
             <Select labelId="year-label" label="Year" defaultValue="">
@@ -99,8 +98,8 @@ function Body() {
           </FormControl>
         </Grid>
 
-        {/* Section Dropdown */}
-        <Grid item xs={12} md={2}>
+   
+        <Grid item xs={12} md={2.4}>
           <FormControl fullWidth size="small">
             <InputLabel id="section-label">Section</InputLabel>
             <Select labelId="section-label" label="Section" defaultValue="">
@@ -114,8 +113,8 @@ function Body() {
           </FormControl>
         </Grid>
 
-        {/* Attendance Dropdown */}
-        <Grid item xs={12} md={2}>
+        
+        <Grid item xs={12} md={2.4}>
           <FormControl fullWidth size="small">
             <InputLabel id="attendance-label">Attendance</InputLabel>
             <Select labelId="attendance-label" label="Attendance" defaultValue="">
@@ -125,8 +124,7 @@ function Body() {
           </FormControl>
         </Grid>
 
-        {/* Date Picker */}
-        <Grid item xs={12} md={2}>
+        <Grid item xs={12} md={2.4}>
           <TextField
             label="Select Date"
             type="date"
@@ -137,7 +135,7 @@ function Body() {
         </Grid>
       </Grid>
       
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 , m: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 , p:2}}>
                 <Button variant="contained" color="primary">
                   ReSet
                 </Button>
