@@ -32,7 +32,7 @@ function Body() {
 
         }}
       >
-        <HailIconc sx={{ color: 'text.primary', fontSize: 28 }} />
+        <HailIcon sx={{ color: 'text.primary', fontSize: 28 }} />
         <Typography variant="h5" component="h1" color="text.primary" fontWeight={600}>
         
          DailyAttendance
@@ -56,7 +56,7 @@ function Body() {
       </Box>
 <Grid container spacing={2} mb={4}>
       {/* Subject Dropdown */}
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={4}>
         <FormControl fullWidth size="small" sx={{ minHeight: 40 }}>
           <InputLabel id="subject-label">Subject</InputLabel>
           <Select labelId="subject-label" label="Subject">
@@ -93,22 +93,6 @@ function Body() {
         </FormControl>
       </Grid>
 
-      {/* Optional Year Dropdown (Uncomment if needed) */}
-      {/* 
-      <Grid item xs={12} md={3}>
-        <FormControl fullWidth size="small" sx={{ minHeight: 40 }}>
-          <InputLabel id="year-label">Year</InputLabel>
-          <Select labelId="year-label" label="Year">
-            <MenuItem value="">Select Year</MenuItem>
-            {[1, 2, 3, 4].map((yr) => (
-              <MenuItem key={yr} value={yr}>
-                {yr}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-      */}
     </Grid>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
