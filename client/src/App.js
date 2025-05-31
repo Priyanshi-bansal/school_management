@@ -98,7 +98,7 @@ const App = () => {
       <Route path="/admin/addsubject" element={<AddSubject />} />
       <Route path="/admin/allsubject" element={<GetSubject />} />
       <Route path="/admin/allstudent" element={<GetStudent />} />
-<<<<<<< HEAD
+
       <Route path="/admin/facultyattendance" element={<FacultyAttendance />} />
       <Route path="/admin/stuattendance" element={<StuAttendance />} />
       <Route path="/admin/managesection" element={<ManageSection />} />
@@ -107,21 +107,7 @@ const App = () => {
       <Route path="/admin/addsection" element={<AddSection />} />
       <Route path="/admin/viewsectiondetail" element={<ViewSection />} />
       <Route path="/admin/editsection" element={<EditSection />} />
-      
 
-
-
-
-
-
-=======
-
-  <Route path="/admin/facultyattendance" element={<FacultyAttendance/>}/>
-  <Route path="/admin/stuattendance" element={<StuAttendance/>}/>
-<Route path="/admin/managesection" element={<ManageSection/>}/>
-<Route path="/admin/getclass" element={<GetClass/>}/>
-<Route path="/admin/addclass" element={<AddClass/>}/>
->>>>>>> ed750640c7a02b4590d836399a2ec330acb18a4c
 
 
       {/* Faculty  */}
@@ -140,14 +126,9 @@ const App = () => {
       <Route path="/faculty/result" element={<Result />} />
       <Route path="/faculty/classperformance" element={<ClassPerformance />} />
       <Route path="/faculty/Marks" element={<Marks />} />
-<<<<<<< HEAD
+
       <Route path="/faculty/StudentAttendance" element={<StudentAttendance />} />
-=======
-      <Route
-        path="/faculty/StudentAttendance"
-        element={<StudentAttendance />}
-      />
->>>>>>> ed750640c7a02b4590d836399a2ec330acb18a4c
+
 
       {/* Student  */}
 
@@ -163,12 +144,7 @@ const App = () => {
       <Route path="/student/attendance" element={<Attendance />} />
       <Route path="/student/StudentTest" element={<StudentTest />} />
       <Route path="/student/DailyAttendance" element={<DailyAttendance />} />
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> ed750640c7a02b4590d836399a2ec330acb18a4c
     </Routes>
   );
 };

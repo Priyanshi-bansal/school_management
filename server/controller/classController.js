@@ -121,6 +121,7 @@ const assignClassTeacher = asyncHandler(async (req, res) => {
   res.json(updatedClass);
 });
 
+
 export {
   createClass,
   getClasses,
