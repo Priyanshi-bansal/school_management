@@ -3,9 +3,7 @@ import Subject from "../models/subject.js";
 import ClassSubject from "../models/ClassSubject.js";
 import asyncHandler from "express-async-handler";
 
-// @desc    Create a new subject
-// @route   POST /api/subjects
-// @access  Private/Admin
+
 const createSubject = asyncHandler(async (req, res) => {
   const { subjectName, subjectCode, department, totalLectures, year } = req.body;
 
@@ -27,9 +25,6 @@ const createSubject = asyncHandler(async (req, res) => {
   res.status(201).json(subject);
 });
 
-// @desc    Get all subjects
-// @route   GET /api/subjects
-// @access  Private/Admin
 const getSubjects = asyncHandler(async (req, res) => {
   const { department, year } = req.query;
   let query = {};
@@ -45,9 +40,6 @@ const getSubjects = asyncHandler(async (req, res) => {
   res.json(subjects);
 });
 
-// @desc    Get subject by ID
-// @route   GET /api/subjects/:id
-// @access  Private/Admin
 const getSubjectById = asyncHandler(async (req, res) => {
   const subject = await Subject.findById(req.params.id);
 
@@ -59,9 +51,6 @@ const getSubjectById = asyncHandler(async (req, res) => {
   res.json(subject);
 });
 
-// @desc    Update subject
-// @route   PUT /api/subjects/:id
-// @access  Private/Admin
 const updateSubject = asyncHandler(async (req, res) => {
   const subject = await Subject.findById(req.params.id);
 
@@ -92,9 +81,6 @@ const updateSubject = asyncHandler(async (req, res) => {
   res.json(updatedSubject);
 });
 
-// @desc    Delete subject
-// @route   DELETE /api/subjects/:id
-// @access  Private/Admin
 const deleteSubject = asyncHandler(async (req, res) => {
   const subject = await Subject.findById(req.params.id);
 
@@ -116,9 +102,6 @@ const deleteSubject = asyncHandler(async (req, res) => {
   res.json({ message: "Subject removed" });
 });
 
-// @desc    Assign subject to class
-// @route   POST /api/class-subjects
-// @access  Private/Admin
 const assignSubjectToClass = asyncHandler(async (req, res) => {
   const { subject, class: classId, academicYear, isElective, electiveGroup } =
     req.body;
@@ -145,9 +128,6 @@ const assignSubjectToClass = asyncHandler(async (req, res) => {
   res.status(201).json(classSubject);
 });
 
-// @desc    Get subjects for a class
-// @route   GET /api/class-subjects
-// @access  Private/Admin
 const getClassSubjects = asyncHandler(async (req, res) => {
   const { class: classId, academicYear } = req.query;
 
@@ -167,9 +147,6 @@ const getClassSubjects = asyncHandler(async (req, res) => {
   res.json(classSubjects);
 });
 
-// @desc    Assign teacher to class subject
-// @route   PUT /api/class-subjects/:id/assign-teacher
-// @access  Private/Admin
 const assignTeacherToClassSubject = asyncHandler(async (req, res) => {
   const { teacherId } = req.body;
 
@@ -187,9 +164,34 @@ const assignTeacherToClassSubject = asyncHandler(async (req, res) => {
   res.json(updatedClassSubject);
 });
 
-// @desc    Update syllabus for class subject
-// @route   PUT /api/class-subjects/:id/syllabus
-// @access  Private/Admin
+const getClassSubjectTeacher = asyncHandler(async (req, res) => {
+  const classSubject = await ClassSubject.findById(req.params.id)
+    .populate("teacher", "name email");
+
+  if (!classSubject) {
+    res.status(404);
+    throw new Error("Class subject not found");
+  }
+
+  res.json(classSubject.teacher);
+});
+
+const getTeacherClassSubjects = asyncHandler(async (req, res) => {
+  const { teacherId } = req.query;
+
+  if (!teacherId) {
+    res.status(400);
+    throw new Error("Teacher ID is required");
+  }
+
+  const classSubjects = await ClassSubject.find({ teacher: teacherId })
+    .populate("subject", "subjectName subjectCode")
+    .populate("class", "name")
+    .sort("subject.subjectName");
+
+  res.json(classSubjects);
+});
+
 const updateClassSubjectSyllabus = asyncHandler(async (req, res) => {
   const { syllabus } = req.body;
 

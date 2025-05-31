@@ -113,12 +113,20 @@ const assignClassTeacher = asyncHandler(async (req, res) => {
     throw new Error("Class not found");
   }
 
+  // Unset previous teacher
+  if (classData.classTeacher && classData.classTeacher.toString() !== teacherId) {
+    await Faculty.findByIdAndUpdate(classData.classTeacher, { isClassTeacher: false });
+  }
+
+  // Set new teacher
+  await Faculty.findByIdAndUpdate(teacherId, { isClassTeacher: true });
+
   // TODO: Verify that the teacher exists and is active
 
   classData.classTeacher = teacherId;
-  const updatedClass = await classData.save();
+  await classData.save();
 
-  res.json(updatedClass);
+  res.json({ message: "Class teacher assigned successfully" });
 });
 
 

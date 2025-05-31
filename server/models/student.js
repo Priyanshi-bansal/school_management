@@ -43,10 +43,12 @@ const studentSchema = new Schema({
     type: String,
     required: true,
   },
-  section: {
-    type: String,
-    required: true,
-  },
+ section: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Section",
+  default: null, // student might not be assigned yet
+}
+,
   batch: {
     type: String,
   },
