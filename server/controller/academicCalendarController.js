@@ -118,8 +118,7 @@ const updateAcademicCalendarEvent = asyncHandler(async (req, res) => {
   const event = await AcademicCalendar.findById(req.params.id);
 
   if (!event) {
-    res.status(404);
-    throw new Error("Event not found");
+    res.status(404).send("Event not found");
   }
 
   event.title = req.body.title || event.title;
