@@ -185,22 +185,22 @@ const Body = () => {
             mb: 3,
             alignItems: 'center'
           }}>
-            <FormControl sx={{ minWidth: 200, height:12}}>
-              <InputLabel>Department</InputLabel>
-              <Select
-                name="department"
-                value={filter.department}
-                onChange={handleFilterChange}
-                label="Department"
-              >
-                <MenuItem value="all">All Departments</MenuItem>
-                {departments?.map((dp, idx) => (
-                  <MenuItem key={idx} value={dp.department}>
-                    {dp.department}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+       <FormControl sx={{ minWidth: 200 }} size="small">
+  <InputLabel>Department</InputLabel>
+  <Select
+    name="department"
+    value={filter.department}
+    onChange={handleFilterChange}
+    label="Department"
+  >
+    <MenuItem value="all">All Departments</MenuItem>
+    {departments?.map((dp, idx) => (
+      <MenuItem key={idx} value={dp.department}>
+        {dp.department}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
 
             <TextField
               name="searchQuery"

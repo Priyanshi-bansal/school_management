@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { PersonAdd } from '@mui/icons-material';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -15,48 +13,51 @@ import {
   Person,
   School,
   Work,
-  Edit as EditIcon,
 } from '@mui/icons-material';
 
 const Spinner = ({ message }) => <span>{message}</span>;
 
 const Body = () => {
-  const location = useLocation();
-  const sectionToEdit = location.state?.section || null;
-
   const [value, setValue] = useState({
-    name: '',
-    academicYear: '',
     class: '',
-    capacity: '',
+    academicYear: '',
+    classSubject: '',
+    teacherName: '',
   });
 
-  const [error, setError] = useState({ backendError: '' });
+  const [error, setError] = useState({
+    backendError: '',
+  });
+
   const [loading, setLoading] = useState(false);
 
   const departments = [
-    { department: 'Class 10A' },
-    { department: 'Class 9B' },
-    { department: 'Class 8C' },
+    { department: 'Class 10' },
+    { department: 'Class 9' },
+    { department: 'Class 8' },
   ];
 
-  useEffect(() => {
-    if (sectionToEdit) {
-      setValue({
-        name: sectionToEdit.name || '',
-        academicYear: sectionToEdit.academicYear || '',
-        class: sectionToEdit.class || '',
-        capacity: sectionToEdit.capacity || '',
-      });
-    }
-  }, [sectionToEdit]);
+  const teachers = [
+    'Mr. John Doe',
+    'Ms. Jane Smith',
+    'Mrs. Emily Johnson',
+  ];
+
+  const classSubjects = [
+    'Mathematics',
+    'Physics',
+    'Chemistry',
+    'Biology',
+    'History',
+    'Geography',
+  ];
 
   const resetForm = () => {
     setValue({
-      name: '',
-      academicYear: '',
       class: '',
-      capacity: '',
+      academicYear: '',
+      classSubject: '',
+      teacherName: '',
     });
     setError({ backendError: '' });
   };
@@ -65,9 +66,9 @@ const Body = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
+    // Simulated API call
     setTimeout(() => {
-      console.log(sectionToEdit ? 'Updated Data:' : 'Submitted Data:', value);
+      console.log('Submitted Data:', value);
       resetForm();
       setLoading(false);
     }, 1000);
@@ -78,10 +79,8 @@ const Body = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center mb-8">
-          <EditIcon className="text-indigo-600 mr-3" fontSize="large" />
-          <h1 className="text-2xl font-bold text-gray-800">
-            {sectionToEdit ? 'Edit Section' : 'Add Section'}
-          </h1>
+          <AddIcon className="text-indigo-600 mr-3" fontSize="large" />
+          <h1 className="text-2xl font-bold text-gray-800">Assign Teacher To classSubject</h1>
         </div>
 
         {/* Form Card */}
@@ -89,42 +88,6 @@ const Body = () => {
           <form onSubmit={handleSubmit} className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column */}
-              <div className="space-y-5">
-                {/* Session Name */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                    <Person className="text-gray-500 mr-2" fontSize="small" />
-                    Session Name
-                  </label>
-                  <input
-                    placeholder="Enter session name"
-                    required
-                    className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                    type="text"
-                    value={value.name}
-                    onChange={(e) => setValue({ ...value, name: e.target.value })}
-                  />
-                </div>
-
-                {/* Academic Year */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                    <Work className="text-gray-500 mr-2" fontSize="small" />
-                    Academic Year
-                  </label>
-                  <input
-                    placeholder="2024-2025"
-                    required
-                    className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                    type="text"
-                    value={value.academicYear}
-                    onChange={(e) => setValue({ ...value, academicYear: e.target.value })}
-                  />
-                </div>
-   
-              </div>
-
-              {/* Right Column */}
               <div className="space-y-5">
                 {/* Class */}
                 <div>
@@ -165,28 +128,102 @@ const Body = () => {
                   </FormControl>
                 </div>
 
-                {/* Capacity */}
+                {/* Academic Year */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Work className="text-gray-500 mr-2" fontSize="small" />
-                    Capacity
+                    Academic Year
                   </label>
                   <input
-                    placeholder="Enter capacity"
+                    placeholder="2024-2025"
                     required
                     className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                    type="number"
-                    min="1"
-                    value={value.capacity}
-                    onChange={(e) => setValue({ ...value, capacity: e.target.value })}
+                    type="text"
+                    value={value.academicYear}
+                    onChange={(e) => setValue({ ...value, academicYear: e.target.value })}
                   />
                 </div>
+              </div>
 
+              {/* Right Column */}
+              <div className="space-y-5">
+                {/* Class Subject */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Work className="text-gray-500 mr-2" fontSize="small" />
+                    Class Subject
+                  </label>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      required
+                      displayEmpty
+                      value={value.classSubject}
+                      onChange={(e) => setValue({ ...value, classSubject: e.target.value })}
+                      sx={{
+                        height: '40px',
+                        '& .MuiSelect-select': {
+                          paddingTop: '8px',
+                          paddingBottom: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#d1d5db',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#6366f1',
+                        },
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select class subject</em>
+                      </MenuItem>
+                      {classSubjects.map((subject, idx) => (
+                        <MenuItem key={idx} value={subject}>
+                          {subject}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
 
-
-
-                
-                
+                {/* Teacher Name */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Person className="text-gray-500 mr-2" fontSize="small" />
+                    Teacher Name
+                  </label>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      required
+                      displayEmpty
+                      value={value.teacherName}
+                      onChange={(e) => setValue({ ...value, teacherName: e.target.value })}
+                      sx={{
+                        height: '40px',
+                        '& .MuiSelect-select': {
+                          paddingTop: '8px',
+                          paddingBottom: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#d1d5db',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#6366f1',
+                        },
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select teacher</em>
+                      </MenuItem>
+                      {teachers.map((teacher, idx) => (
+                        <MenuItem key={idx} value={teacher}>
+                          {teacher}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
               </div>
             </div>
 
@@ -207,11 +244,7 @@ const Body = () => {
                 className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
                 disabled={loading}
               >
-                {loading ? (
-                  <Spinner message={sectionToEdit ? 'Updating...' : 'Adding...'} />
-                ) : (
-                  sectionToEdit ? 'Update Section' : 'Add Section'
-                )}
+                {loading ? <Spinner message="Adding Section..." /> : 'Assign Subject'}
               </Button>
             </div>
 

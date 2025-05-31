@@ -62,6 +62,13 @@ import AddClass from "./components/admin/addclass/AddClass";
 import AddSection from "./components/admin/addsection/AddSection";
 import ViewSection from "./components/admin/viewsectiondetail/ViewSection";
 import EditSection from "./components/admin/editsection/EditSection";
+import GetAcademic from "./components/admin/getacademic/GetAcademic";
+import AddAcedmicYear from "./components/admin/addacedmicyear/AddAcedmicYear";
+import EditAcademic from "./components/admin/editacademic/EditAcademic";
+import EditSubject from "./components/admin/editsubject/EditSubject";
+import ViewSubject from "./components/admin/viewsubject/ViewSubject";
+import SubjectToAssign from "./components/admin/subjecttoassign/SubjectToAssign";
+import TeacherToSubject from "./components/admin/teachertosubject/TeacherToSubject";
 
 
 
@@ -107,6 +114,18 @@ const App = () => {
       <Route path="/admin/addsection" element={<AddSection />} />
       <Route path="/admin/viewsectiondetail" element={<ViewSection />} />
       <Route path="/admin/editsection" element={<EditSection />} />
+      <Route path="/admin/getacademic" element={<GetAcademic />} />
+      <Route path="/admin/addacedmicyear" element={<AddAcedmicYear />} />
+      <Route path="/admin/editacadamic" element={<EditAcademic />} />
+      <Route path="/admin/editsubject" element={<EditSubject />} />
+      <Route path="/admin/viewsubject" element={<ViewSubject />} />
+        <Route path="/admin/subjecttoclass" element={<SubjectToAssign />} />
+          <Route path="/admin/teachertosubject" element={<TeacherToSubject />} />
+
+
+
+
+
 
 
 

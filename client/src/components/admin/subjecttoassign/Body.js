@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { PersonAdd } from '@mui/icons-material';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -15,48 +13,45 @@ import {
   Person,
   School,
   Work,
-  Edit as EditIcon,
 } from '@mui/icons-material';
 
 const Spinner = ({ message }) => <span>{message}</span>;
 
 const Body = () => {
-  const location = useLocation();
-  const sectionToEdit = location.state?.section || null;
-
   const [value, setValue] = useState({
     name: '',
     academicYear: '',
+    electiveGroup: '',
     class: '',
-    capacity: '',
+    isElective: '',
   });
 
-  const [error, setError] = useState({ backendError: '' });
+  const [error, setError] = useState({
+    backendError: '',
+  });
+
   const [loading, setLoading] = useState(false);
 
   const departments = [
-    { department: 'Class 10A' },
-    { department: 'Class 9B' },
-    { department: 'Class 8C' },
+    { department: 'Class 10' },
+    { department: 'Class 9' },
+    { department: 'Class 8' },
   ];
 
-  useEffect(() => {
-    if (sectionToEdit) {
-      setValue({
-        name: sectionToEdit.name || '',
-        academicYear: sectionToEdit.academicYear || '',
-        class: sectionToEdit.class || '',
-        capacity: sectionToEdit.capacity || '',
-      });
-    }
-  }, [sectionToEdit]);
+  const electiveGroups = [
+    'Science',
+    'Commerce',
+    'Arts',
+    'Technology',
+  ];
 
   const resetForm = () => {
     setValue({
       name: '',
       academicYear: '',
+      electiveGroup: '',
       class: '',
-      capacity: '',
+      isElective: '',
     });
     setError({ backendError: '' });
   };
@@ -65,9 +60,9 @@ const Body = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
+    // Simulated API call
     setTimeout(() => {
-      console.log(sectionToEdit ? 'Updated Data:' : 'Submitted Data:', value);
+      console.log('Submitted Data:', value);
       resetForm();
       setLoading(false);
     }, 1000);
@@ -78,10 +73,8 @@ const Body = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center mb-8">
-          <EditIcon className="text-indigo-600 mr-3" fontSize="large" />
-          <h1 className="text-2xl font-bold text-gray-800">
-            {sectionToEdit ? 'Edit Section' : 'Add Section'}
-          </h1>
+          <AddIcon className="text-indigo-600 mr-3" fontSize="large" />
+          <h1 className="text-2xl font-bold text-gray-800">Assign Subject To Class</h1>
         </div>
 
         {/* Form Card */}
@@ -90,14 +83,13 @@ const Body = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column */}
               <div className="space-y-5">
-                {/* Session Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Person className="text-gray-500 mr-2" fontSize="small" />
-                    Session Name
+                    Subject Name
                   </label>
                   <input
-                    placeholder="Enter session name"
+                    placeholder="Enter subject name"
                     required
                     className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
@@ -121,7 +113,45 @@ const Body = () => {
                     onChange={(e) => setValue({ ...value, academicYear: e.target.value })}
                   />
                 </div>
-   
+
+                {/* Elective Group */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Work className="text-gray-500 mr-2" fontSize="small" />
+                    Elective Group
+                  </label>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      required
+                      displayEmpty
+                      value={value.electiveGroup}
+                      onChange={(e) => setValue({ ...value, electiveGroup: e.target.value })}
+                      sx={{
+                        height: '40px',
+                        '& .MuiSelect-select': {
+                          paddingTop: '8px',
+                          paddingBottom: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#d1d5db',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#6366f1',
+                        },
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select elective group</em>
+                      </MenuItem>
+                      {electiveGroups.map((group, idx) => (
+                        <MenuItem key={idx} value={group}>
+                          {group}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
               </div>
 
               {/* Right Column */}
@@ -165,28 +195,41 @@ const Body = () => {
                   </FormControl>
                 </div>
 
-                {/* Capacity */}
+                {/* Is Elective */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Work className="text-gray-500 mr-2" fontSize="small" />
-                    Capacity
+                    Is Elective
                   </label>
-                  <input
-                    placeholder="Enter capacity"
-                    required
-                    className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                    type="number"
-                    min="1"
-                    value={value.capacity}
-                    onChange={(e) => setValue({ ...value, capacity: e.target.value })}
-                  />
+                  <FormControl fullWidth size="small">
+                    <Select
+                      required
+                      displayEmpty
+                      value={value.isElective}
+                      onChange={(e) => setValue({ ...value, isElective: e.target.value })}
+                      sx={{
+                        height: '40px',
+                        '& .MuiSelect-select': {
+                          paddingTop: '8px',
+                          paddingBottom: '8px',
+                        },
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#d1d5db',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: '#6366f1',
+                        },
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select</em>
+                      </MenuItem>
+                      <MenuItem value="Yes">Yes</MenuItem>
+                      <MenuItem value="No">No</MenuItem>
+                    </Select>
+                  </FormControl>
                 </div>
-
-
-
-
-                
-                
               </div>
             </div>
 
@@ -208,9 +251,9 @@ const Body = () => {
                 disabled={loading}
               >
                 {loading ? (
-                  <Spinner message={sectionToEdit ? 'Updating...' : 'Adding...'} />
+                  <Spinner message="Adding Section..." />
                 ) : (
-                  sectionToEdit ? 'Update Section' : 'Add Section'
+                  'Assign Subject'
                 )}
               </Button>
             </div>
