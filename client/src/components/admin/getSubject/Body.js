@@ -1,4 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Tooltip } from '@mui/material';
+import {
+  Visibility,
+  Edit,
+  Delete,
+  LibraryBooks,
+  PersonAdd,
+} from '@mui/icons-material';
+
 import { 
   MenuBook as MenuBookIcon,
   Delete as DeleteIcon,
@@ -261,66 +270,114 @@ const Body = () => {
               {error.noSubjectError || error.backendError}
             </Alert>
           )}
+<TableContainer component={Paper} sx={{ mb: 3 }}>
+  <Table>
+    <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+      <TableRow>
+        <TableCell padding="checkbox">
+          <Checkbox
+            indeterminate={
+              selectedSubjects.length > 0 && 
+              selectedSubjects.length < (searchedSubjects?.length || 0)
+            }
+            checked={
+              (searchedSubjects?.length || 0) > 0 && 
+              selectedSubjects.length === (searchedSubjects?.length || 0)
+            }
+            onChange={() => {
+              if (selectedSubjects.length === (searchedSubjects?.length || 0)) {
+                setSelectedSubjects([]);
+              } else {
+                setSelectedSubjects(searchedSubjects?.map(sub => sub._id) || []);
+              }
+            }}
+          />
+        </TableCell>
+        <TableCell>#</TableCell>
+        <TableCell>Subject Code</TableCell>
+        <TableCell>Subject Name</TableCell>
+        <TableCell>Department</TableCell>
+        <TableCell>Year</TableCell>
+        <TableCell>Total Lectures</TableCell>
+        <TableCell align="center">Actions</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {searchedSubjects?.length > 0 ? (
+        searchedSubjects.map((sub, idx) => (
+          <TableRow key={sub._id} hover>
+            <TableCell padding="checkbox">
+              <Checkbox
+                checked={selectedSubjects.includes(sub._id)}
+                onChange={() => handleCheckboxChange(sub._id)}
+              />
+            </TableCell>
+            <TableCell>{idx + 1}</TableCell>
+            <TableCell>{sub.subjectCode}</TableCell>
+            <TableCell>{sub.subjectName}</TableCell>
+            <TableCell>{sub.department}</TableCell>
+            <TableCell>{sub.year}</TableCell>
+            <TableCell>{sub.totalLectures}</TableCell>
+          <TableCell align="center">
+  <Tooltip title="View Subject">
+        <IconButton
+          color="primary"
+          onClick={() => navigate(`/admin/viewsubject/`)}
+        >
+          <Visibility fontSize="small" />
+        </IconButton>
+      </Tooltip>
 
-          <TableContainer component={Paper} sx={{ mb: 3 }}>
-            <Table>
-              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableRow>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      indeterminate={
-                        selectedSubjects.length > 0 && 
-                        selectedSubjects.length < (searchedSubjects?.length || 0)
-                      }
-                      checked={
-                        (searchedSubjects?.length || 0) > 0 && 
-                        selectedSubjects.length === (searchedSubjects?.length || 0)
-                      }
-                      onChange={() => {
-                        if (selectedSubjects.length === (searchedSubjects?.length || 0)) {
-                          setSelectedSubjects([]);
-                        } else {
-                          setSelectedSubjects(searchedSubjects?.map(sub => sub._id) || []);
-                        }
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell>#</TableCell>
-                  <TableCell>Subject Code</TableCell>
-                  <TableCell>Subject Name</TableCell>
-                  <TableCell>Department</TableCell>
-                  <TableCell>Year</TableCell>
-                  <TableCell>Total Lectures</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {searchedSubjects?.length > 0 ? (
-                  searchedSubjects.map((sub, idx) => (
-                    <TableRow key={sub._id} hover>
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={selectedSubjects.includes(sub._id)}
-                          onChange={() => handleCheckboxChange(sub._id)}
-                        />
-                      </TableCell>
-                      <TableCell>{idx + 1}</TableCell>
-                      <TableCell>{sub.subjectCode}</TableCell>
-                      <TableCell>{sub.subjectName}</TableCell>
-                      <TableCell>{sub.department}</TableCell>
-                      <TableCell>{sub.year}</TableCell>
-                      <TableCell>{sub.totalLectures}</TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4 }}>
-                      {loading ? '' : 'No subjects found matching your criteria'}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+      <Tooltip title="Edit Subject">
+        <IconButton
+          color="primary"
+          onClick={() => navigate(`/admin/editsubject/`)}
+        >
+          <Edit fontSize="small" />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Delete Subject">
+        <IconButton
+          color="error"
+          onClick={() => navigate(``)}
+        >
+          <Delete fontSize="small" />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Assign Subject to Class">
+        <IconButton
+          color="primary"
+          onClick={() => navigate(`/admin/subjecttoclass/`)}
+        >
+          <LibraryBooks fontSize="small" />
+        </IconButton>
+      </Tooltip>
+
+      <Tooltip title="Assign Teacher to Subject">
+        <IconButton
+          color="primary"
+          onClick={() => navigate(`/admin/teachertosubject/`)}
+        >
+          <PersonAdd fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    </TableCell>
+
+          </TableRow>
+        ))
+      ) : (
+        <TableRow>
+          <TableCell colSpan={8} sx={{ textAlign: 'center', py: 4 }}>
+            {loading ? '' : 'No subjects found matching your criteria'}
+          </TableCell>
+        </TableRow>
+      )}
+    </TableBody>
+  </Table>
+</TableContainer>
+
 
           {selectedSubjects.length > 0 && (
             <Box sx={{ 

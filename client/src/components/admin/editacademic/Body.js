@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { PersonAdd } from '@mui/icons-material';
+import {
+  Person,
+  Work,
+  Edit as EditIcon,
+  Add as AddIcon,
+  Clear,
+  Today,
+} from '@mui/icons-material';
 import {
   Box,
   Button,
-  FormControl,
-  MenuItem,
-  Select,
   Typography,
 } from '@mui/material';
-import {
-  Add as AddIcon,
-  Clear,
-  Person,
-  School,
-  Work,
-  Edit as EditIcon,
-} from '@mui/icons-material';
 
 const Spinner = ({ message }) => <span>{message}</span>;
 
@@ -29,16 +25,13 @@ const Body = () => {
     academicYear: '',
     class: '',
     capacity: '',
+    startDate: '',
+    endDate: '',
+    description: '',
   });
 
   const [error, setError] = useState({ backendError: '' });
   const [loading, setLoading] = useState(false);
-
-  const departments = [
-    { department: 'Class 10A' },
-    { department: 'Class 9B' },
-    { department: 'Class 8C' },
-  ];
 
   useEffect(() => {
     if (sectionToEdit) {
@@ -47,6 +40,9 @@ const Body = () => {
         academicYear: sectionToEdit.academicYear || '',
         class: sectionToEdit.class || '',
         capacity: sectionToEdit.capacity || '',
+        startDate: sectionToEdit.startDate || '',
+        endDate: sectionToEdit.endDate || '',
+        description: sectionToEdit.description || '',
       });
     }
   }, [sectionToEdit]);
@@ -57,6 +53,9 @@ const Body = () => {
       academicYear: '',
       class: '',
       capacity: '',
+      startDate: '',
+      endDate: '',
+      description: '',
     });
     setError({ backendError: '' });
   };
@@ -65,7 +64,6 @@ const Body = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
     setTimeout(() => {
       console.log(sectionToEdit ? 'Updated Data:' : 'Submitted Data:', value);
       resetForm();
@@ -80,7 +78,7 @@ const Body = () => {
         <div className="flex items-center mb-8">
           <EditIcon className="text-indigo-600 mr-3" fontSize="large" />
           <h1 className="text-2xl font-bold text-gray-800">
-            {sectionToEdit ? 'Edit Section' : 'Add Section'}
+            {sectionToEdit ? 'Edit Academic' : 'Add Academic'}
           </h1>
         </div>
 
@@ -90,11 +88,11 @@ const Body = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column */}
               <div className="space-y-5">
-                {/* Session Name */}
+                {/* Student Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Person className="text-gray-500 mr-2" fontSize="small" />
-                    Session Name
+                    Student Name
                   </label>
                   <input
                     placeholder="Enter session name"
@@ -106,87 +104,75 @@ const Body = () => {
                   />
                 </div>
 
-                {/* Academic Year */}
+                {/* Is Current */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Work className="text-gray-500 mr-2" fontSize="small" />
-                    Academic Year
+                    Is Current
                   </label>
                   <input
-                    placeholder="2024-2025"
+                    placeholder="yes or no"
                     required
                     className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.academicYear}
-                    onChange={(e) => setValue({ ...value, academicYear: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, academicYear: e.target.value })
+                    }
                   />
                 </div>
-   
               </div>
 
               {/* Right Column */}
               <div className="space-y-5">
-                {/* Class */}
+                {/* Start Date */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                    <School className="text-gray-500 mr-2" fontSize="small" />
-                    Class
-                  </label>
-                  <FormControl fullWidth size="small">
-                    <Select
-                      required
-                      displayEmpty
-                      value={value.class}
-                      onChange={(e) => setValue({ ...value, class: e.target.value })}
-                      sx={{
-                        height: '40px',
-                        '& .MuiSelect-select': {
-                          paddingTop: '8px',
-                          paddingBottom: '8px',
-                        },
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#d1d5db',
-                        },
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#6366f1',
-                        },
-                        borderRadius: '8px',
-                      }}
-                    >
-                      <MenuItem value="">
-                        <em>Select class</em>
-                      </MenuItem>
-                      {departments.map((dp, idx) => (
-                        <MenuItem key={idx} value={dp.department}>
-                          {dp.department}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </div>
-
-                {/* Capacity */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                    <Work className="text-gray-500 mr-2" fontSize="small" />
-                    Capacity
+                    <Today className="text-gray-500 mr-2" fontSize="small" />
+                    Start Date
                   </label>
                   <input
-                    placeholder="Enter capacity"
                     required
+                    type="date"
                     className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                    type="number"
-                    min="1"
-                    value={value.capacity}
-                    onChange={(e) => setValue({ ...value, capacity: e.target.value })}
+                    value={value.startDate}
+                    onChange={(e) =>
+                      setValue({ ...value, startDate: e.target.value })
+                    }
                   />
                 </div>
 
+                {/* End Date */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Today className="text-gray-500 mr-2" fontSize="small" />
+                    End Date
+                  </label>
+                  <input
+                    required
+                    type="date"
+                    className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    value={value.endDate}
+                    onChange={(e) =>
+                      setValue({ ...value, endDate: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
 
-
-
-                
-                
+              {/* Description Full Width */}
+              <div className="col-span-1 md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <Work className="text-gray-500 mr-2" fontSize="small" />
+                  Description
+                </label>
+                <textarea
+                  rows={4}
+                  placeholder="Enter description"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition resize-none"
+                  value={value.description}
+                  onChange={(e) => setValue({ ...value, description: e.target.value })}
+                />
               </div>
             </div>
 
@@ -209,13 +195,15 @@ const Body = () => {
               >
                 {loading ? (
                   <Spinner message={sectionToEdit ? 'Updating...' : 'Adding...'} />
+                ) : sectionToEdit ? (
+                  'Update Academic'
                 ) : (
-                  sectionToEdit ? 'Update Section' : 'Add Section'
+                  'Add Academic'
                 )}
               </Button>
             </div>
 
-            {/* Error Display */}
+            {/* Error Message */}
             {error.backendError && (
               <Box className="mt-4 p-3 bg-red-50 rounded-lg">
                 <Typography className="text-red-600 text-sm">

@@ -99,6 +99,14 @@ const Sidebar = () => {
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
     },
+      { 
+      header: "Acedmic Management",
+      items: [
+        { icon: <MenuBook />, label: "manage Academic", path: "/admin/getacademic" },
+        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+      ]
+    },
      { 
       header: "Attendance",
       items: [
