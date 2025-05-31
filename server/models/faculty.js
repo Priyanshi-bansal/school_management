@@ -45,6 +45,11 @@ const facultySchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isClassTeacher: {
+  type: Boolean,
+  default: false,
+},
+}, { timestamps: true
 });
 
 export default mongoose.model("faculty", facultySchema);

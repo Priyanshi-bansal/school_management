@@ -114,20 +114,14 @@ const App = () => {
       <Route path="/admin/addsection" element={<AddSection />} />
       <Route path="/admin/viewsectiondetail" element={<ViewSection />} />
       <Route path="/admin/editsection" element={<EditSection />} />
+
       <Route path="/admin/getacademic" element={<GetAcademic />} />
       <Route path="/admin/addacedmicyear" element={<AddAcedmicYear />} />
       <Route path="/admin/editacadamic" element={<EditAcademic />} />
       <Route path="/admin/editsubject" element={<EditSubject />} />
       <Route path="/admin/viewsubject" element={<ViewSubject />} />
-        <Route path="/admin/subjecttoclass" element={<SubjectToAssign />} />
-          <Route path="/admin/teachertosubject" element={<TeacherToSubject />} />
-
-
-
-
-
-
-
+      <Route path="/admin/subjecttoclass" element={<SubjectToAssign />} />
+      <Route path="/admin/teachertosubject" element={<TeacherToSubject />} />
 
       {/* Faculty  */}
 
@@ -161,6 +155,7 @@ const App = () => {
       <Route path="/student/attendance" element={<Attendance />} />
       <Route path="/student/StudentTest" element={<StudentTest />} />
       <Route path="/student/DailyAttendance" element={<DailyAttendance />} />
+
     </Routes>
   );
 };

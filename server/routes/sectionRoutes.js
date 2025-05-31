@@ -8,6 +8,7 @@ import {
   assignSectionTeacher,
   addStudentToSection,
   removeStudentFromSection,
+  getAvailableStudents
 } from "../controller/sectionController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
@@ -31,5 +32,8 @@ router
 router
   .route("/:id/remove-student")
   .put(protect, admin, removeStudentFromSection);
+router
+  .route("/api/students/available")
+  .get(protect, admin, getAvailableStudents);
 
 export default router;
