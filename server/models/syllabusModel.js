@@ -33,12 +33,12 @@ const chapterSchema = new mongoose.Schema({
 });
 
 const syllabusSchema = new mongoose.Schema({
-  class: { 
+  classId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Class', 
     required: true 
   },
-  subject: { 
+  subjectId: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Subject', 
     required: true 
@@ -51,7 +51,7 @@ const syllabusSchema = new mongoose.Schema({
   chapters: [chapterSchema],
   createdBy: { 
     type: mongoose.Schema.Types.ObjectId, 
-    ref: 'Faculty' 
+    ref: 'Admin'
   },
   updatedBy: { 
     type: mongoose.Schema.Types.ObjectId, 
@@ -72,7 +72,8 @@ const syllabusSchema = new mongoose.Schema({
 });
 
 // Indexes for faster querying
-syllabusSchema.index({ class: 1, subject: 1, academicYear: 1 }, { unique: true });
+syllabusSchema.index({ classId: 1, subjectId: 1, academicYear: 1 }, { unique: true });
+
 
 // Virtual for progress calculation
 syllabusSchema.virtual('progress').get(function() {
