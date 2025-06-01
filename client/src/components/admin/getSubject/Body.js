@@ -200,7 +200,7 @@ const Body = () => {
             mb: 3,
             alignItems: 'center'
           }}>
-            <FormControl sx={{ minWidth: 200 }}>
+            <FormControl sx={{ minWidth: 200 }}size="small"> 
               <InputLabel>Department</InputLabel>
               <Select
                 name="department"
@@ -217,7 +217,7 @@ const Body = () => {
               </Select>
             </FormControl>
 
-            <FormControl sx={{ minWidth: 120 }}>
+            <FormControl sx={{ minWidth: 120 }}size="small">
               <InputLabel>Year</InputLabel>
               <Select
                 name="year"
