@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { PersonAdd } from '@mui/icons-material';
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   MenuItem,
   Select,
@@ -17,8 +17,6 @@ import {
   Work,
   Edit as EditIcon,
 } from '@mui/icons-material';
-
-const Spinner = ({ message }) => <span>{message}</span>;
 
 const Body = () => {
   const location = useLocation();
@@ -40,12 +38,18 @@ const Body = () => {
     { department: 'Class 8C' },
   ];
 
+  // When editing, initialize form with existing data
   useEffect(() => {
     if (sectionToEdit) {
+      // Ensure class matches one of the options exactly
+      const matchedClass = departments.find(
+        (d) => d.department === sectionToEdit.class
+      )?.department || '';
+
       setValue({
         name: sectionToEdit.name || '',
         academicYear: sectionToEdit.academicYear || '',
-        class: sectionToEdit.class || '',
+        class: matchedClass,
         capacity: sectionToEdit.capacity || '',
       });
     }
@@ -121,7 +125,6 @@ const Body = () => {
                     onChange={(e) => setValue({ ...value, academicYear: e.target.value })}
                   />
                 </div>
-   
               </div>
 
               {/* Right Column */}
@@ -181,12 +184,6 @@ const Body = () => {
                     onChange={(e) => setValue({ ...value, capacity: e.target.value })}
                   />
                 </div>
-
-
-
-
-                
-                
               </div>
             </div>
 
@@ -203,14 +200,16 @@ const Body = () => {
               <Button
                 type="submit"
                 variant="contained"
-                startIcon={<AddIcon />}
+                startIcon={loading ? null : <AddIcon />}
                 className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
                 disabled={loading}
               >
                 {loading ? (
-                  <Spinner message={sectionToEdit ? 'Updating...' : 'Adding...'} />
+                  <CircularProgress size={20} color="inherit" />
+                ) : sectionToEdit ? (
+                  'Update Section'
                 ) : (
-                  sectionToEdit ? 'Update Section' : 'Add Section'
+                  'Add Section'
                 )}
               </Button>
             </div>

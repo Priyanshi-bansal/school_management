@@ -107,6 +107,22 @@ const Sidebar = () => {
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
     },
+      { 
+      header: "Acedmic Calendra Management",
+      items: [
+        { icon: <MenuBook />, label: "Calendra Management ", path: "/admin/calendramanagement" },
+        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+      ]
+    },
+     { 
+      header: "Syllabus Management",
+      items: [
+        { icon: <MenuBook />, label: "syllabus Management ", path: "/admin/syllabusmanagement" },
+        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+      ]
+    },
      { 
       header: "Attendance",
       items: [

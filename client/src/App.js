@@ -69,6 +69,14 @@ import EditSubject from "./components/admin/editsubject/EditSubject";
 import ViewSubject from "./components/admin/viewsubject/ViewSubject";
 import SubjectToAssign from "./components/admin/subjecttoassign/SubjectToAssign";
 import TeacherToSubject from "./components/admin/teachertosubject/TeacherToSubject";
+import CreateCalendra from "./components/admin/createcalendra/CreateCalendra";
+import EditCalendra from "./components/admin/editcalendra/EditCalendra";
+import CalendraManagement from "./components/admin/calendramanagement/CalendraManagement";
+import SyllabusManagemant from "./components/admin/syllabusmanagement/SyllabusManagemant";
+import GetSyllabus from "./components/admin/getsyllabus/GetSyllabus";
+import EditSyllabus from "./components/admin/editsyllabus/EditSyllabus";
+import ViewChapter from "./components/admin/viewchapter/ViewChapter";
+import EditChapter from "./components/admin/editchapter/EditChapter";
 
 
 
@@ -122,6 +130,17 @@ const App = () => {
       <Route path="/admin/viewsubject" element={<ViewSubject />} />
       <Route path="/admin/subjecttoclass" element={<SubjectToAssign />} />
       <Route path="/admin/teachertosubject" element={<TeacherToSubject />} />
+       <Route path="/admin/createcalendra" element={<CreateCalendra />} />
+      <Route path="/admin/editcalendra" element={<EditCalendra />} />
+      <Route path="/admin/calendramanagement" element={< CalendraManagement/>} />
+        <Route path="/admin/syllabusmanagement" element={< SyllabusManagemant/>} />
+          <Route path="/admin/getsyllabus" element={< GetSyllabus/>} />
+            <Route path="/admin/editsyllabus" element={< EditSyllabus/>} />
+             <Route path="/admin/viewchapter" element={<ViewChapter/>} />
+             <Route path="/admin/editchapter" element={<EditChapter/>} />
+
+
+
 
       {/* Faculty  */}
 
