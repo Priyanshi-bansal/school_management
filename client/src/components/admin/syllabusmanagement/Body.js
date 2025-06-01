@@ -254,7 +254,7 @@ const Body = () => {
                       <TableCell>{fac.updatedBy}</TableCell>
                       <TableCell>{fac.lastUpdated}</TableCell>
                       <TableCell>
-                        <IconButton color="primary" onClick={() => navigate(`/admin/viewsectiondetail`)} sx={{ mr: 1 }}>
+                        <IconButton color="primary" onClick={() => navigate(`/admin/viewChapter`)} sx={{ mr: 1 }}>
                           <VisibilityIcon />
                         </IconButton>
                         <IconButton

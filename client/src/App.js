@@ -75,6 +75,8 @@ import CalendraManagement from "./components/admin/calendramanagement/CalendraMa
 import SyllabusManagemant from "./components/admin/syllabusmanagement/SyllabusManagemant";
 import GetSyllabus from "./components/admin/getsyllabus/GetSyllabus";
 import EditSyllabus from "./components/admin/editsyllabus/EditSyllabus";
+import ViewChapter from "./components/admin/viewchapter/ViewChapter";
+import EditChapter from "./components/admin/editchapter/EditChapter";
 
 
 
@@ -134,6 +136,8 @@ const App = () => {
         <Route path="/admin/syllabusmanagement" element={< SyllabusManagemant/>} />
           <Route path="/admin/getsyllabus" element={< GetSyllabus/>} />
             <Route path="/admin/editsyllabus" element={< EditSyllabus/>} />
+             <Route path="/admin/viewchapter" element={<ViewChapter/>} />
+             <Route path="/admin/editchapter" element={<EditChapter/>} />
 
 
 
