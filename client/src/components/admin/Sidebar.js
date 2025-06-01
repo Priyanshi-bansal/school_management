@@ -101,16 +101,22 @@ const Sidebar = () => {
     },
      { 
       header: "Attendance",
-      items: [
-        { icon: <MenuBook />, label: "FacultyAttendance", path: "/admin/facultyattendance" },
-               { icon: <MenuBook />, label: "StudentAttendance", path: "/admin/stuattendance" },
-
-
-        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
-        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
-      ]
-    }
-  ];
+    items: [
+      { icon: <MenuBook />, label: "FacultyAttendance", path: "/admin/facultyattendance" },
+      { icon: <MenuBook />, label: "StudentAttendance", path: "/admin/stuattendance" },
+      // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+      // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+    ]
+  },
+  {
+    header: "Assign class teacher",
+    items: [
+      { icon: <MenuBook />, label: "AssignTeacher", path: "/admin/AssignTeacher" },
+      // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+      // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+    ]
+  }
+];
 
   return (
     <>

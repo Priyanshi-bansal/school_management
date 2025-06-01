@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Engineering as EngineeringIcon,
+  Edit as EditIcon,
   Delete as DeleteIcon,
+  Engineering as EngineeringIcon,
   Search,
   ClearAll,
   Add,
+  Visibility as VisibilityIcon, 
 } from "@mui/icons-material";
+
 import {
   Select,
   MenuItem,
@@ -38,7 +41,7 @@ const mockData = [
     teacher: "John Doe",
     capacity: "30",
     academic: "2023-2024",
-    department: "Engineering",
+
   },
   {
     _id: "2",
@@ -46,7 +49,7 @@ const mockData = [
     teacher: "Jane Smith",
     capacity: "25",
     academic: "2023-2024",
-    department: "Science",
+    // department: "Science",
   },
 ];
 
@@ -108,6 +111,19 @@ const Body = () => {
     }
   };
 
+
+  const handleDeleteSingle = (id) => {
+  if (window.confirm("Are you sure you want to delete this class?")) {
+    setLoading(true);
+    setTimeout(() => {
+      setAllFaculty((prev) => prev.filter((fac) => fac._id !== id));
+      setSelectedFaculty((prev) => prev.filter((fid) => fid !== id));
+      setLoading(false);
+    }, 1000);
+  }
+};
+
+
   return (
     <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
       <Box sx={{ mb: 4 }}>
@@ -136,7 +152,7 @@ const Body = () => {
               textTransform: "none",
             }}
           >
-            Add Faculty
+            Add Class
           </Button>
         </Box>
 
@@ -150,7 +166,7 @@ const Body = () => {
                 onChange={handleFilterChange}
                 label="Department"
                 size="small"
-                sx={{ height: '40px' }} 
+                sx={{ height: '40px' }}
               >
                 <MenuItem value="all">All Departments</MenuItem>
                 {departments.map((dp, idx) => (
@@ -228,6 +244,7 @@ const Body = () => {
                   <TableCell>Teacher</TableCell>
                   <TableCell>Capacity</TableCell>
                   <TableCell>Academic Year</TableCell>
+                  <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -245,6 +262,38 @@ const Body = () => {
                       <TableCell>{fac.teacher}</TableCell>
                       <TableCell>{fac.capacity}</TableCell>
                       <TableCell>{fac.academic}</TableCell>
+
+
+                      <TableCell>
+                        <IconButton
+                          color="primary"
+                          onClick={() => navigate(`/admin/viewClass`)}
+                          sx={{ mr: 1 }}
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            navigate('/admin/EditClass', {
+                              state: {
+                                section: fac, // pass the section data
+                              },
+                            })
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDeleteSingle(fac._id)} // Call your delete handler
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
