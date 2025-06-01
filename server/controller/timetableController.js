@@ -1,308 +1,491 @@
-// controllers/timetable/timetableController.js
-import ClassTimetable from "../models/classTimetableModel.js";
-import DailyTimetable from "../models/dailyTimetableModel.js";
-import TimeSlot from "../models/timeSlotModel.js";
-import Class from "../models/Class.js";
-import Section from "../models/Section.js";
-import Subject from "../models/subject.js";
-import Faculty from "../models/faculty.js";
-import asyncHandler from "express-async-handler";
+import mongoose from 'mongoose';
+import ClassTimetable from '../models/classTimetableModel.js';
+import DailyTimetable from '../models/dailyTimetableModel.js';
+import TimeSlot from '../models/timeSlotModel.js';
 
-const createTimeSlots = asyncHandler(async (req, res) => {
-  const { slots } = req.body;
-
-  if (!slots || !Array.isArray(slots)) {
-    res.status(400).send("Invalid time slots format");
-  }
-
-  // Validate each slot
-  for (const slot of slots) {
-    if (!slot.startTime || !slot.endTime || !slot.periodNumber) {
-      res.status(400);
-      throw new Error(
-        "Each slot must have startTime, endTime and periodNumber"
-      );
-    }
-  }
-
-  // Delete existing slots
-  await TimeSlot.deleteMany({});
-
-  // Create new slots
-  const createdSlots = await TimeSlot.insertMany(slots);
-
-  res.status(201).json({
-    status: "success",
-    data: createdSlots,
-  });
-});
-
-// @desc    Get all time slots
-// @route   GET /api/timetable/slots
-// @access  Private
-const getTimeSlots = asyncHandler(async (req, res) => {
-  const slots = await TimeSlot.find().sort("periodNumber");
-
-  res.json({
-    status: "success",
-    data: slots,
-  });
-});
-
-// @desc    Create/update class timetable
-// @route   POST /api/timetable
-// @access  Private/Admin
-const createUpdateClassTimetable = asyncHandler(async (req, res) => {
-  const {
-    class: classId,
-    section,
-    academicYear,
-    timetable,
-    effectiveFrom,
-  } = req.body;
-
-  // Validate inputs
-  if (!classId || !academicYear || !timetable || !effectiveFrom) {
-    res.status(400);
-    throw new Error("Please provide all required fields");
-  }
-
-  // Check if class exists
-  const classExists = await Class.findById(classId);
-  if (!classExists) {
-    res.status(404);
-    throw new Error("Class not found");
-  }
-
-  // Check if section exists if provided
-  if (section) {
-    const sectionExists = await Section.findById(section);
-    if (!sectionExists) {
-      res.status(404);
-      throw new Error("Section not found");
-    }
-  }
-
-  // Validate timetable structure
-  if (!Array.isArray(timetable)) {
-    res.status(400);
-    throw new Error("Timetable must be an array of daily timetables");
-  }
-
-  // Validate each day's timetable
-  const days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-  const teacherConflicts = {};
-
-  for (const dayTimetable of timetable) {
-    if (!days.includes(dayTimetable.day)) {
-      res.status(400);
-      throw new Error(`Invalid day: ${dayTimetable.day}`);
+// TimeSlot Controllers
+const createTimeSlot = async (req, res) => {
+  try {
+    const { startTime, endTime, periodNumber, isBreak, breakName } = req.body;
+    
+    if (isBreak && !breakName) {
+      return res.status(400).json({ message: "Break name is required for break slots" });
     }
 
-    if (!Array.isArray(dayTimetable.slots)) {
-      res.status(400);
-      throw new Error(`Slots for ${dayTimetable.day} must be an array`);
+    const newSlot = new TimeSlot({
+      startTime,
+      endTime,
+      periodNumber,
+      isBreak,
+      breakName: isBreak ? breakName : undefined
+    });
+
+    await newSlot.save();
+    res.status(201).json(newSlot);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const getTimeSlots = async (req, res) => {
+  try {
+    const slots = await TimeSlot.find().sort({ periodNumber: 1 });
+    res.json(slots);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getTimeSlotById = async (req, res) => {
+  try {
+
+    const slot = await TimeSlot.findById(req.params.id);
+    if (!slot) {
+      return res.status(404).json({ message: "Time slot not found" });
+    }
+    res.json(slot);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateTimeSlot = async (req, res) => {
+  try {
+
+    const { startTime, endTime, periodNumber, isBreak, breakName } = req.body;
+    
+    if (isBreak && !breakName) {
+      return res.status(400).json({ message: "Break name is required for break slots" });
     }
 
-    for (const slot of dayTimetable.slots) {
-      if (!slot.slot || !slot.periodNumber) {
-        res.status(400);
-        throw new Error(`Invalid slot ID for ${dayTimetable.day}`);
-      }
+    const updatedSlot = await TimeSlot.findByIdAndUpdate(
+      req.params.id,
+      {
+        startTime,
+        endTime,
+        periodNumber,
+        isBreak,
+        breakName: isBreak ? breakName : undefined
+      },
+      { new: true }
+    );
 
-      // Check if slot exists
-      const slotExists = await TimeSlot.findById(slot.slot);
-      if (!slotExists) {
-        res.status(404);
-        throw new Error(`Time slot not found: ${slot.slot}`);
-      }
+    if (!updatedSlot) {
+      return res.status(404).json({ message: "Time slot not found" });
+    }
 
-      // If subject is assigned, validate it
+    res.json(updatedSlot);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const deleteTimeSlot = async (req, res) => {
+  try {
+
+    const slot = await TimeSlot.findByIdAndDelete(req.params.id);
+    if (!slot) {
+      return res.status(404).json({ message: "Time slot not found" });
+    }
+    res.json({ message: "Time slot deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Daily Timetable Controllers
+const createDailyTimetable = async (req, res) => {
+  try {
+    const { day, slots } = req.body;
+
+    const validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    if (!validDays.includes(day)) {
+      return res.status(400).json({ message: "Invalid day" });
+    }
+
+    for (const slot of slots) {
       if (slot.subject) {
-        return res.status(400).send("Subject ID is required for each slot");
+        return res.status(400).json({ message: "Invalid subject ID" });
       }
-      const subjectExists = await Subject.findById(slot.subject);
-      if (!subjectExists) {
-        res.status(404);
-        throw new Error(`Subject not found: ${slot.subject}`);
-      }
-
-      // If teacher is assigned, validate and check for conflicts
       if (slot.teacher) {
-        return res.status(400).send("Teacher ID is required for each slot");
-      }
-      const teacherExists = await Faculty.findById(slot.teacher);
-      if (!teacherExists) {
-        res.status(404);
-        throw new Error(`Teacher not found: ${slot.teacher}`);
+        return res.status(400).json({ message: "Invalid teacher ID" });
       }
     }
-  }
 
-  // Deactivate any existing active timetable for this class/section
-  await ClassTimetable.updateMany(
-    {
+    const newDailyTimetable = new DailyTimetable({
+      day,
+      slots
+    });
+
+    await newDailyTimetable.save();
+    res.status(201).json(newDailyTimetable);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const getDailyTimetableById = async (req, res) => {
+  try {
+
+    const dailyTimetable = await DailyTimetable.findById(req.params.id)
+      .populate('slots.slot')
+      .populate('slots.subject')
+      .populate('slots.teacher');
+
+    if (!dailyTimetable) {
+      return res.status(404).json({ message: "Daily timetable not found" });
+    }
+    res.json(dailyTimetable);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateDailyTimetable = async (req, res) => {
+  try {
+
+    const { day, slots } = req.body;
+
+    const updatedDailyTimetable = await DailyTimetable.findByIdAndUpdate(
+      req.params.id,
+      { day, slots },
+      { new: true }
+    ).populate('slots.slot')
+     .populate('slots.subject')
+     .populate('slots.teacher');
+
+    if (!updatedDailyTimetable) {
+      return res.status(404).json({ message: "Daily timetable not found" });
+    }
+
+    res.json(updatedDailyTimetable);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Class Timetable Controllers
+const createClassTimetable = async (req, res) => {
+  try {
+    const { class: classId, section, academicYear, timetable, effectiveFrom, effectiveTill, isActive, createdBy } = req.body;
+
+    if (!classId || !academicYear || !effectiveFrom || !createdBy) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const idsToValidate = [
+      { value: classId, name: 'Class' },
+      { value: academicYear, name: 'AcademicYear' },
+      { value: createdBy, name: 'Admin' }
+    ];
+
+    const existingTimetable = await ClassTimetable.findOne({
       class: classId,
-      section: section || null,
-      isActive: true,
-    },
-    { $set: { isActive: false } }
-  );
+      section: section || { $exists: false },
+      academicYear,
+      isActive: true
+    });
 
-  // Create daily timetables
-  const dailyTimetables = await DailyTimetable.insertMany(timetable);
-
-  // Create class timetable
-  const newTimetable = await ClassTimetable.create({
-    class: classId,
-    section: section || null,
-    academicYear,
-    timetable: dailyTimetables.map((dt) => dt._id),
-    effectiveFrom: new Date(effectiveFrom),
-    isActive: true,
-  });
-
-  // Populate the response
-  const populatedTimetable = await ClassTimetable.findById(newTimetable._id)
-    .populate({
-      path: "timetable",
-      populate: {
-        path: "slots.slot slots.subject slots.teacher",
-        select: "startTime endTime periodNumber name subjectName",
-      },
-    })
-    .populate("class section", "name");
-
-  res.status(201).json({
-    status: "success",
-    data: populatedTimetable,
-  });
-});
-
-// @desc    Get class timetable
-// @route   GET /api/timetable
-// @access  Private
-const getClassTimetable = asyncHandler(async (req, res) => {
-  const { class: classId, section, academicYear } = req.query;
-
-  // Validate inputs
-  if (!classId) {
-    res.status(400);
-    throw new Error("Class ID is required");
-  }
-
-  const query = {
-    class: classId,
-    isActive: true,
-  };
-
-  if (section) {
-    query.section = section;
-  } else {
-    query.section = null;
-  }
-
-  if (academicYear) {
-    query.academicYear = academicYear;
-  } else {
-    // Get current academic year if not specified
-    const currentYear = await AcademicYear.findOne({ isCurrent: true });
-    if (currentYear) {
-      query.academicYear = currentYear._id;
+    if (existingTimetable) {
+      return res.status(400).json({ 
+        message: "An active timetable already exists for this class/section and academic year" 
+      });
     }
-  }
 
-  const timetable = await ClassTimetable.findOne(query)
+    const newClassTimetable = new ClassTimetable({
+      class: classId,
+      section,
+      academicYear,
+      timetable,
+      effectiveFrom,
+      effectiveTill,
+      isActive,
+      createdBy
+    });
+
+    await newClassTimetable.save();
+    res.status(201).json(newClassTimetable);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const getClassTimetables = async (req, res) => {
+  try {
+    const { classId, sectionId, academicYearId, isActive } = req.query;
+    const filter = {};
+
+    if (classId) filter.class = classId;
+    if (sectionId) filter.section = sectionId;
+    if (academicYearId) filter.academicYear = academicYearId;
+    if (isActive !== undefined) filter.isActive = isActive === 'true';
+
+    const timetables = await ClassTimetable.find(filter)
+      .populate('class')
+      .populate('section')
+      .populate('academicYear')
+      .populate('timetable')
+      .populate('createdBy', 'name email');
+
+    res.json(timetables);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getClassTimetableById = async (req, res) => {
+  try {
+
+    const timetable = await ClassTimetable.findById(req.params.id)
+      .populate('class')
+      .populate('section')
+      .populate('academicYear')
+      .populate({
+        path: 'timetable',
+        populate: {
+          path: 'slots.slot slots.subject slots.teacher',
+          select: 'startTime endTime periodNumber name email'
+        }
+      })
+      .populate('createdBy', 'name email');
+
+    if (!timetable) {
+      return res.status(404).json({ message: "Class timetable not found" });
+    }
+    res.json(timetable);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateClassTimetable = async (req, res) => {
+  try {
+
+    const { timetable, effectiveFrom, effectiveTill, isActive } = req.body;
+
+    const updatedTimetable = await ClassTimetable.findByIdAndUpdate(
+      req.params.id,
+      { timetable, effectiveFrom, effectiveTill, isActive },
+      { new: true }
+    )
+    .populate('class')
+    .populate('section')
+    .populate('academicYear')
     .populate({
-      path: "timetable",
+      path: 'timetable',
       populate: {
-        path: "slots.slot slots.subject slots.teacher",
-        select: "startTime endTime periodNumber name subjectName",
-      },
-    })
-    .populate("class section", "name");
+        path: 'slots.slot slots.subject slots.teacher',
+        select: 'startTime endTime periodNumber name email'
+      }
+    });
 
-  if (!timetable) {
-    res.status(404);
-    throw new Error("Timetable not found");
+    if (!updatedTimetable) {
+      return res.status(404).json({ message: "Class timetable not found" });
+    }
+
+    res.json(updatedTimetable);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
+};
 
-  res.json({
-    status: "success",
-    data: timetable,
-  });
-});
+const deleteClassTimetable = async (req, res) => {
+  try {
 
-// @desc    Get teacher timetable
-// @route   GET /api/timetable/teacher/:id
-// @access  Private
-const getTeacherTimetable = asyncHandler(async (req, res) => {
-  const teacherId = req.params.id;
-
-  // Check if teacher exists
-  const teacher = await Faculty.findById(teacherId);
-  if (!teacher) {
-    res.status(404);
-    throw new Error("Teacher not found");
+    const timetable = await ClassTimetable.findByIdAndDelete(req.params.id);
+    if (!timetable) {
+      return res.status(404).json({ message: "Class timetable not found" });
+    }
+    res.json({ message: "Class timetable deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
+};
 
-  // Find all active timetables where this teacher is assigned
-  const timetables = await ClassTimetable.find({
-    isActive: true,
-    "timetable.slots.teacher": teacherId,
-  })
-    .populate({
-      path: "timetable",
-      match: { "slots.teacher": teacherId },
-      populate: {
-        path: "slots.slot slots.subject",
-        match: { "slots.teacher": teacherId },
-      },
-    })
-    .populate("class section", "name");
+/**
+ * @desc Get timetable for a specific class and section
+ * @route GET /api/timetable/class/:classId/section/:sectionId
+ * @access Public
+ */
+const getClassTimetable = async (req, res) => {
+  try {
+    const { classId, sectionId } = req.params;
+    const { academicYearId } = req.query;
 
-  // Format the data for easier consumption
-  const formattedTimetable = timetables.flatMap((ct) =>
-    ct.timetable.flatMap((dt) =>
-      dt.slots
-        .filter((slot) => slot.teacher?.toString() === teacherId)
-        .map((slot) => ({
-          day: dt.day,
-          class: ct.class.name,
-          section: ct.section?.name || "All",
+    // Validate IDs
+    if (!mongoose.Types.ObjectId.isValid(classId) || 
+        !mongoose.Types.ObjectId.isValid(sectionId)) {
+      return res.status(400).json({ message: "Invalid class or section ID" });
+    }
+
+    if (academicYearId && !mongoose.Types.ObjectId.isValid(academicYearId)) {
+      return res.status(400).json({ message: "Invalid academic year ID" });
+    }
+
+    // Build filter
+    const filter = {
+      class: classId,
+      section: sectionId,
+      isActive: true
+    };
+
+    if (academicYearId) {
+      filter.academicYear = academicYearId;
+    }
+
+    // Find timetable with full population
+    const timetable = await ClassTimetable.findOne(filter)
+      .populate('class', 'name code')
+      .populate('section', 'name')
+      .populate('academicYear', 'name year')
+      .populate({
+        path: 'timetable',
+        populate: {
+          path: 'slots.slot slots.subject slots.teacher',
+          select: 'startTime endTime periodNumber name code email'
+        }
+      });
+
+    if (!timetable) {
+      return res.status(404).json({ 
+        message: "No active timetable found for this class/section" 
+      });
+    }
+
+    // Format the response
+    const formattedTimetable = {
+      class: timetable.class,
+      section: timetable.section,
+      academicYear: timetable.academicYear,
+      effectiveFrom: timetable.effectiveFrom,
+      effectiveTill: timetable.effectiveTill,
+      days: timetable.timetable.map(day => ({
+        day: day.day,
+        slots: day.slots.map(slot => ({
           period: slot.slot.periodNumber,
           startTime: slot.slot.startTime,
           endTime: slot.slot.endTime,
-          subject: slot.subject?.subjectName || "N/A",
-          room: slot.room || "N/A",
+          isBreak: slot.slot.isBreak,
+          breakName: slot.slot.breakName,
+          subject: slot.subject,
+          teacher: slot.teacher,
+          room: slot.room
         }))
-    )
-  );
+      }))
+    };
 
-  res.json({
-    status: "success",
-    data: {
-      teacher: {
-        id: teacher._id,
-        name: teacher.name,
-      },
-      timetable: formattedTimetable,
-    },
-  });
-});
+    res.json(formattedTimetable);
+
+  } catch (error) {
+    console.error('Error fetching class timetable:', error);
+    res.status(500).json({ 
+      message: "Server error while fetching timetable",
+      error: error.message 
+    });
+  }
+};
+
+/**
+ * @desc Get timetable for a specific teacher
+ * @route GET /api/timetable/teacher/:teacherId
+ * @access Public
+ */
+const getTeacherTimetable = async (req, res) => {
+  try {
+    const { teacherId } = req.params;
+    const { academicYearId } = req.query;
+
+    // Validate teacher ID
+    if (!mongoose.Types.ObjectId.isValid(teacherId)) {
+      return res.status(400).json({ message: "Invalid teacher ID" });
+    }
+
+    if (academicYearId && !mongoose.Types.ObjectId.isValid(academicYearId)) {
+      return res.status(400).json({ message: "Invalid academic year ID" });
+    }
+
+    // Build filter
+    const filter = { 
+      isActive: true,
+      'timetable.slots.teacher': teacherId 
+    };
+
+    if (academicYearId) {
+      filter.academicYear = academicYearId;
+    }
+
+    // Find all timetables where the teacher has classes
+    const timetables = await ClassTimetable.find(filter)
+      .populate('class', 'name code')
+      .populate('section', 'name')
+      .populate('academicYear', 'name year')
+      .populate({
+        path: 'timetable',
+        populate: {
+          path: 'slots.slot slots.subject slots.teacher',
+          match: { 'slots.teacher': teacherId },
+          select: 'startTime endTime periodNumber name code email'
+        }
+      });
+
+    // Format the response
+    const teacherTimetable = timetables
+      .filter(timetable => timetable.timetable.some(day => day.slots.length > 0))
+      .map(timetable => {
+        const daysWithClasses = timetable.timetable
+          .filter(day => day.slots.length > 0)
+          .map(day => ({
+            day: day.day,
+            classes: day.slots.map(slot => ({
+              period: slot.slot.periodNumber,
+              startTime: slot.slot.startTime,
+              endTime: slot.slot.endTime,
+              subject: slot.subject,
+              class: timetable.class.name,
+              section: timetable.section?.name || 'All',
+              room: slot.room
+            }))
+          }));
+
+        return {
+          academicYear: timetable.academicYear,
+          class: timetable.class,
+          section: timetable.section,
+          schedule: daysWithClasses
+        };
+      });
+
+    if (teacherTimetable.length === 0) {
+      return res.status(404).json({ 
+        message: "No classes found for this teacher" 
+      });
+    }
+
+    res.json(teacherTimetable);
+
+  } catch (error) {
+    console.error('Error fetching teacher timetable:', error);
+    res.status(500).json({ 
+      message: "Server error while fetching teacher timetable",
+      error: error.message 
+    });
+  }
+};
 
 export {
-  createTimeSlots,
+  createTimeSlot,
   getTimeSlots,
-  createUpdateClassTimetable,
+  getTimeSlotById,
+  updateTimeSlot,
+  deleteTimeSlot,
+  createDailyTimetable,
+  getDailyTimetableById,
+  updateDailyTimetable,
+  createClassTimetable,
+  getClassTimetables,
+  getClassTimetableById,
+  updateClassTimetable,
+  deleteClassTimetable,
   getClassTimetable,
-  getTeacherTimetable,
+  getTeacherTimetable
 };
