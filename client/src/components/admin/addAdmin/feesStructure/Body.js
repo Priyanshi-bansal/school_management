@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Edit as EditIcon,
@@ -7,7 +7,7 @@ import {
   Search,
   ClearAll,
   Add,
-  Visibility as VisibilityIcon,
+  Visibility as VisibilityIcon, 
 } from "@mui/icons-material";
 
 import {
@@ -33,23 +33,23 @@ import {
   Alert,
 } from "@mui/material";
 
-// Updated mock data with unique _id fields
+// ✅ Mock Data
 const mockData = [
   {
-    _id: "1",
-    startTime: "09:00 AM",
-    endTime: "09:45 AM",
-    periodNumber: 1,
-    isBreak: false,
-    breakName: true,
+
+    class: "10th Grade",
+    teacher: "John Doe",
+    capacity: "30",
+    academic: "2023-2024",
+
   },
   {
     _id: "2",
-    startTime: "09:45 AM",
-    endTime: "10:30 AM",
-    periodNumber: 2,
-    isBreak: true,
-    breakName: false,
+    name: "Class B",
+    teacher: "Jane Smith",
+    capacity: "25",
+    academic: "2023-2024",
+    // department: "Science",
   },
 ];
 
@@ -64,23 +64,18 @@ const Body = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
 
-  // Filter by department - your data has no department field so this filter does nothing
-  // You can remove or extend this if you add department to data
   const faculty =
     filter.department === "all"
       ? allFaculty
       : allFaculty.filter((f) => f.department === filter.department);
 
-  // Search by startTime or endTime (since you don’t have other fields)
   const searchedFaculty = useMemo(() => {
-    const q = filter.searchQuery.toLowerCase();
     return faculty.filter(
       (fac) =>
-        fac.startTime.toLowerCase().includes(q) ||
-        fac.endTime.toLowerCase().includes(q) ||
-        fac.periodNumber.toString().includes(q) ||
-        (fac.isBreak ? "yes" : "no").includes(q) ||
-        (fac.breakNumber ? fac.breakNumber.toString() : "").includes(q)
+        fac.name.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+        fac.teacher.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+        fac.capacity.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
+        fac.academic.toLowerCase().includes(filter.searchQuery.toLowerCase())
     );
   }, [faculty, filter.searchQuery]);
 
@@ -116,23 +111,25 @@ const Body = () => {
     }
   };
 
+
   const handleDeleteSingle = (id) => {
-    if (window.confirm("Are you sure you want to delete this class?")) {
-      setLoading(true);
-      setTimeout(() => {
-        setAllFaculty((prev) => prev.filter((fac) => fac._id !== id));
-        setSelectedFaculty((prev) => prev.filter((fid) => fid !== id));
-        setLoading(false);
-      }, 1000);
-    }
-  };
+  if (window.confirm("Are you sure you want to delete this class?")) {
+    setLoading(true);
+    setTimeout(() => {
+      setAllFaculty((prev) => prev.filter((fac) => fac._id !== id));
+      setSelectedFaculty((prev) => prev.filter((fid) => fid !== id));
+      setLoading(false);
+    }, 1000);
+  }
+};
+
 
   return (
     <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
           <EngineeringIcon color="primary" sx={{ mr: 1 }} />
-          <Typography variant="h5">Time Table</Typography>
+          <Typography variant="h5">Fees Management</Typography>
           <Chip
             label={`Total Classes: ${faculty.length}`}
             color="primary"
@@ -143,7 +140,7 @@ const Body = () => {
             variant="contained"
             color="primary"
             startIcon={<Add />}
-            onClick={() => navigate("/admin/AddTimetablemanagement")}
+            onClick={() => navigate("/admin/addclass")}
             sx={{
               ml: "auto",
               px: 3,
@@ -155,7 +152,7 @@ const Body = () => {
               textTransform: "none",
             }}
           >
-            Add Time
+            Add Class
           </Button>
         </Box>
 
@@ -169,7 +166,7 @@ const Body = () => {
                 onChange={handleFilterChange}
                 label="Department"
                 size="small"
-                sx={{ height: "40px" }}
+                sx={{ height: '40px' }}
               >
                 <MenuItem value="all">All Departments</MenuItem>
                 {departments.map((dp, idx) => (
@@ -187,7 +184,8 @@ const Body = () => {
               label="Search"
               variant="outlined"
               size="small"
-              sx={{ flexGrow: 1, height: "40px" }}
+
+              sx={{ flexGrow: 1, height: '40px' }}
               InputProps={{
                 endAdornment: (
                   <IconButton>
@@ -202,7 +200,7 @@ const Body = () => {
               startIcon={<ClearAll />}
               onClick={handleClearFilters}
               size="small"
-              sx={{ height: "40px", whiteSpace: "nowrap" }}
+              sx={{ height: '40px', whiteSpace: 'nowrap' }}
             >
               Clear Filters
             </Button>
@@ -215,9 +213,7 @@ const Body = () => {
           )}
 
           {(error.noFacultyError || error.backendError) && (
-            <Alert severity="error">
-              {error.noFacultyError || error.backendError}
-            </Alert>
+            <Alert severity="error">{error.noFacultyError || error.backendError}</Alert>
           )}
 
           <TableContainer component={Paper} sx={{ mb: 3 }}>
@@ -243,18 +239,14 @@ const Body = () => {
                       }
                     />
                   </TableCell>
-
-                  <TableCell>Start Time</TableCell>
-                  <TableCell>End Time</TableCell>
-                  <TableCell>Period Number</TableCell>
-                  <TableCell>Is Break</TableCell>
-                  <TableCell>Break Name</TableCell>
+                  <TableCell>Class</TableCell>
+                  <TableCell>Academic Year</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {searchedFaculty.length > 0 ? (
-                  searchedFaculty.map((fac) => (
+                  searchedFaculty.map((fac, idx) => (
                     <TableRow key={fac._id} hover>
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -262,30 +254,20 @@ const Body = () => {
                           onChange={() => handleCheckboxChange(fac._id)}
                         />
                       </TableCell>
-
-                      <TableCell>{fac.startTime}</TableCell>
-                      <TableCell>{fac.endTime}</TableCell>
-                      <TableCell>{fac.periodNumber}</TableCell>
-                      <TableCell>{fac.isBreak ? "No" : "yes"}</TableCell>
-                   
-                    <TableCell>{fac.breakName ? "Morning" : "-"}</TableCell>
-
+                     
+                      <TableCell>{fac.Class}</TableCell>
+                      <TableCell>{fac.academic}</TableCell>
 
 
                       <TableCell>
-                        <IconButton
-                          color="primary"
-                          onClick={() => navigate("")}
-                          sx={{ mr: 1 }}
-                        >
-                          <VisibilityIcon />
-                        </IconButton>
-
+                        
                         <IconButton
                           color="primary"
                           onClick={() =>
-                            navigate("/admin/AddTimetablemanagement", {
-                              state: { section: fac },
+                            navigate('/admin/EditClass', {
+                              state: {
+                                section: fac, // pass the section data
+                              },
                             })
                           }
                         >
@@ -294,17 +276,18 @@ const Body = () => {
 
                         <IconButton
                           color="error"
-                          onClick={() => handleDeleteSingle(fac._id)}
+                          onClick={() => handleDeleteSingle(fac._id)} // Call your delete handler
                         >
                           <DeleteIcon />
                         </IconButton>
+
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={7} sx={{ textAlign: "center", py: 4 }}>
-                      {loading ? "" : "No classes found matching your criteria"}
+                    <TableCell colSpan={6} sx={{ textAlign: "center", py: 4 }}>
+                      {loading ? "" : "No faculty found matching your criteria"}
                     </TableCell>
                   </TableRow>
                 )}

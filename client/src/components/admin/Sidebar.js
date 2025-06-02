@@ -156,7 +156,15 @@ const Sidebar = () => {
         // { icon: <Add />, label: "Add Admin", path: "/admin/gettestadmin" },
         { icon: <MenuBook />, label: "Manage test", path: "/admin/gettestadmin" }
       ]
-    }
+    },
+      { 
+      header: "Fees Management",
+      items: [
+        { icon: <MenuBook />, label: "Fees Structure", path: "/admin/feesStructure" },
+        // { icon: <Add />, label: "Fees Management", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Fees Management", path: "/admin/deletesFees Management" }
+      ]
+    },
 ];
 
   return (

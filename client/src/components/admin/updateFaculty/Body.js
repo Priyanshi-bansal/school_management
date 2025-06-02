@@ -155,7 +155,7 @@ function FacultyForm() {
                             InputProps={{
                                 startAdornment: (
                                     <InputAdornment position="start">
-                                        <Person  />
+                                        <Person />
                                     </InputAdornment>
                                 ),
                             }}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { 
+import {
   Groups as StudentIcon,
   School as DepartmentIcon,
   CalendarToday as YearIcon,
@@ -11,16 +11,13 @@ import {
   Search,
   ClearAll,
   Add,
-  Edit  // <-- Yahan Edit icon import karen
-
+  Edit
 } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { getStudent, getAllStudent } from "../../../redux/actions/adminActions";
-import { 
-  Select, 
-  MenuItem, 
-  Button, 
-  Box, 
+import {
+  Select,
+  MenuItem,
+  Button,
+  Box,
   Typography,
   FormControl,
   InputLabel,
@@ -36,10 +33,15 @@ import {
   TextField,
   IconButton,
   Alert,
-  Divider
+  Divider,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { getStudent, getAllStudent } from "../../../redux/actions/adminActions";
 import { SET_ERRORS } from "../../../redux/actionTypes";
 import { useNavigate } from "react-router-dom";
+
 const Body = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -47,13 +49,15 @@ const Body = () => {
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const store = useSelector((state) => state);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [filter, setFilter] = useState({
     department: "all",
     year: "all",
     searchQuery: ""
   });
 
-  // Get all students by default on component mount
   useEffect(() => {
     dispatch(getAllStudent());
   }, []);
@@ -67,26 +71,42 @@ const Body = () => {
     }
   }, [store.errors]);
 
+  useEffect(() => {
+    if (students !== undefined) {
+      setLoading(false);
+    }
+  }, [store.admin]);
+
+  useEffect(() => {
+    dispatch({ type: SET_ERRORS, payload: {} });
+  }, []);
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilter(prev => ({ ...prev, [name]: value }));
+    setFilter((prev) => ({ ...prev, [name]: value }));
 
     if (name === "department" || name === "year") {
       setLoading(true);
       if (value === "all") {
-        if ((name === "department" && filter.year === "all") ||
-          (name === "year" && filter.department === "all")) {
+        if (
+          (name === "department" && filter.year === "all") ||
+          (name === "year" && filter.department === "all")
+        ) {
           dispatch(getAllStudent());
         } else {
           const params = {};
-          if (name === "department" && filter.year !== "all") params.year = filter.year;
-          if (name === "year" && filter.department !== "all") params.department = filter.department;
+          if (name === "department" && filter.year !== "all")
+            params.year = filter.year;
+          if (name === "year" && filter.department !== "all")
+            params.department = filter.department;
           dispatch(getStudent(params));
         }
       } else {
         const params = { [name]: value };
-        if (name === "department" && filter.year !== "all") params.year = filter.year;
-        if (name === "year" && filter.department !== "all") params.department = filter.department;
+        if (name === "department" && filter.year !== "all")
+          params.year = filter.year;
+        if (name === "year" && filter.department !== "all")
+          params.department = filter.department;
         dispatch(getStudent(params));
       }
     }
@@ -117,56 +137,59 @@ const Body = () => {
   const allStudents = useSelector((state) => state.admin.allStudent);
   const filteredStudents = useSelector((state) => state.admin.students.result);
 
-  const students = (filter.department === "all" && filter.year === "all")
-    ? allStudents
-    : filteredStudents;
+  const students =
+    filter.department === "all" && filter.year === "all"
+      ? allStudents
+      : filteredStudents;
 
-  const searchedStudents = students?.filter(student =>
-    student.name.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
-    student.email.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
-    student.username.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
-    student.section?.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
-    student.batch?.toLowerCase().includes(filter.searchQuery.toLowerCase())
+  const searchedStudents = students?.filter((student) =>
+    [student.name, student.email, student.username, student.section, student.batch]
+      .join(" ")
+      .toLowerCase()
+      .includes(filter.searchQuery.toLowerCase())
   );
-
-  useEffect(() => {
-    if (students !== undefined) {
-      setLoading(false);
-    }
-  }, [students]);
-
-  useEffect(() => {
-    dispatch({ type: SET_ERRORS, payload: {} });
-  }, []);
 
   return (
     <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
       <Box sx={{ mb: 4 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <StudentIcon color="primary" sx={{ mr: 1 }} />
-          <Typography variant="h5" color="textPrimary">
-            Student Management
-          </Typography>
+        {/* Header */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 2,
+            mb: 2
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <StudentIcon color="primary" sx={{ mr: 1 }} />
+            <Typography variant={isMobile ? "h6" : "h5"}>
+              Student Management
+            </Typography>
+          </Box>
+
           <Chip
             label={`Total Students: ${students?.length || 0}`}
             color="primary"
             variant="outlined"
-            sx={{ ml: 2 }}
           />
+
           <Button
             variant="contained"
             color="primary"
             startIcon={<Add />}
             onClick={() => navigate("/admin/addstudent")}
+            fullWidth={isMobile}
             sx={{
-              ml: "auto",
+              ml: { sm: "auto" },
               px: 3,
               py: 1.5,
               fontWeight: "bold",
               fontSize: "16px",
               borderRadius: "8px",
               boxShadow: 2,
-              textTransform: "none",
+              textTransform: "none"
             }}
           >
             Add Student
@@ -174,210 +197,187 @@ const Body = () => {
         </Box>
 
         <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-          {/* Filter Section */}
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="subtitle1" sx={{ mb: 1, display: 'flex', alignItems: 'center' }}>
-              <Search sx={{ mr: 1 }} /> Search Filters
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
+          {/* Filters */}
+          <Typography
+            variant="subtitle1"
+            sx={{ mb: 1, display: "flex", alignItems: "center" }}
+          >
+            <Search sx={{ mr: 1 }} /> Search Filters
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
 
-            <Box sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 2,
-              alignItems: 'center'
-            }}>
-              <FormControl sx={{ minWidth: 200 }} size="small">
-                <InputLabel>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <DepartmentIcon sx={{ mr: 1, fontSize: 20 }} /> Department
-                  </Box>
-                </InputLabel>
-                <Select
-                  name="department"
-                  value={filter.department}
-                  onChange={handleFilterChange}
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <DepartmentIcon sx={{ mr: 1, fontSize: 20 }} /> Department
-                    </Box>
-                  }
-                >
-                  <MenuItem value="all">All Departments</MenuItem>
-                  {departments?.map((dp, idx) => (
-                    <MenuItem key={idx} value={dp.department}>
-                      {dp.department}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl sx={{ minWidth: 200 }} size="small">
-                <InputLabel>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <YearIcon sx={{ mr: 1, fontSize: 20 }} /> Year
-                  </Box>
-                </InputLabel>
-                <Select
-                  name="year"
-                  value={filter.year}
-                  onChange={handleFilterChange}
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <YearIcon sx={{ mr: 1, fontSize: 20 }} /> Year
-                    </Box>
-                  }
-                >
-                  <MenuItem value="all">All Years</MenuItem>
-                  <MenuItem value="1">1st Year</MenuItem>
-                  <MenuItem value="2">2nd Year</MenuItem>
-                  <MenuItem value="3">3rd Year</MenuItem>
-                  <MenuItem value="4">4th Year</MenuItem>
-                </Select>
-              </FormControl>
-
-              <TextField
-                name="searchQuery"
-                value={filter.searchQuery}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              flexWrap: "wrap",
+              gap: 2
+            }}
+          >
+            <FormControl sx={{ minWidth: 200 }} size="small">
+              <InputLabel>Department</InputLabel>
+              <Select
+                name="department"
+                value={filter.department}
                 onChange={handleFilterChange}
-                label="Search Students"
-                variant="outlined"
-                size="small"
-                sx={{ flexGrow: 1 }}
-                InputProps={{
-                  startAdornment: (
-                    <Search sx={{ color: 'action.active', mr: 1 }} />
-                  ),
-                }}
-              />
-
-              <Button
-                variant="outlined"
-                startIcon={<ClearAll />}
-                onClick={handleClearFilters}
-                size="small"
+                label="Department"
               >
-                Clear Filters
-              </Button>
+                <MenuItem value="all">All Departments</MenuItem>
+                {departments?.map((dp, idx) => (
+                  <MenuItem key={idx} value={dp.department}>
+                    {dp.department}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-              <Button
-                variant="contained"
-                startIcon={<Search />}
-                onClick={handleSearch}
-                size="small"
-                sx={{ ml: 'auto' }}
+            <FormControl sx={{ minWidth: 200 }} size="small">
+              <InputLabel>Year</InputLabel>
+              <Select
+                name="year"
+                value={filter.year}
+                onChange={handleFilterChange}
+                label="Year"
               >
-                Search
-              </Button>
-            </Box>
+                <MenuItem value="all">All Years</MenuItem>
+                <MenuItem value="1">1st Year</MenuItem>
+                <MenuItem value="2">2nd Year</MenuItem>
+                <MenuItem value="3">3rd Year</MenuItem>
+                <MenuItem value="4">4th Year</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              name="searchQuery"
+              value={filter.searchQuery}
+              onChange={handleFilterChange}
+              label="Search Students"
+              variant="outlined"
+              size="small"
+              fullWidth={isMobile}
+            />
+
+            <Button
+              variant="outlined"
+              startIcon={<ClearAll />}
+              onClick={handleClearFilters}
+              size="small"
+            >
+              Clear
+            </Button>
+
+            <Button
+              variant="contained"
+              startIcon={<Search />}
+              onClick={handleSearch}
+              size="small"
+            >
+              Search
+            </Button>
           </Box>
 
-          {/* Status Section */}
+          {/* Loading */}
           {loading && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", my: 2 }}>
               <CircularProgress />
             </Box>
           )}
 
+          {/* Error */}
           {(error.noStudentError || error.backendError) && (
-            <Alert severity="error" sx={{ mb: 2 }}>
+            <Alert severity="error" sx={{ mt: 2 }}>
               {error.noStudentError || error.backendError}
             </Alert>
           )}
 
-          {/* Student Table */}
-           <TableContainer component={Paper} sx={{ mb: 3, border: '1px solid #e0e0e0' }}>
-        <Table>
-          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', width: 60 }}>#</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <NameIcon sx={{ mr: 1, fontSize: 20 }} /> Name
-                </Box>
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <UsernameIcon sx={{ mr: 1, fontSize: 20 }} /> Username
-                </Box>
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <EmailIcon sx={{ mr: 1, fontSize: 20 }} /> Email
-                </Box>
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <SectionIcon sx={{ mr: 1, fontSize: 20 }} /> Section
-                </Box>
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <BatchIcon sx={{ mr: 1, fontSize: 20 }} /> Batch
-                </Box>
-              </TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <BatchIcon sx={{ mr: 1, fontSize: 20 }} /> Action
-                </Box>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {searchedStudents?.length > 0 ? (
-              searchedStudents.map((student, idx) => (
-                <TableRow 
-                  key={student._id} 
-                  hover
-                  sx={{ '&:last-child td': { borderBottom: 0 } }}
-                >
-                  <TableCell>{idx + 1}</TableCell>
-                  <TableCell sx={{ fontWeight: 500 }}>{student.name}</TableCell>
-                  <TableCell>{student.username}</TableCell>
-                  <TableCell sx={{ 
-                    maxWidth: '200px', 
-                    overflow: 'hidden', 
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    {student.email}
-                  </TableCell>
-                  <TableCell>{student.section}</TableCell>
-                  <TableCell>{student.batch}</TableCell>
+          {/* Table */}
+          <TableContainer
+            component={Paper}
+            sx={{ mt: 3, overflowX: "auto", border: "1px solid #e0e0e0" }}
+          >
+            <Table>
+              <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableRow>
+                  <TableCell>#</TableCell>
                   <TableCell>
-                    {/* Edit button with icon */}
-                    <IconButton
-                      color="primary"
-                      size="small"
-                      onClick={() => navigate(`/admin/UpdateStudent/${student._id}`)}
-                      aria-label="edit student"
-                    >
-                      <Edit />
-                    </IconButton>
-                  </TableCell>  
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <NameIcon sx={{ mr: 1, fontSize: 20 }} /> Name
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <UsernameIcon sx={{ mr: 1, fontSize: 20 }} /> Username
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <EmailIcon sx={{ mr: 1, fontSize: 20 }} /> Email
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <SectionIcon sx={{ mr: 1, fontSize: 20 }} /> Section
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <BatchIcon sx={{ mr: 1, fontSize: 20 }} /> Batch
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <Edit sx={{ mr: 1, fontSize: 20 }} /> Action
+                    </Box>
+                  </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell 
-                  colSpan={7} 
-                  sx={{ 
-                    textAlign: 'center', 
-                    py: 4,
-                    color: 'text.secondary'
-                  }}
-                >
-                  {loading ? (
-                    <CircularProgress size={24} />
-                  ) : (
-                    'No students found matching your criteria'
-                  )}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+              </TableHead>
+              <TableBody>
+                {searchedStudents?.length > 0 ? (
+                  searchedStudents.map((student, idx) => (
+                    <TableRow key={student._id} hover>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{student.name}</TableCell>
+                      <TableCell>{student.username}</TableCell>
+                      <TableCell
+                        sx={{
+                          maxWidth: "200px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap"
+                        }}
+                      >
+                        {student.email}
+                      </TableCell>
+                      <TableCell>{student.section}</TableCell>
+                      <TableCell>{student.batch}</TableCell>
+                      <TableCell>
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            navigate(`/admin/UpdateStudent/${student._id}`)
+                          }
+                          size="small"
+                          aria-label="edit student"
+                        >
+                          <Edit />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                      {loading ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        "No students found matching your criteria."
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Paper>
       </Box>
     </Box>
