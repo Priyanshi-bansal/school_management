@@ -54,8 +54,9 @@ import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
-import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
-import StuAttendance from "./components/admin/stuattendance/StuAttendance";
+import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
+import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
+
 import ManageSection from "./components/admin/managesection/ManageSection";
 import GetClass from "./components/admin/GetClass/GetClass";
 import AddClass from "./components/admin/addclass/AddClass";
@@ -86,6 +87,21 @@ import EditDailyTime from "./components/admin/editdailytime/EditDailyTime";
 import EditClassTime from "./components/admin/editclasstime/EditClassTime";
 import AddClassTable from "./components/admin/addclasstable/AddClassTable";
 import ViewClassTime from "./components/admin/viewclasstime/ViewClassTime";
+
+import EditClass from "./components/admin/EditClass/EditClass";
+import ViewClass from "./components/admin/viewclass/ViewClass";
+import AssignClassTeacher from "./components/admin/AssignTeacher/AssignTeacher";
+import AssignTeacher from "./components/admin/AssignTeacher/AssignTeacher";
+import AddStudentsection from "./components/admin/AddStudentsection/AddStudentsection";
+import UpdateFaculty from "./components/admin/updateFaculty/UpdateFaculty";
+import UpdateStudent from "./components/admin/updateStudent/UpdateStudent";
+import GettestAdmin from "./components/admin/gettestAdmin/GettestAdmin";
+import AddgetTest from "./components/admin/addgetTest/AddgetTest";
+import AddTimetablemanagement from "./components/admin/addTimetablemanagement/AddTimetablemanagement";
+import FeesStructure from "./components/admin/addAdmin/feesStructure/FeesStructure";
+
+
+
 
 
 
@@ -122,7 +138,6 @@ const App = () => {
       <Route path="/admin/addsubject" element={<AddSubject />} />
       <Route path="/admin/allsubject" element={<GetSubject />} />
       <Route path="/admin/allstudent" element={<GetStudent />} />
-
       <Route path="/admin/facultyattendance" element={<FacultyAttendance />} />
       <Route path="/admin/stuattendance" element={<StuAttendance />} />
       <Route path="/admin/managesection" element={<ManageSection />} />
@@ -131,6 +146,18 @@ const App = () => {
       <Route path="/admin/addsection" element={<AddSection />} />
       <Route path="/admin/viewsectiondetail" element={<ViewSection />} />
       <Route path="/admin/editsection" element={<EditSection />} />
+      <Route path="/admin/editclass" element={<EditClass />} />
+      <Route path="/admin/viewclass" element={<ViewClass />} />
+      <Route path="/admin/AssignTeacher" element={<AssignTeacher />} />
+      <Route path="/admin/AddStudentsection" element={<AddStudentsection />} />
+      <Route path="admin/updatefaculty" element={<UpdateFaculty />} />
+      <Route path="admin/updatestudent" element={<UpdateStudent />} />
+      <Route path="admin/updatestudent" element={<UpdateStudent />} />
+      <Route path="admin/gettestadmin" element={<GettestAdmin />} />
+      <Route path="admin/addgettest" element={<AddgetTest />} />
+
+
+
 
       <Route path="/admin/getacademic" element={<GetAcademic />} />
       <Route path="/admin/addacedmicyear" element={<AddAcedmicYear />} />
@@ -139,7 +166,7 @@ const App = () => {
       <Route path="/admin/viewsubject" element={<ViewSubject />} />
       <Route path="/admin/subjecttoclass" element={<SubjectToAssign />} />
       <Route path="/admin/teachertosubject" element={<TeacherToSubject />} />
-       <Route path="/admin/createcalendra" element={<CreateCalendra />} />
+      <Route path="/admin/createcalendra" element={<CreateCalendra />} />
       <Route path="/admin/editcalendra" element={<EditCalendra />} />
       <Route path="/admin/calendramanagement" element={< CalendraManagement />} />
       <Route path="/admin/syllabusmanagement" element={< SyllabusManagemant />} />
@@ -148,13 +175,17 @@ const App = () => {
       <Route path="/admin/viewchapter" element={<ViewChapter />} />
       <Route path="/admin/editchapter" element={<EditChapter />} />
       <Route path="/admin/timetablemanagement" element={<TimeTableManagement />} />
+
       <Route path="/admin/dailytimetable" element={<DailyTimeTable />} />
       <Route path="/admin/classtimetable" element={<ClassTimeTable />} />
       <Route path="/admin/addtimetable" element={<AddtimeTable />} />
       <Route path="/admin/viewclasstime" element={<ViewClassTime />} />
       <Route path="/admin/editdailytime" element={<EditDailyTime />} />
-         <Route path="/admin/editclasstime" element={<EditClassTime/>} />
-            <Route path="/admin/addclasstable" element={<AddClassTable />} />
+      <Route path="/admin/editclasstime" element={<EditClassTime/>} />
+      <Route path="/admin/addclasstable" element={<AddClassTable />} />
+      <Route path="/admin/addtimetablemanagement" element={<AddTimetablemanagement />} />
+      <Route path="/admin/feesstructure" element={<FeesStructure />} />
+
 
 
 
@@ -177,6 +208,7 @@ const App = () => {
       <Route path="/faculty/classperformance" element={<ClassPerformance />} />
       <Route path="/faculty/Marks" element={<Marks />} />
       <Route path="/faculty/StudentAttendance" element={<StudentAttendance />} />
+      <Route path="/faculty/gettestadmin" element={<GettestAdmin />} />
 
       {/* Student  */}
 

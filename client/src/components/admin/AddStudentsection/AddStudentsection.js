@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
+
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import Body from "./Body";
-import { updateFaculty } from '../../../redux/actions/facultyActions';
 
-const TimeTableManagement = () => {
+const AddStudentsection = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="flex flex-col h-screen">
@@ -20,4 +20,4 @@ const TimeTableManagement = () => {
   );
 };
 
-export default TimeTableManagement;
+export default AddStudentsection;

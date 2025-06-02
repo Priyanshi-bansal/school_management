@@ -161,7 +161,8 @@ const Body = () => {
             alignItems="stretch"
             sx={{ mb: 3 }}
           >
-            <FormControl fullWidth size="small">
+
+            <FormControl sx={{ minWidth: 200, height: '40px' }} size="small">
               <InputLabel>Department</InputLabel>
               <Select
                 value={selectedDepartment}
@@ -271,17 +272,95 @@ const Body = () => {
                             <VisibilityIcon />
                           </IconButton>
 
-                          <IconButton
-                            color="primary"
-                            onClick={() =>
-                              navigate("/admin/editsection", {
-                                state: { section: fac },
-                              })
-                            }
-                            sx={{ mr: 1 }}
-                          >
-                            <EditIcon />
-                          </IconButton>
+          <TableContainer component={Paper} sx={{ mb: 3 }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={
+                        selectedFaculty.length > 0 &&
+                        selectedFaculty.length < searchedFaculty.length
+                      }
+                      checked={
+                        searchedFaculty.length > 0 &&
+                        selectedFaculty.length === searchedFaculty.length
+                      }
+                      onChange={() => {
+                        if (selectedFaculty.length === searchedFaculty.length) {
+                          setSelectedFaculty([]);
+                        } else {
+                          setSelectedFaculty(searchedFaculty.map((f) => f._id));
+                        }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>#</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Class</TableCell>
+                  <TableCell>Academic Year</TableCell>
+                  <TableCell>Class Teacher</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {searchedFaculty.length > 0 ? (
+                  searchedFaculty.map((fac, idx) => (
+                    <TableRow key={fac._id} hover>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedFaculty.includes(fac._id)}
+                          onChange={() => handleCheckboxChange(fac._id)}
+                        />
+                      </TableCell>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{fac.name}</TableCell>
+                      <TableCell>{fac.class}</TableCell>
+                      <TableCell>{fac.academicYear}</TableCell>
+                      <TableCell>{fac.classTeacher}</TableCell>
+
+                      <TableCell>
+                        <IconButton
+                          color="primary"
+                          onClick={() => navigate(`/admin/viewsectiondetail`)}
+                          sx={{ mr: 1 }}
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            navigate('/admin/editsection', {
+                              state: {
+                                section: fac, // pass the section data
+                              },
+                            })
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDeleteSingle(fac._id)} // Call your delete handler
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} sx={{ textAlign: "center", py: 4 }}>
+                      No faculty found matching your criteria
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
                           <IconButton
                             color="error"
