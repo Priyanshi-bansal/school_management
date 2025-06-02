@@ -209,7 +209,7 @@ const Body = () => {
               alignItems: "center",
             }}
           >
-            <FormControl sx={{ minWidth: 200 }}>
+                <FormControl sx={{ minWidth: 200 }} size="small">
               <InputLabel>Department</InputLabel>
               <Select
                 name="department"

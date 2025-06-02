@@ -78,7 +78,7 @@ const Body = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Person className="text-gray-500 mr-2" fontSize="small" />
-                    Session Name
+                    Section Name
                   </label>
                   <input
                     placeholder="Enter session name"

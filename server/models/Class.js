@@ -6,6 +6,10 @@ const classSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
+  sections: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Section"
+}],
   numericValue: {
     type: Number,
     required: true,

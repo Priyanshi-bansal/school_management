@@ -321,3 +321,49 @@ export const getSubject = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+
+export const getStudent = async (req, res) => {
+  try {
+    const { email, department, year, section } = req.query;
+    if (!email && !department && !year && !section) {
+      return res.status(400).json({ message: "At least one query parameter is required" });
+    }
+    let query = {};
+    if (email) {
+      query.email = email;
+    }
+    if (department) {
+      query.department = department;
+    }
+    if (year) {
+      query.year = year;
+    }
+    if (section) {
+      query.section = section;
+    }
+    const students = await Student.find(query);
+    if (students.length === 0) {
+      return res.status(404).json({ message: "No students found" });
+    }
+    res.status(200).json(students);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export const getStudentById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Student ID is required" });
+    }
+
+    const student = await Student.findById(id);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+    res.status(200).json(student);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
