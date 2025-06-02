@@ -39,21 +39,21 @@ const Body = () => {
 
   // Sample Data (replace with actual data or API call)
   const [faculty, setFaculty] = useState([
-  {
-    _id: "1",
-    name: "Dr. John Doe",
-    class: "10A",
-    academicYear: "2024-2025",
-    classTeacher: "ravi",
-  },
-  {
-    _id: "2",
-    name: "Ms. Jane Smith",
-    class: "9B",
-    academicYear: "2024-2025",
-    classTeacher: "rahul"
-  }
-]);
+    {
+      _id: "1",
+      name: "Dr. John Doe",
+      class: "10A",
+      academicYear: "2024-2025",
+      classTeacher: "ravi",
+    },
+    {
+      _id: "2",
+      name: "Ms. Jane Smith",
+      class: "9B",
+      academicYear: "2024-2025",
+      classTeacher: "rahul"
+    }
+  ]);
 
   const [departments, setDepartments] = useState([
     { department: "Computer Science" },
@@ -72,7 +72,7 @@ const Body = () => {
     // Initially show all faculty
     setSearchedFaculty(faculty);
   }, [faculty]);
-  
+
 
   const handleSearch = () => {
     let filtered = [...faculty];
@@ -109,11 +109,11 @@ const Body = () => {
     setSearchedFaculty(faculty);
   };
   const handleDeleteSingle = (id) => {
-  const updatedFaculty = faculty.filter((f) => f._id !== id);
-  setFaculty(updatedFaculty);
-  setSearchedFaculty(updatedFaculty); // Update filtered list as well
-  setSelectedFaculty((prev) => prev.filter((fid) => fid !== id)); // Clean up selection
-};
+    const updatedFaculty = faculty.filter((f) => f._id !== id);
+    setFaculty(updatedFaculty);
+    setSearchedFaculty(updatedFaculty); // Update filtered list as well
+    setSelectedFaculty((prev) => prev.filter((fid) => fid !== id)); // Clean up selection
+  };
 
   return (
     <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
@@ -159,21 +159,21 @@ const Body = () => {
               alignItems: "center",
             }}
           >
-         <FormControl sx={{ minWidth: 200, height: '40px' }} size="small">
-  <InputLabel>Department</InputLabel>
-  <Select
-    value={selectedDepartment}
-    onChange={(e) => setSelectedDepartment(e.target.value)}
-    label="Department"
-  >
-    <MenuItem value="all">All Departments</MenuItem>
-    {departments.map((dp, idx) => (
-      <MenuItem key={idx} value={dp.department}>
-        {dp.department}
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
+            <FormControl sx={{ minWidth: 200, height: '40px' }} size="small">
+              <InputLabel>Department</InputLabel>
+              <Select
+                value={selectedDepartment}
+                onChange={(e) => setSelectedDepartment(e.target.value)}
+                label="Department"
+              >
+                <MenuItem value="all">All Departments</MenuItem>
+                {departments.map((dp, idx) => (
+                  <MenuItem key={idx} value={dp.department}>
+                    {dp.department}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
             <TextField
               name="searchQuery"
@@ -207,95 +207,95 @@ const Body = () => {
             </Box>
           )}
 
-         <TableContainer component={Paper} sx={{ mb: 3 }}>
-  <Table>
-    <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={
-              selectedFaculty.length > 0 &&
-              selectedFaculty.length < searchedFaculty.length
-            }
-            checked={
-              searchedFaculty.length > 0 &&
-              selectedFaculty.length === searchedFaculty.length
-            }
-            onChange={() => {
-              if (selectedFaculty.length === searchedFaculty.length) {
-                setSelectedFaculty([]);
-              } else {
-                setSelectedFaculty(searchedFaculty.map((f) => f._id));
-              }
-            }}
-          />
-        </TableCell>
-        <TableCell>#</TableCell>
-        <TableCell>Name</TableCell>
-        <TableCell>Class</TableCell>
-        <TableCell>Academic Year</TableCell>
-        <TableCell>Class Teacher</TableCell>
-        <TableCell>Action</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {searchedFaculty.length > 0 ? (
-        searchedFaculty.map((fac, idx) => (
-          <TableRow key={fac._id} hover>
-            <TableCell padding="checkbox">
-              <Checkbox
-                checked={selectedFaculty.includes(fac._id)}
-                onChange={() => handleCheckboxChange(fac._id)}
-              />
-            </TableCell>
-            <TableCell>{idx + 1}</TableCell>
-            <TableCell>{fac.name}</TableCell>
-            <TableCell>{fac.class}</TableCell>
-            <TableCell>{fac.academicYear}</TableCell>
-            <TableCell>{fac.classTeacher}</TableCell>
-        
-<TableCell>
-  <IconButton
-    color="primary"
-    onClick={() => navigate(`/admin/viewsectiondetail`)}
-    sx={{ mr: 1 }}
-  >
-    <VisibilityIcon />
-  </IconButton>
+          <TableContainer component={Paper} sx={{ mb: 3 }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableRow>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={
+                        selectedFaculty.length > 0 &&
+                        selectedFaculty.length < searchedFaculty.length
+                      }
+                      checked={
+                        searchedFaculty.length > 0 &&
+                        selectedFaculty.length === searchedFaculty.length
+                      }
+                      onChange={() => {
+                        if (selectedFaculty.length === searchedFaculty.length) {
+                          setSelectedFaculty([]);
+                        } else {
+                          setSelectedFaculty(searchedFaculty.map((f) => f._id));
+                        }
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>#</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Class</TableCell>
+                  <TableCell>Academic Year</TableCell>
+                  <TableCell>Class Teacher</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {searchedFaculty.length > 0 ? (
+                  searchedFaculty.map((fac, idx) => (
+                    <TableRow key={fac._id} hover>
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selectedFaculty.includes(fac._id)}
+                          onChange={() => handleCheckboxChange(fac._id)}
+                        />
+                      </TableCell>
+                      <TableCell>{idx + 1}</TableCell>
+                      <TableCell>{fac.name}</TableCell>
+                      <TableCell>{fac.class}</TableCell>
+                      <TableCell>{fac.academicYear}</TableCell>
+                      <TableCell>{fac.classTeacher}</TableCell>
 
-  <IconButton
-  color="primary"
-  onClick={() =>
-    navigate('/admin/editsection', {
-      state: {
-        section: fac, // pass the section data
-      },
-    })
-  }
->
-  <EditIcon />
-</IconButton>
+                      <TableCell>
+                        <IconButton
+                          color="primary"
+                          onClick={() => navigate(`/admin/viewsectiondetail`)}
+                          sx={{ mr: 1 }}
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
 
- <IconButton
-  color="error"
-  onClick={() => handleDeleteSingle(fac._id)} // Call your delete handler
->
-  <DeleteIcon />
-</IconButton>
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            navigate('/admin/editsection', {
+                              state: {
+                                section: fac, // pass the section data
+                              },
+                            })
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
 
-</TableCell>
-          </TableRow>
-        ))
-      ) : (
-        <TableRow>
-          <TableCell colSpan={7} sx={{ textAlign: "center", py: 4 }}>
-            No faculty found matching your criteria
-          </TableCell>
-        </TableRow>
-      )}
-    </TableBody>
-  </Table>
-</TableContainer>
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDeleteSingle(fac._id)} // Call your delete handler
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} sx={{ textAlign: "center", py: 4 }}>
+                      No faculty found matching your criteria
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
 
           {selectedFaculty.length > 0 && (

@@ -10,7 +10,9 @@ import {
   Event as BatchIcon,
   Search,
   ClearAll,
-  Add
+  Add,
+  Edit  // <-- Yahan Edit icon import karen
+
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudent, getAllStudent } from "../../../redux/actions/adminActions";
@@ -38,7 +40,6 @@ import {
 } from "@mui/material";
 import { SET_ERRORS } from "../../../redux/actionTypes";
 import { useNavigate } from "react-router-dom";
-
 const Body = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -69,12 +70,12 @@ const Body = () => {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilter(prev => ({ ...prev, [name]: value }));
-    
+
     if (name === "department" || name === "year") {
       setLoading(true);
       if (value === "all") {
-        if ((name === "department" && filter.year === "all") || 
-            (name === "year" && filter.department === "all")) {
+        if ((name === "department" && filter.year === "all") ||
+          (name === "year" && filter.department === "all")) {
           dispatch(getAllStudent());
         } else {
           const params = {};
@@ -115,12 +116,12 @@ const Body = () => {
 
   const allStudents = useSelector((state) => state.admin.allStudent);
   const filteredStudents = useSelector((state) => state.admin.students.result);
-  
-  const students = (filter.department === "all" && filter.year === "all") 
-    ? allStudents 
+
+  const students = (filter.department === "all" && filter.year === "all")
+    ? allStudents
     : filteredStudents;
 
-  const searchedStudents = students?.filter(student => 
+  const searchedStudents = students?.filter(student =>
     student.name.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
     student.email.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
     student.username.toLowerCase().includes(filter.searchQuery.toLowerCase()) ||
@@ -146,30 +147,30 @@ const Body = () => {
           <Typography variant="h5" color="textPrimary">
             Student Management
           </Typography>
-          <Chip 
-            label={`Total Students: ${students?.length || 0}`} 
-            color="primary" 
+          <Chip
+            label={`Total Students: ${students?.length || 0}`}
+            color="primary"
             variant="outlined"
             sx={{ ml: 2 }}
           />
           <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={<Add />}
-                      onClick={() => navigate("/admin/addstudent")}
-                      sx={{
-                        ml: "auto",
-                        px: 3,
-                        py: 1.5,
-                        fontWeight: "bold",
-                        fontSize: "16px",
-                        borderRadius: "8px",
-                        boxShadow: 2,
-                        textTransform: "none",
-                      }}
-                    >
-                      Add Student
-                    </Button>
+            variant="contained"
+            color="primary"
+            startIcon={<Add />}
+            onClick={() => navigate("/admin/addstudent")}
+            sx={{
+              ml: "auto",
+              px: 3,
+              py: 1.5,
+              fontWeight: "bold",
+              fontSize: "16px",
+              borderRadius: "8px",
+              boxShadow: 2,
+              textTransform: "none",
+            }}
+          >
+            Add Student
+          </Button>
         </Box>
 
         <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
@@ -179,10 +180,10 @@ const Body = () => {
               <Search sx={{ mr: 1 }} /> Search Filters
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            
-            <Box sx={{ 
-              display: 'flex', 
-              flexWrap: 'wrap', 
+
+            <Box sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
               gap: 2,
               alignItems: 'center'
             }}>
@@ -285,82 +286,98 @@ const Body = () => {
           )}
 
           {/* Student Table */}
-          <TableContainer component={Paper} sx={{ mb: 3, border: '1px solid #e0e0e0' }}>
-            <Table>
-              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold', width: 60 }}>#</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <NameIcon sx={{ mr: 1, fontSize: 20 }} /> Name
-                    </Box>
+           <TableContainer component={Paper} sx={{ mb: 3, border: '1px solid #e0e0e0' }}>
+        <Table>
+          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold', width: 60 }}>#</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <NameIcon sx={{ mr: 1, fontSize: 20 }} /> Name
+                </Box>
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <UsernameIcon sx={{ mr: 1, fontSize: 20 }} /> Username
+                </Box>
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <EmailIcon sx={{ mr: 1, fontSize: 20 }} /> Email
+                </Box>
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <SectionIcon sx={{ mr: 1, fontSize: 20 }} /> Section
+                </Box>
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <BatchIcon sx={{ mr: 1, fontSize: 20 }} /> Batch
+                </Box>
+              </TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <BatchIcon sx={{ mr: 1, fontSize: 20 }} /> Action
+                </Box>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {searchedStudents?.length > 0 ? (
+              searchedStudents.map((student, idx) => (
+                <TableRow 
+                  key={student._id} 
+                  hover
+                  sx={{ '&:last-child td': { borderBottom: 0 } }}
+                >
+                  <TableCell>{idx + 1}</TableCell>
+                  <TableCell sx={{ fontWeight: 500 }}>{student.name}</TableCell>
+                  <TableCell>{student.username}</TableCell>
+                  <TableCell sx={{ 
+                    maxWidth: '200px', 
+                    overflow: 'hidden', 
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    {student.email}
                   </TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <UsernameIcon sx={{ mr: 1, fontSize: 20 }} /> Username
-                    </Box>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <EmailIcon sx={{ mr: 1, fontSize: 20 }} /> Email
-                    </Box>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <SectionIcon sx={{ mr: 1, fontSize: 20 }} /> Section
-                    </Box>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <BatchIcon sx={{ mr: 1, fontSize: 20 }} /> Batch
-                    </Box>
-                  </TableCell>
+                  <TableCell>{student.section}</TableCell>
+                  <TableCell>{student.batch}</TableCell>
+                  <TableCell>
+                    {/* Edit button with icon */}
+                    <IconButton
+                      color="primary"
+                      size="small"
+                      onClick={() => navigate(`/admin/UpdateStudent/${student._id}`)}
+                      aria-label="edit student"
+                    >
+                      <Edit />
+                    </IconButton>
+                  </TableCell>  
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {searchedStudents?.length > 0 ? (
-                  searchedStudents.map((student, idx) => (
-                    <TableRow 
-                      key={student._id} 
-                      hover
-                      sx={{ '&:last-child td': { borderBottom: 0 } }}
-                    >
-                      <TableCell>{idx + 1}</TableCell>
-                      <TableCell sx={{ fontWeight: 500 }}>{student.name}</TableCell>
-                      <TableCell>{student.username}</TableCell>
-                      <TableCell sx={{ 
-                        maxWidth: '200px', 
-                        overflow: 'hidden', 
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
-                      }}>
-                        {student.email}
-                      </TableCell>
-                      <TableCell>{student.section}</TableCell>
-                      <TableCell>{student.batch}</TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell 
-                      colSpan={6} 
-                      sx={{ 
-                        textAlign: 'center', 
-                        py: 4,
-                        color: 'text.secondary'
-                      }}
-                    >
-                      {loading ? (
-                        <CircularProgress size={24} />
-                      ) : (
-                        'No students found matching your criteria'
-                      )}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell 
+                  colSpan={7} 
+                  sx={{ 
+                    textAlign: 'center', 
+                    py: 4,
+                    color: 'text.secondary'
+                  }}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} />
+                  ) : (
+                    'No students found matching your criteria'
+                  )}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
         </Paper>
       </Box>
     </Box>

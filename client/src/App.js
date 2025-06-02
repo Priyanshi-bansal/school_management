@@ -68,6 +68,12 @@ import ViewClass from "./components/admin/viewclass/ViewClass";
 import AssignClassTeacher from "./components/admin/AssignTeacher/AssignTeacher";
 import AssignTeacher from "./components/admin/AssignTeacher/AssignTeacher";
 import AddStudentsection from "./components/admin/AddStudentsection/AddStudentsection";
+import UpdateFaculty from "./components/admin/updateFaculty/UpdateFaculty";
+import UpdateStudent from "./components/admin/updateStudent/UpdateStudent";
+import GettestAdmin from "./components/admin/gettestAdmin/GettestAdmin";
+import AddgetTest from "./components/admin/addgetTest/AddgetTest";
+
+
 
 
 
@@ -116,7 +122,13 @@ const App = () => {
       <Route path="/admin/editclass" element={<EditClass />} />
       <Route path="/admin/viewclass" element={<ViewClass />} />
       <Route path="/admin/AssignTeacher" element={<AssignTeacher />} />
-      <Route path="/admin/AddStudentsection" element={<AddStudentsection/>} />
+      <Route path="/admin/AddStudentsection" element={<AddStudentsection />} />
+      <Route path="admin/updatefaculty" element={<UpdateFaculty />} />
+      <Route path="admin/updatestudent" element={<UpdateStudent />} />
+      <Route path="admin/updatestudent" element={<UpdateStudent />} />
+      <Route path="admin/gettestadmin" element={<GettestAdmin />} />
+           <Route path="admin/addgettest" element={<AddgetTest />} />
+     
 
 
 
@@ -140,6 +152,7 @@ const App = () => {
       <Route path="/faculty/Marks" element={<Marks />} />
 
       <Route path="/faculty/StudentAttendance" element={<StudentAttendance />} />
+      <Route path="/faculty/gettestadmin" element={<GettestAdmin />} />
 
 
       {/* Student  */}

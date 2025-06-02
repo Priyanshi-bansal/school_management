@@ -115,7 +115,14 @@ const Sidebar = () => {
       // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
       // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
     ]
-  }
+  },
+   { 
+      header: "Manage test",
+      items: [
+        // { icon: <Add />, label: "Add Admin", path: "/admin/gettestadmin" },
+        { icon: <MenuBook />, label: "Manage test", path: "/admin/gettestadmin" }
+      ]
+    }
 ];
 
   return (
