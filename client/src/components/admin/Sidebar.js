@@ -124,6 +124,16 @@ const Sidebar = () => {
       ]
     },
      { 
+      header: "Time Table Management",
+      items: [
+        { icon: <MenuBook />, label: "Time Table  ", path: "/admin/timetablemanagement" },
+          { icon: <MenuBook />, label: "Daily Time Table  ", path: "/admin/timetablemanagement" },
+            { icon: <MenuBook />, label: "Class Time Table  ", path: "/admin/timetablemanagement" },
+        // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
+      ]
+    },
+     { 
       header: "Attendance",
     items: [
       { icon: <MenuBook />, label: "FacultyAttendance", path: "/admin/facultyattendance" },

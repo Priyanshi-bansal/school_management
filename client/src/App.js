@@ -77,6 +77,7 @@ import GetSyllabus from "./components/admin/getsyllabus/GetSyllabus";
 import EditSyllabus from "./components/admin/editsyllabus/EditSyllabus";
 import ViewChapter from "./components/admin/viewchapter/ViewChapter";
 import EditChapter from "./components/admin/editchapter/EditChapter";
+import TimeTableManagement from "./components/admin/timetablemanagement/TimeTableManagement";
 
 import EditClass from "./components/admin/EditClass/EditClass";
 import ViewClass from "./components/admin/viewclass/ViewClass";
@@ -162,6 +163,8 @@ const App = () => {
             <Route path="/admin/editsyllabus" element={< EditSyllabus/>} />
              <Route path="/admin/viewchapter" element={<ViewChapter/>} />
              <Route path="/admin/editchapter" element={<EditChapter/>} />
+              <Route path="/admin/timetablemanagement" element={<TimeTableManagement/>} />
+             
 
 
 
