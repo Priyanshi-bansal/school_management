@@ -54,8 +54,9 @@ import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
-import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
-import StuAttendance from "./components/admin/stuattendance/StuAttendance";
+import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
+import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
+
 import ManageSection from "./components/admin/managesection/ManageSection";
 import GetClass from "./components/admin/GetClass/GetClass";
 import AddClass from "./components/admin/addclass/AddClass";
@@ -88,6 +89,8 @@ import UpdateFaculty from "./components/admin/updateFaculty/UpdateFaculty";
 import UpdateStudent from "./components/admin/updateStudent/UpdateStudent";
 import GettestAdmin from "./components/admin/gettestAdmin/GettestAdmin";
 import AddgetTest from "./components/admin/addgetTest/AddgetTest";
+import AddTimetablemanagement from "./components/admin/addTimetablemanagement/AddTimetablemanagement";
+import FeesStructure from "./components/admin/addAdmin/feesStructure/FeesStructure";
 
 
 
@@ -143,8 +146,8 @@ const App = () => {
       <Route path="admin/updatestudent" element={<UpdateStudent />} />
       <Route path="admin/updatestudent" element={<UpdateStudent />} />
       <Route path="admin/gettestadmin" element={<GettestAdmin />} />
-           <Route path="admin/addgettest" element={<AddgetTest />} />
-     
+      <Route path="admin/addgettest" element={<AddgetTest />} />
+
 
 
 
@@ -155,16 +158,18 @@ const App = () => {
       <Route path="/admin/viewsubject" element={<ViewSubject />} />
       <Route path="/admin/subjecttoclass" element={<SubjectToAssign />} />
       <Route path="/admin/teachertosubject" element={<TeacherToSubject />} />
-       <Route path="/admin/createcalendra" element={<CreateCalendra />} />
+      <Route path="/admin/createcalendra" element={<CreateCalendra />} />
       <Route path="/admin/editcalendra" element={<EditCalendra />} />
-      <Route path="/admin/calendramanagement" element={< CalendraManagement/>} />
-        <Route path="/admin/syllabusmanagement" element={< SyllabusManagemant/>} />
-          <Route path="/admin/getsyllabus" element={< GetSyllabus/>} />
-            <Route path="/admin/editsyllabus" element={< EditSyllabus/>} />
-             <Route path="/admin/viewchapter" element={<ViewChapter/>} />
-             <Route path="/admin/editchapter" element={<EditChapter/>} />
-              <Route path="/admin/timetablemanagement" element={<TimeTableManagement/>} />
-             
+      <Route path="/admin/calendramanagement" element={< CalendraManagement />} />
+      <Route path="/admin/syllabusmanagement" element={< SyllabusManagemant />} />
+      <Route path="/admin/getsyllabus" element={< GetSyllabus />} />
+      <Route path="/admin/editsyllabus" element={< EditSyllabus />} />
+      <Route path="/admin/viewchapter" element={<ViewChapter />} />
+      <Route path="/admin/editchapter" element={<EditChapter />} />
+      <Route path="/admin/timetablemanagement" element={<TimeTableManagement />} />
+      <Route path="/admin/addtimetablemanagement" element={<AddTimetablemanagement />} />
+      <Route path="/admin/feesstructure" element={<FeesStructure />} />
+
 
 
 
