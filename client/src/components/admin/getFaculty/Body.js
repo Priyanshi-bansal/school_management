@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Engineering as EngineeringIcon,
   Delete as DeleteIcon,
@@ -32,12 +33,14 @@ import {
   CircularProgress,
   Chip,
   TextField,
+  Tooltip,
   IconButton,
   Alert,
 } from "@mui/material";
 import { DELETE_FACULTY, SET_ERRORS } from "../../../redux/actionTypes";
 
 const Body = () => {
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const departments = useSelector((state) => state.admin.allDepartment);
@@ -117,6 +120,11 @@ const Body = () => {
       fac.designation?.toLowerCase().includes(filter.searchQuery.toLowerCase())
   );
 
+  const handleEdit = (faculty) => {
+    console.log("Editing faculty:", faculty);
+    // Implement edit logic (e.g., open a modal)
+  };
+
   const handleDelete = () => {
     if (selectedFaculty.length === 0) return;
 
@@ -154,6 +162,8 @@ const Body = () => {
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
   }, []);
+
+
 
   return (
     <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
@@ -267,7 +277,7 @@ const Body = () => {
                       checked={
                         (searchedFaculty?.length || 0) > 0 &&
                         selectedFaculty.length ===
-                          (searchedFaculty?.length || 0)
+                        (searchedFaculty?.length || 0)
                       }
                       onChange={() => {
                         if (
@@ -289,6 +299,7 @@ const Body = () => {
                   <TableCell>Email</TableCell>
                   <TableCell>Department</TableCell>
                   <TableCell>Designation</TableCell>
+                  <TableCell>action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -307,6 +318,20 @@ const Body = () => {
                       <TableCell>{fac.email}</TableCell>
                       <TableCell>{fac.department}</TableCell>
                       <TableCell>{fac.designation}</TableCell>
+                      <TableCell> <Tooltip title="Edit Faculty">
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            navigate('/admin/updateFaculty', {
+                              state: { section: fac },
+                            })
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : (
