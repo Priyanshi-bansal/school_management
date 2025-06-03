@@ -1,45 +1,54 @@
 import express from 'express';
 import {
   createTimeSlot,
-  getTimeSlots,
-  getTimeSlotById,
+  getTimeSlot,
   updateTimeSlot,
   deleteTimeSlot,
+  getAllTimeSlots,
+  bulkCreateTimeSlots,
   createDailyTimetable,
-  getDailyTimetableById,
+  getDailyTimetable,
   updateDailyTimetable,
+  deleteDailyTimetable,
   createClassTimetable,
-  getClassTimetables,
-  getClassTimetableById,
+  getClassTimetable,
   updateClassTimetable,
   deleteClassTimetable,
-  getClassTimetable,
-  getTeacherTimetable
+  getClassTimetableByClass,
+  getTeacherTimetable,
+  validateTimetableConflicts,
+  assignSubstituteTeacher,
+  getTimetableConflicts
 } from '../controller/timetableController.js';
+import auth  from '../middleware/auth.js';
 
 const router = express.Router();
 
-// TimeSlot routes
-router.post('/timeslots', createTimeSlot);
-router.get('/timeslots', getTimeSlots);
-router.get('/timeslots/:id', getTimeSlotById);
-router.put('/timeslots/:id', updateTimeSlot);
-router.delete('/timeslots/:id', deleteTimeSlot);
+// TimeSlot Routes
+router.post('/timeslots', auth, createTimeSlot);
+router.get('/timeslots', auth, getAllTimeSlots);
+router.get('/timeslots/:id', auth, getTimeSlot);
+router.put('/timeslots/:id', auth, updateTimeSlot);
+router.delete('/timeslots/:id', auth, deleteTimeSlot);
+router.post('/timeslots/bulk', auth, bulkCreateTimeSlots);
 
-// DailyTimetable routes
-router.post('/dailytimetables', createDailyTimetable);
-router.get('/dailytimetables/:id', getDailyTimetableById);
-router.put('/dailytimetables/:id', updateDailyTimetable);
+// DailyTimetable Routes
+router.post('/daily', auth, createDailyTimetable);
+router.get('/daily/:id', auth, getDailyTimetable);
+router.put('/daily/:id', auth, updateDailyTimetable);
+router.delete('/daily/:id', auth, deleteDailyTimetable);
 
-// ClassTimetable routes
-router.post('/classtimetables', createClassTimetable);
-router.get('/classtimetables', getClassTimetables);
-router.get('/classtimetables/:id', getClassTimetableById);
-router.put('/classtimetables/:id', updateClassTimetable);
-router.delete('/classtimetables/:id', deleteClassTimetable);
+// ClassTimetable Routes
+router.post('/classes', auth, createClassTimetable);
+router.get('/classes/:id', auth, getClassTimetable);
+router.put('/classes/:id', auth, updateClassTimetable);
+router.delete('/classes/:id', auth, deleteClassTimetable);
 
-// Special routes
-router.get('/class/:classId/section/:sectionId', getClassTimetable);
-router.get('/teacher/:teacherId', getTeacherTimetable);
+// Specialized Routes
+router.get('/classes/:classId/:sectionId/:academicYearId', auth, getClassTimetableByClass);
+router.get('/teachers/:teacherId/schedule', auth, getTeacherTimetable);
+router.post('/validate', auth, validateTimetableConflicts);
+router.patch('/:timetableId/days/:dayId/slots/:slotId/substitute', auth, assignSubstituteTeacher);
+router.get('/:timetableId/conflicts', auth, getTimetableConflicts);
 
 export default router;

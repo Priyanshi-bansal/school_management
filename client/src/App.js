@@ -54,8 +54,8 @@ import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
-import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
-import StuAttendance from "./components/admin/stuattendance/StuAttendance";
+import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
+import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
 
 import ManageSection from "./components/admin/managesection/ManageSection";
 import GetClass from "./components/admin/GetClass/GetClass";

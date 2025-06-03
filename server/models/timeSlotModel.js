@@ -1,4 +1,3 @@
-// models/timetable/timeSlotModel.js
 import mongoose from 'mongoose';
 
 const timeSlotSchema = new mongoose.Schema({
@@ -6,10 +5,8 @@ const timeSlotSchema = new mongoose.Schema({
     type: String, 
     required: true,
     validate: {
-      validator: function(v) {
-        return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v);
-      },
-      message: props => `${props.value} is not a valid time format (HH:mm)`
+      validator: v => /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v),
+      message: props => `${props.value} is not a valid time (HH:MM)`
     }
   },
   endTime: { 
@@ -17,15 +14,18 @@ const timeSlotSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function(v) {
-        return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v);
+        const isValidFormat = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(v);
+        const isAfterStart = new Date(`1970-01-01T${v}:00`) > new Date(`1970-01-01T${this.startTime}:00`);
+        return isValidFormat && isAfterStart;
       },
-      message: props => `${props.value} is not a valid time format (HH:mm)`
+      message: 'End time must be valid and after start time'
     }
   },
   periodNumber: { 
     type: Number, 
     required: true,
-    min: 1
+    min: 1,
+    max: 12
   },
   isBreak: { 
     type: Boolean, 
@@ -33,13 +33,16 @@ const timeSlotSchema = new mongoose.Schema({
   },
   breakName: { 
     type: String,
-    required: function() {
-      return this.isBreak;
-    }
+    required: function() { return this.isBreak; }
+  },
+  isTeachingSlot: { 
+    type: Boolean, 
+    default: true 
   }
+}, { 
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
-const TimeSlot = mongoose.model('TimeSlot', timeSlotSchema);
-
-export default TimeSlot;
-
+export default mongoose.model('TimeSlot', timeSlotSchema);
