@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Engineering as EngineeringIcon,
@@ -60,43 +60,41 @@ const Body = () => {
     { department: "Electrical" },
   ]);
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("all");
-  const [searchedFaculty, setSearchedFaculty] = useState(faculty);
+  const [filter, setFilter] = useState({ department: "all", searchQuery: "" });
   const [selectedFaculty, setSelectedFaculty] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setSearchedFaculty(faculty);
-  }, [faculty]);
-
-  const handleSearch = () => {
-    let filtered = [...faculty];
-    if (selectedDepartment !== "all") {
-      filtered = filtered.filter((f) => f.department === selectedDepartment);
+  // Memoized filtered data
+  const searchedFaculty = useMemo(() => {
+    let data = [...faculty];
+    if (filter.department !== "all") {
+      data = data.filter((f) => f.department === filter.department);
     }
-    if (searchQuery.trim()) {
-      filtered = filtered.filter(
+    if (filter.searchQuery.trim()) {
+      const q = filter.searchQuery.toLowerCase();
+      data = data.filter(
         (f) =>
-          f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          f.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          f.email?.toLowerCase().includes(searchQuery.toLowerCase())
+          f.name.toLowerCase().includes(q) ||
+          f.username?.toLowerCase().includes(q) ||
+          f.email?.toLowerCase().includes(q)
       );
     }
-    setSearchedFaculty(filtered);
-  };
+    return data;
+  }, [faculty, filter]);
 
   const handleDelete = () => {
     const updated = faculty.filter((f) => !selectedFaculty.includes(f._id));
     setFaculty(updated);
     setSelectedFaculty([]);
-    setSearchedFaculty(updated);
   };
 
-  const clearFilters = () => {
-    setSelectedDepartment("all");
-    setSearchQuery("");
-    setSearchedFaculty(faculty);
+  const handleClearFilters = () => {
+    setFilter({ department: "all", searchQuery: "" });
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilter((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -113,7 +111,7 @@ const Body = () => {
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <EngineeringIcon color="primary" />
-          <Typography variant="h5">Session Management</Typography>
+          <Typography variant="h5">Manage Test</Typography>
         </Box>
         <Chip
           label={`Total Faculty: ${faculty.length}`}
@@ -142,21 +140,15 @@ const Body = () => {
         </Box>
       </Box>
 
-      {/* Filters */}
-      <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            gap: 2,
-            mb: 3,
-          }}
-        >
-          <FormControl fullWidth size="small">
+      {/* Filters - Updated UI */}
+      <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+          <FormControl sx={{ minWidth: 200 }} size="small">
             <InputLabel>Department</InputLabel>
             <Select
-              value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
+              name="department"
+              value={filter.department}
+              onChange={handleFilterChange}
               label="Department"
             >
               <MenuItem value="all">All Departments</MenuItem>
@@ -169,15 +161,16 @@ const Body = () => {
           </FormControl>
 
           <TextField
-            fullWidth
-            size="small"
+            name="searchQuery"
+            value={filter.searchQuery}
+            onChange={handleFilterChange}
+            label="Search"
             variant="outlined"
-            label="Search Test"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            size="small"
+            sx={{ flexGrow: 1, minWidth: 200 }}
             InputProps={{
               endAdornment: (
-                <IconButton onClick={handleSearch}>
+                <IconButton>
                   <Search />
                 </IconButton>
               ),
@@ -187,22 +180,21 @@ const Body = () => {
           <Button
             variant="outlined"
             startIcon={<ClearAll />}
-            onClick={clearFilters}
-            fullWidth={isMobile}
+            onClick={handleClearFilters}
+            size="small"
+            sx={{ height: "40px", whiteSpace: "nowrap" }}
           >
             Clear Filters
           </Button>
         </Box>
 
+        {/* Table Section */}
         {loading ? (
-          <Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
+          <Box sx={{ textAlign: "center", my: 4 }}>
             <CircularProgress />
           </Box>
         ) : (
-          <TableContainer
-            component={Paper}
-            sx={{ overflowX: "auto", mb: 2, borderRadius: 2 }}
-          >
+          <TableContainer component={Paper} sx={{ overflowX: "auto", mb: 2, borderRadius: 2 }}>
             <Table size="small">
               <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
                 <TableRow>
@@ -217,51 +209,64 @@ const Body = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
-                  <TableCell>Midterm</TableCell>
-                  <TableCell>Math</TableCell>
-                  <TableCell>Science</TableCell>
-                  <TableCell>100</TableCell>
-                  <TableCell>A</TableCell>
-                  <TableCell>2025-06-01</TableCell>
-                  <TableCell>2025</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <IconButton color="primary">
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton color="primary">
-                        <VisibilityIcon />
-                      </IconButton>
-                      <IconButton color="error">
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  </TableCell>
-                </TableRow>
+                {searchedFaculty.length > 0 ? (
+                  searchedFaculty.map((fac) => (
+                    <TableRow key={fac._id}>
+                      <TableCell>{fac.test || "Midterm"}</TableCell>
+                      <TableCell>{fac.subject || "Math"}</TableCell>
+                      <TableCell>{fac.department || "Science"}</TableCell>
+                      <TableCell>{fac.totalMarks || 100}</TableCell>
+                      <TableCell>{fac.section || "A"}</TableCell>
+                      <TableCell>{fac.date || "2025-06-01"}</TableCell>
+                      <TableCell>{fac.year || "2025"}</TableCell>
+                      <TableCell>
+                        <Box sx={{ display: "flex", gap: 1 }}>
+                          <IconButton
+                            color="primary"
+                            onClick={() =>
+                              navigate("/admin/AddgeTtest", {
+                                state: { section: fac },
+                              })
+                            }
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton color="primary">
+                            <VisibilityIcon />
+                          </IconButton>
+                          <IconButton color="error">
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={8} sx={{ textAlign: "center", py: 4 }}>
+                      No tests found matching your criteria
+                    </TableCell>
+                  </TableRow>
+                )}
               </TableBody>
             </Table>
           </TableContainer>
         )}
 
-        {/* Bulk Delete Notice */}
+        {/* Bulk Delete UI */}
         {selectedFaculty.length > 0 && (
           <Box
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" },
               justifyContent: "space-between",
               alignItems: "center",
-              gap: 2,
               mt: 2,
               p: 2,
               backgroundColor: "action.selected",
               borderRadius: 1,
             }}
           >
-            <Typography>
-              {selectedFaculty.length} faculty member(s) selected
-            </Typography>
+            <Typography>{selectedFaculty.length} selected</Typography>
             <Button
               variant="contained"
               color="error"

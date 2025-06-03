@@ -126,9 +126,9 @@ const Sidebar = () => {
      { 
       header: "Time Table Management",
       items: [
-        { icon: <MenuBook />, label: "Time Table  ", path: "/admin/timetablemanagement" },
-          { icon: <MenuBook />, label: "Daily Time Table  ", path: "/admin/timetablemanagement" },
-            { icon: <MenuBook />, label: "Class Time Table  ", path: "/admin/timetablemanagement" },
+        { icon: <MenuBook />, label: "Time Slot  ", path: "/admin/timetablemanagement" },
+          { icon: <MenuBook />, label: "Daily Time Table  ", path: "/admin/dailytimetable" },
+            { icon: <MenuBook />, label: "Class Time Table  ", path: "/admin/classtimetable" },
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
@@ -156,7 +156,16 @@ const Sidebar = () => {
         // { icon: <Add />, label: "Add Admin", path: "/admin/gettestadmin" },
         { icon: <MenuBook />, label: "Manage test", path: "/admin/gettestadmin" }
       ]
-    }
+    },
+      { 
+      header: "Fees Management",
+      items: [
+        { icon: <MenuBook />, label: "Fees Structure", path: "/admin/feesStructure" },
+          { icon: <MenuBook />, label: "Fees Payment", path: "/admin/feepayment" },
+        // { icon: <Add />, label: "Fees Management", path: "/admin/addsubject" },
+        // { icon: <Delete />, label: "Delete Fees Management", path: "/admin/deletesFees Management" }
+      ]
+    },
 ];
 
   return (

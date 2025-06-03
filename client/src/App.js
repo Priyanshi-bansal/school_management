@@ -79,6 +79,14 @@ import EditSyllabus from "./components/admin/editsyllabus/EditSyllabus";
 import ViewChapter from "./components/admin/viewchapter/ViewChapter";
 import EditChapter from "./components/admin/editchapter/EditChapter";
 import TimeTableManagement from "./components/admin/timetablemanagement/TimeTableManagement";
+import DailyTimeTable from "./components/admin/dailytimetable/DailyTimeTable";
+import ClassTimeTable from "./components/admin/classtimetable/ClassTimeTable";
+import AddtimeTable from "./components/admin/addtimetable/AddtimeTable";
+import ViewDailyTime from "./components/admin/viewclasstime/ViewClassTime";
+import EditDailyTime from "./components/admin/editdailytime/EditDailyTime";
+import EditClassTime from "./components/admin/editclasstime/EditClassTime";
+import AddClassTable from "./components/admin/addclasstable/AddClassTable";
+import ViewClassTime from "./components/admin/viewclasstime/ViewClassTime";
 
 import EditClass from "./components/admin/EditClass/EditClass";
 import ViewClass from "./components/admin/viewclass/ViewClass";
@@ -89,6 +97,11 @@ import UpdateFaculty from "./components/admin/updateFaculty/UpdateFaculty";
 import UpdateStudent from "./components/admin/updateStudent/UpdateStudent";
 import GettestAdmin from "./components/admin/gettestAdmin/GettestAdmin";
 import AddgetTest from "./components/admin/addgetTest/AddgetTest";
+import AddTimetablemanagement from "./components/admin/addTimetablemanagement/AddTimetablemanagement";
+import FeesStructure from "./components/admin/addAdmin/feesStructure/FeesStructure";
+import FeePayment from "./components/admin/feepayment/FeePayment";
+import AddPayment from "./components/admin/addpayment/AddPayment";
+import EditPayment from "./components/admin/editpayment/EditPayment";
 
 
 
@@ -144,8 +157,8 @@ const App = () => {
       <Route path="admin/updatestudent" element={<UpdateStudent />} />
       <Route path="admin/updatestudent" element={<UpdateStudent />} />
       <Route path="admin/gettestadmin" element={<GettestAdmin />} />
-           <Route path="admin/addgettest" element={<AddgetTest />} />
-     
+      <Route path="admin/addgettest" element={<AddgetTest />} />
+
 
 
 
@@ -156,16 +169,29 @@ const App = () => {
       <Route path="/admin/viewsubject" element={<ViewSubject />} />
       <Route path="/admin/subjecttoclass" element={<SubjectToAssign />} />
       <Route path="/admin/teachertosubject" element={<TeacherToSubject />} />
-       <Route path="/admin/createcalendra" element={<CreateCalendra />} />
+      <Route path="/admin/createcalendra" element={<CreateCalendra />} />
       <Route path="/admin/editcalendra" element={<EditCalendra />} />
-      <Route path="/admin/calendramanagement" element={< CalendraManagement/>} />
-        <Route path="/admin/syllabusmanagement" element={< SyllabusManagemant/>} />
-          <Route path="/admin/getsyllabus" element={< GetSyllabus/>} />
-            <Route path="/admin/editsyllabus" element={< EditSyllabus/>} />
-             <Route path="/admin/viewchapter" element={<ViewChapter/>} />
-             <Route path="/admin/editchapter" element={<EditChapter/>} />
-              <Route path="/admin/timetablemanagement" element={<TimeTableManagement/>} />
-             
+      <Route path="/admin/calendramanagement" element={< CalendraManagement />} />
+      <Route path="/admin/syllabusmanagement" element={< SyllabusManagemant />} />
+      <Route path="/admin/getsyllabus" element={< GetSyllabus />} />
+      <Route path="/admin/editsyllabus" element={< EditSyllabus />} />
+      <Route path="/admin/viewchapter" element={<ViewChapter />} />
+      <Route path="/admin/editchapter" element={<EditChapter />} />
+      <Route path="/admin/timetablemanagement" element={<TimeTableManagement />} />
+
+      <Route path="/admin/dailytimetable" element={<DailyTimeTable />} />
+      <Route path="/admin/classtimetable" element={<ClassTimeTable />} />
+      <Route path="/admin/addtimetable" element={<AddtimeTable />} />
+      <Route path="/admin/viewclasstime" element={<ViewClassTime />} />
+      <Route path="/admin/editdailytime" element={<EditDailyTime />} />
+      <Route path="/admin/editclasstime" element={<EditClassTime/>} />
+      <Route path="/admin/addclasstable" element={<AddClassTable />} />
+      <Route path="/admin/addtimetablemanagement" element={<AddTimetablemanagement />} />
+      <Route path="/admin/feesstructure" element={<FeesStructure />} />
+       <Route path="/admin/feepayment" element={<FeePayment />} />
+        <Route path="/admin/addpayment" element={<AddPayment />} />
+        <Route path="/admin/editpayment" element={<EditPayment />} />
+
 
 
 
