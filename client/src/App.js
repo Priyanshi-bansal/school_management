@@ -54,8 +54,8 @@ import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
-import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
-import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
+import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
+import StuAttendance from "./components/admin/stuattendance/StuAttendance";
 
 import ManageSection from "./components/admin/managesection/ManageSection";
 import GetClass from "./components/admin/GetClass/GetClass";
@@ -99,6 +99,9 @@ import GettestAdmin from "./components/admin/gettestAdmin/GettestAdmin";
 import AddgetTest from "./components/admin/addgetTest/AddgetTest";
 import AddTimetablemanagement from "./components/admin/addTimetablemanagement/AddTimetablemanagement";
 import FeesStructure from "./components/admin/addAdmin/feesStructure/FeesStructure";
+import FeePayment from "./components/admin/feepayment/FeePayment";
+import AddPayment from "./components/admin/addpayment/AddPayment";
+import EditPayment from "./components/admin/editpayment/EditPayment";
 
 
 
@@ -185,7 +188,9 @@ const App = () => {
       <Route path="/admin/addclasstable" element={<AddClassTable />} />
       <Route path="/admin/addtimetablemanagement" element={<AddTimetablemanagement />} />
       <Route path="/admin/feesstructure" element={<FeesStructure />} />
-
+       <Route path="/admin/feepayment" element={<FeePayment />} />
+        <Route path="/admin/addpayment" element={<AddPayment />} />
+        <Route path="/admin/editpayment" element={<EditPayment />} />
 
 
 
