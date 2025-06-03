@@ -27,15 +27,6 @@ const classSubjectSchema = mongoose.Schema({
   electiveGroup: {
     type: String,
   },
-  syllabus: [{
-    topic: String,
-    description: String,
-    duration: Number, // in weeks
-    isCompleted: {
-      type: Boolean,
-      default: false,
-    },
-  }],
 }, { timestamps: true });
 
 export default mongoose.model("ClassSubject", classSubjectSchema);

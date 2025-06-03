@@ -161,6 +161,7 @@ const Sidebar = () => {
       header: "Fees Management",
       items: [
         { icon: <MenuBook />, label: "Fees Structure", path: "/admin/feesStructure" },
+          { icon: <MenuBook />, label: "Fees Payment", path: "/admin/feepayment" },
         // { icon: <Add />, label: "Fees Management", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Fees Management", path: "/admin/deletesFees Management" }
       ]

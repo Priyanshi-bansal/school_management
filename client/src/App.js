@@ -104,22 +104,6 @@ import EditFees from "./components/admin/editfees/EditFees";
 import EdittestManage from "./components/admin/edittestmanage/EdittestManage";
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const App = () => {
   return (
     <Routes>
@@ -200,13 +184,12 @@ const App = () => {
       <Route path="/admin/addtimetablemanagement" element={<AddTimetablemanagement />} />
       <Route path="/admin/feesstructure" element={<FeesStructure />} />
       <Route path="/admin/addfees" element={<AddFees />} />
-       <Route path="/admin/editfees" element={<EditFees/>} />
-         <Route path="/admin/edittestmanage" element={<EdittestManage/>} />
-  
-
-
-
-
+      <Route path="/admin/editfees" element={<EditFees/>} />
+      <Route path="/admin/edittestmanage" element={<EdittestManage/>} />
+ 
+      <Route path="/admin/feepayment" element={<FeePayment />} />
+      <Route path="/admin/addpayment" element={<AddPayment />} />
+      <Route path="/admin/editpayment" element={<EditPayment />} />
 
 
 
