@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { getAllDepartment } from "../../../../redux/actions/adminActions"; // Fixed path
-import Header from "../../Header"; // Adjust as per actual structure
-import Sidebar from "../../Sidebar"; // Adjust as per actual structure
+import { getAllDepartment } from "../../../redux/actions/adminActions"; // Fixed path
+import Header from "../Header"; // Adjust as per actual structure
+import Sidebar from "../Sidebar"; // Adjust as per actual structure
 import Body from "./Body";
 
-const FeesStructure = () => {
+const EdittestManage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllDepartment());
@@ -26,4 +26,4 @@ const FeesStructure = () => {
   );
 };
 
-export default FeesStructure;
+export default EdittestManage;

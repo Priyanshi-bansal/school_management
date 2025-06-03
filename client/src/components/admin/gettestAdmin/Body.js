@@ -224,7 +224,7 @@ const Body = () => {
                           <IconButton
                             color="primary"
                             onClick={() =>
-                              navigate("/admin/AddgeTtest", {
+                              navigate("/admin/edittestmanage", {
                                 state: { section: fac },
                               })
                             }

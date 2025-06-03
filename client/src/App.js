@@ -98,15 +98,10 @@ import UpdateStudent from "./components/admin/updateStudent/UpdateStudent";
 import GettestAdmin from "./components/admin/gettestAdmin/GettestAdmin";
 import AddgetTest from "./components/admin/addgetTest/AddgetTest";
 import AddTimetablemanagement from "./components/admin/addTimetablemanagement/AddTimetablemanagement";
-import FeesStructure from "./components/admin/addAdmin/feesStructure/FeesStructure";
-import FeePayment from "./components/admin/feepayment/FeePayment";
-import AddPayment from "./components/admin/addpayment/AddPayment";
-import EditPayment from "./components/admin/editpayment/EditPayment";
-
-
-
-
-
+import FeesStructure from "./components/admin/feesStructure/FeesStructure";
+import AddFees from "./components/admin/addfees/AddFees";
+import EditFees from "./components/admin/editfees/EditFees";
+import EdittestManage from "./components/admin/edittestmanage/EdittestManage";
 
 
 const App = () => {
@@ -184,15 +179,17 @@ const App = () => {
       <Route path="/admin/addtimetable" element={<AddtimeTable />} />
       <Route path="/admin/viewclasstime" element={<ViewClassTime />} />
       <Route path="/admin/editdailytime" element={<EditDailyTime />} />
-      <Route path="/admin/editclasstime" element={<EditClassTime/>} />
+      <Route path="/admin/editclasstime" element={<EditClassTime />} />
       <Route path="/admin/addclasstable" element={<AddClassTable />} />
       <Route path="/admin/addtimetablemanagement" element={<AddTimetablemanagement />} />
       <Route path="/admin/feesstructure" element={<FeesStructure />} />
-       <Route path="/admin/feepayment" element={<FeePayment />} />
-        <Route path="/admin/addpayment" element={<AddPayment />} />
-        <Route path="/admin/editpayment" element={<EditPayment />} />
-
-
+      <Route path="/admin/addfees" element={<AddFees />} />
+      <Route path="/admin/editfees" element={<EditFees/>} />
+      <Route path="/admin/edittestmanage" element={<EdittestManage/>} />
+ 
+      <Route path="/admin/feepayment" element={<FeePayment />} />
+      <Route path="/admin/addpayment" element={<AddPayment />} />
+      <Route path="/admin/editpayment" element={<EditPayment />} />
 
 
 
