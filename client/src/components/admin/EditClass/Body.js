@@ -1,97 +1,106 @@
-
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
- Edit as EditIcon,
-  Cake,
-  School,
-  Image,
-  Clear
-} from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import FileBase from "react-file-base64";
-import { addFaculty } from "../../../redux/actions/adminActions";
-import {
-  Button,
-  Avatar,
   Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
   Typography,
-  TextField
-} from "@mui/material";
-import Spinner from "../../../utils/Spinner";
-import { ADD_FACULTY, SET_ERRORS } from "../../../redux/actionTypes";
+  TextField,
+} from '@mui/material';
+import {
+  Add as AddIcon,
+  Clear,
+  Person,
+  School,
+  Work,
+  Edit as EditIcon,
+} from '@mui/icons-material';
 
 const Body = () => {
-  const dispatch = useDispatch();
-  const store = useSelector((state) => state);
+  const location = useLocation();
+  const sectionToEdit = location.state?.section || null;
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState({});
   const [value, setValue] = useState({
-    name: "",
-    numericValue: "",
-    academic: "",
-    capacity: "",
-    description: "",
-    avatar: ""
+    name: '',
+    academicYear: '',
+    class: '',
+    capacity: '',
   });
 
-  useEffect(() => {
-    if (Object.keys(store.errors).length !== 0) {
-      setError(store.errors);
-    }
-  }, [store.errors]);
+  const [error, setError] = useState({ backendError: '' });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError({});
-    setLoading(true);
-    dispatch(addFaculty(value));
-  };
+  const departments = [
+    { department: 'Class 10A' },
+    { department: 'Class 9B' },
+    { department: 'Class 8C' },
+  ];
+
+  // When editing, initialize form with existing data
+  useEffect(() => {
+    if (sectionToEdit) {
+      // Ensure class matches one of the options exactly
+      const matchedClass = departments.find(
+        (d) => d.department === sectionToEdit.class
+      )?.department || '';
+
+      setValue({
+        name: sectionToEdit.name || '',
+        academicYear: sectionToEdit.academicYear || '',
+        class: matchedClass,
+        capacity: sectionToEdit.capacity || '',
+      });
+    }
+  }, [sectionToEdit]);
 
   const resetForm = () => {
     setValue({
-      name: "",
-      numericValue: "",
-      academic: "",
-      capacity: "",
-      description: "",
-      avatar: ""
+      name: '',
+      academicYear: '',
+      class: '',
+      capacity: '',
     });
-    setError({});
+    setError({ backendError: '' });
   };
 
-  useEffect(() => {
-    if (store.errors || store.admin.facultyAdded) {
-      setLoading(false);
-      if (store.admin.facultyAdded) {
-        resetForm();
-        dispatch({ type: SET_ERRORS, payload: {} });
-        dispatch({ type: ADD_FACULTY, payload: false });
-      }
-    }
-  }, [store.errors, store.admin.facultyAdded]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  useEffect(() => {
-    dispatch({ type: SET_ERRORS, payload: {} });
-  }, []);
+    // Simulate API call
+    setTimeout(() => {
+      console.log(sectionToEdit ? 'Updated Data:' : 'Submitted Data:', value);
+      resetForm();
+      setLoading(false);
+    }, 1000);
+  };
 
   return (
     <div className="flex-1 p-6 bg-gray-50">
       <div className="max-w-4xl mx-auto">
+        {/* Header */}
         <div className="flex items-center mb-8">
           <EditIcon className="text-indigo-600 mr-3" fontSize="large" />
-          <h1 className="text-2xl font-bold text-gray-800">Edit Class</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            {sectionToEdit ? 'Edit Section' : 'Add Section'}
+          </h1>
         </div>
 
+        {/* Form Card */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
           <form onSubmit={handleSubmit} className="p-6 space-y-6">
             <div className="grid grid-cols-12 gap-6">
+              {/* Session Name */}
               <div className="col-span-12 md:col-span-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Name
+                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <Person className="text-gray-500 mr-2" fontSize="small" />
+                  Session Name
                 </label>
                 <input
-                  placeholder="Enter class name"
+                  placeholder="Enter session name"
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                   type="text"
@@ -100,44 +109,67 @@ const Body = () => {
                 />
               </div>
 
+              {/* Academic Year */}
               <div className="col-span-12 md:col-span-6">
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <Cake className="text-gray-500 mr-2" fontSize="small" />
-                  Numeric Value
+                  <Work className="text-gray-500 mr-2" fontSize="small" />
+                  Academic Year
                 </label>
                 <input
-                  placeholder="e.g., 2024"
+                  placeholder="2024-2025"
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                  type="number"
-                  value={value.numericValue}
-                  onChange={(e) =>
-                    setValue({ ...value, numericValue: e.target.value })
-                  }
+                  type="text"
+                  value={value.academicYear}
+                  onChange={(e) => setValue({ ...value, academicYear: e.target.value })}
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-12 gap-6">
+              {/* Class */}
               <div className="col-span-12 md:col-span-6">
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <Cake className="text-gray-500 mr-2" fontSize="small" />
-                  Academic Year
+                  <School className="text-gray-500 mr-2" fontSize="small" />
+                  Class
                 </label>
-                <input
-                  placeholder="e.g., 2024"
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                  type="number"
-                  value={value.academic}
-                  onChange={(e) =>
-                    setValue({ ...value, academic: e.target.value })
-                  }
-                />
+                <FormControl fullWidth size="small">
+                  <Select
+                    required
+                    displayEmpty
+                    value={value.class}
+                    onChange={(e) => setValue({ ...value, class: e.target.value })}
+                    sx={{
+                      height: '40px',
+                      '& .MuiSelect-select': {
+                        paddingTop: '8px',
+                        paddingBottom: '8px',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#d1d5db',
+                      },
+                      '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#6366f1',
+                      },
+                      borderRadius: '8px',
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Select class</em>
+                    </MenuItem>
+                    {departments.map((dp, idx) => (
+                      <MenuItem key={idx} value={dp.department}>
+                        {dp.department}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </div>
 
+              {/* Capacity */}
               <div className="col-span-12 md:col-span-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <Work className="text-gray-500 mr-2" fontSize="small" />
                   Capacity
                 </label>
                 <input
@@ -145,44 +177,14 @@ const Body = () => {
                   required
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                   type="number"
+                  min="1"
                   value={value.capacity}
-                  onChange={(e) =>
-                    setValue({ ...value, capacity: e.target.value })
-                  }
+                  onChange={(e) => setValue({ ...value, capacity: e.target.value })}
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                <School className="text-gray-500 mr-2" fontSize="small" />
-                Description
-              </label>
-
-              <TextField
-                required
-                fullWidth
-                placeholder="Enter class description"
-                value={value.description}
-                onChange={(e) =>
-                  setValue({ ...value, description: e.target.value })
-                }
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '8px',
-                    height: '160px',          // custom height
-                    alignItems: 'flex-start', // align text at top
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#d1d5db',
-                  },
-                  '&:hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: '#6366f1',
-                  },
-                }}
-              />
-            </div>
-
+            {/* Form Actions */}
             <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">
               <Button
                 variant="outlined"
@@ -194,24 +196,21 @@ const Body = () => {
               <Button
                 type="submit"
                 variant="contained"
-                startIcon={<EditIcon />}
+                startIcon={loading ? null : sectionToEdit ? <EditIcon /> : <AddIcon />}
                 className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
                 disabled={loading}
               >
                 {loading ? (
-                  <Spinner
-                    message="Adding Class..."
-                    height={24}
-                    width={140}
-                    color="#ffffff"
-                    messageColor="#ffffff"
-                  />
+                  <CircularProgress size={20} color="inherit" />
+                ) : sectionToEdit ? (
+                  'Update Section'
                 ) : (
-                  "Edit Class"
+                  'Add Section'
                 )}
               </Button>
             </div>
 
+            {/* Error Display */}
             {error.backendError && (
               <Box className="mt-4 p-3 bg-red-50 rounded-lg">
                 <Typography className="text-red-600 text-sm">
