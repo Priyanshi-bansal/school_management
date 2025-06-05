@@ -46,7 +46,7 @@ export const adminLogin = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { username: existingAdmin.username, id: existingAdmin._id },
+      { username: existingAdmin.username, id: existingAdmin._id, role: "Admin"},
       "sEcReT",
       { expiresIn: "12h" }
     );
@@ -680,7 +680,7 @@ export const addOrganizationIP = async (req, res) => {
     const newIP = await OrganizationIP.create({
       ipAddress,
       description,
-      addedBy: req.user.id
+      addedBy: req.userId
     });
 
     res.status(201).json(newIP);

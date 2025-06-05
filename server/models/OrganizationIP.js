@@ -8,7 +8,7 @@ const organizationIPSchema = new mongoose.Schema({
   },
   addedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "admin",
+    ref: "Admin",
     required: true
   },
   description: {

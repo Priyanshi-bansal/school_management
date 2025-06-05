@@ -79,7 +79,7 @@ export const facultyLogin = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { email: existingFaculty.email, id: existingFaculty._id },
+      { username: existingFaculty.username, id: existingFaculty._id, role: "Faculty" },
       "sEcReT",
       { expiresIn: "12h" }
     );

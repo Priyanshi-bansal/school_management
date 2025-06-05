@@ -185,7 +185,7 @@ export const createClassTimetable = async (req, res) => {
       academicYearId,
       timetable,
       effectiveFrom,
-      createdBy: req.user.id
+      createdBy: req.userId
     }, { session });
 
     await session.commitTransaction();

@@ -49,4 +49,4 @@ const adminSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("admin", adminSchema);
+export default mongoose.model("Admin", adminSchema);

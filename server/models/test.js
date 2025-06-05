@@ -32,4 +32,4 @@ const testSchema = mongoose.Schema({
   },
 });
 
-export default mongoose.model("test", testSchema);
+export default mongoose.model("Test", testSchema);

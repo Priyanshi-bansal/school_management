@@ -20,7 +20,7 @@ const createAcademicYear = asyncHandler(async (req, res) => {
     endDate,
     description,
     isCurrent: req.body.isCurrent || false,
-    createdBy: req.user._id,
+    createdBy: req.userId,
   });
 
   res.status(201).json(academicYear);

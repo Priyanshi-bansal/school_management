@@ -24,7 +24,7 @@ const studentSchema = new Schema({
   subjects: [
     {
       type: Schema.Types.ObjectId,
-      ref: "subject",
+      ref: "Subject",
     },
   ],
   username: {
@@ -68,4 +68,4 @@ const studentSchema = new Schema({
   },
 });
 
-export default mongoose.model("student", studentSchema);
+export default mongoose.model("Student", studentSchema);
