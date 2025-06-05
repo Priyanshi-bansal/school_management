@@ -17,7 +17,7 @@ export const createSyllabus = async (req, res) => {
         classId,
         subjectId,
         academicYear,
-      createdBy: req.user._id
+      createdBy: req.userId
     });
     
     await syllabus.save();
@@ -83,8 +83,8 @@ export const updateSyllabus = async (req, res) => {
         classId,
         subjectId,
         academicYear,
-        updatedBy: req.user._id,
-        updatedByModel: req.user.role === 'admin' ? 'Admin' : 'Faculty',
+        updatedBy: req.userId,
+        updatedByModel: req.user.role === 'Admin' ? 'Admin' : 'Faculty',
         lastUpdated: Date.now()
       },
       { new: true, runValidators: true }
@@ -129,8 +129,8 @@ export const addChapter = async (req, res) => {
     }
     
     syllabus.chapters.push(req.body);
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -163,8 +163,8 @@ export const updateChapter = async (req, res) => {
       ...req.body
     };
     
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -188,8 +188,8 @@ export const deleteChapter = async (req, res) => {
       chap => chap._id.toString() !== chapterId
     );
     
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -221,8 +221,8 @@ export const addTopic = async (req, res) => {
     }
     
     chapter.topics.push(req.body);
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -253,8 +253,8 @@ export const updateTopic = async (req, res) => {
     }
     
     topic.set(req.body);
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -287,8 +287,8 @@ export const toggleTopicCompletion = async (req, res) => {
     topic.isCompleted = !topic.isCompleted;
     topic.completedOn = topic.isCompleted ? new Date() : null;
     
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -317,8 +317,8 @@ export const deleteTopic = async (req, res) => {
       topic => topic._id.toString() !== topicId
     );
     
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -344,8 +344,8 @@ export const addAssessment = async (req, res) => {
     }
     
     chapter.assessments.push(req.body);
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -376,8 +376,8 @@ export const updateAssessment = async (req, res) => {
     }
     
     assessment.set(req.body);
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -406,8 +406,8 @@ export const deleteAssessment = async (req, res) => {
       assessment => assessment._id.toString() !== assessmentId
     );
     
-    syllabus.updatedBy = req.user._id;
-    syllabus.updatedByModel = req.user.role === 'admin' ? 'Admin' : 'Faculty';
+    syllabus.updatedBy = req.userId;
+    syllabus.updatedByModel = req.user.role === 'Admin' ? 'Admin' : 'Faculty';
     syllabus.lastUpdated = Date.now();
     
     await syllabus.save();
@@ -523,9 +523,9 @@ export const cloneSyllabus = async (req, res) => {
       ...sourceSyllabus.toObject(),
       _id: new mongoose.Types.ObjectId(),
       academicYear: academicYearId,
-      createdBy: req.user._id,
-      updatedBy: req.user._id,
-      updatedByModel: req.user.role === 'admin' ? 'Admin' : 'Faculty',
+      createdBy: req.userId,
+      updatedBy: req.userId,
+      updatedByModel: req.user.role === 'Admin' ? 'Admin' : 'Faculty',
       lastUpdated: Date.now(),
       createdAt: new Date(),
       updatedAt: new Date()
@@ -549,7 +549,7 @@ export const cloneSyllabus = async (req, res) => {
 // Get syllabus for a student's enrolled class
 export const getStudentSyllabus = async (req, res) => {
   try {
-    const student = await Student.findById(req.user._id).populate('year');
+    const student = await Student.findById(req.userId).populate('year');
     if (!student) return res.status(404).json({ error: 'Student not found' });
 
     const syllabus = await Syllabus.findOne({
@@ -581,7 +581,7 @@ export const completeTopics = async (req, res) => {
       }
     });
 
-    syllabus.updatedBy = req.user._id;
+    syllabus.updatedBy = req.userId;
     await syllabus.save();
     res.json(syllabus);
   } catch (error) {

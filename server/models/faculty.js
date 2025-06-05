@@ -52,4 +52,4 @@ const facultySchema = mongoose.Schema({
 }, { timestamps: true
 });
 
-export default mongoose.model("faculty", facultySchema);
+export default mongoose.model("Faculty", facultySchema);

@@ -9,6 +9,8 @@ const auth = async (req, res, next) => {
     if (token) {
       decodedData = jwt.verify(token, "sEcReT");
       req.userId = decodedData?.id;
+      req.username = decodedData?.username;
+      req.user.role = decodedData?.role;
     }
   }
     next();

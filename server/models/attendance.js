@@ -3,11 +3,11 @@ const { Schema } = mongoose;
 const attendenceSchema = new Schema({
   student: {
     type: Schema.Types.ObjectId,
-    ref: "student",
+    ref: "Student",
   },
   subject: {
     type: Schema.Types.ObjectId,
-    ref: "subject",
+    ref: "Subject",
   },
   totalLecturesByFaculty: {
     type: Number,
@@ -35,4 +35,4 @@ const attendenceSchema = new Schema({
   }
 });
 
-export default mongoose.model("attendance", attendenceSchema);
+export default mongoose.model("Attendance", attendenceSchema);

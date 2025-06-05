@@ -4,11 +4,11 @@ const { Schema } = mongoose;
 const marksSchema = new Schema({
   exam: {
     type: Schema.Types.ObjectId,
-    ref: "test",
+    ref: "Test",
   },
   student: {
     type: Schema.Types.ObjectId,
-    ref: "student",
+    ref: "Student",
   },
   marks: {
     type: Number,
@@ -16,4 +16,4 @@ const marksSchema = new Schema({
   },
 });
 
-export default mongoose.model("marks", marksSchema);
+export default mongoose.model("Marks", marksSchema);

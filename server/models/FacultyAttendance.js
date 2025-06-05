@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const facultyAttendanceSchema = new mongoose.Schema({
   faculty: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "faculty",
+    ref: "Faculty",
     required: true
   },
   date: {

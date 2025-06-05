@@ -102,6 +102,9 @@ import FeesStructure from "./components/admin/feesStructure/FeesStructure";
 import AddFees from "./components/admin/addfees/AddFees";
 import EditFees from "./components/admin/editfees/EditFees";
 import EdittestManage from "./components/admin/edittestmanage/EdittestManage";
+import FeePayment from "./components/admin/feepayment/FeePayment";
+import AddPayment from "./components/admin/addpayment/AddPayment";
+import EditPayment from "./components/admin/editpayment/EditPayment";
 
 
 const App = () => {

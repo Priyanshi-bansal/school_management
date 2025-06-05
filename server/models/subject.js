@@ -24,8 +24,8 @@ const subjectSchema = new Schema({
   },
   attendence: {
     type: Schema.Types.ObjectId,
-    ref: "attendence",
+    ref: "Attendence",
   },
 });
 
-export default mongoose.model("subject", subjectSchema);
+export default mongoose.model("Subject", subjectSchema);

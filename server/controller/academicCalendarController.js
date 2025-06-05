@@ -28,7 +28,7 @@ const createAcademicCalendarEvent = asyncHandler(async (req, res) => {
     forClass,
     forSection,
     isImportant: isImportant || false,
-    createdBy: req.user._id,
+    createdBy: req.userId,
   });
 
   res.status(201).json(event);
