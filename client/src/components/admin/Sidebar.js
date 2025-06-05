@@ -166,6 +166,15 @@ const Sidebar = () => {
         // { icon: <Delete />, label: "Delete Fees Management", path: "/admin/deletesFees Management" }
       ]
     },
+     { 
+      header: "Management Salary",
+      items: [
+        { icon: <MenuBook />, label: " Salary Structure", path: "/admin/getSalary" },
+         
+        // { icon: <Add />, label: "Management Salary", path: "/admin/addsubject" },
+      
+      ]
+    },
 ];
 
   return (

@@ -3,7 +3,7 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 import Body from "./Body";
 
-const EditSubject = () => {
+const EditSalary = () => {
   return (
     <div>
 
@@ -25,4 +25,4 @@ const EditSubject = () => {
   )
 }
 
-export default EditSubject
+export default EditSalary
