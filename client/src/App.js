@@ -105,6 +105,10 @@ import EdittestManage from "./components/admin/edittestmanage/EdittestManage";
 import FeePayment from "./components/admin/feepayment/FeePayment";
 import AddPayment from "./components/admin/addpayment/AddPayment";
 import EditPayment from "./components/admin/editpayment/EditPayment";
+import GetSalary from "./components/admin/getSalary/GetSalary";
+import EditSalary from "./components/admin/EditSlary/EditSalary";
+import AddSalary from "./components/admin/addSalary/AddSalary";
+import ViewSalary from "./components/admin/viewSalary/ViewSalary";
 
 
 const App = () => {
@@ -157,9 +161,6 @@ const App = () => {
       <Route path="admin/gettestadmin" element={<GettestAdmin />} />
       <Route path="admin/addgettest" element={<AddgetTest />} />
 
-
-
-
       <Route path="/admin/getacademic" element={<GetAcademic />} />
       <Route path="/admin/addacedmicyear" element={<AddAcedmicYear />} />
       <Route path="/admin/editacadamic" element={<EditAcademic />} />
@@ -187,12 +188,15 @@ const App = () => {
       <Route path="/admin/addtimetablemanagement" element={<AddTimetablemanagement />} />
       <Route path="/admin/feesstructure" element={<FeesStructure />} />
       <Route path="/admin/addfees" element={<AddFees />} />
-      <Route path="/admin/editfees" element={<EditFees/>} />
-      <Route path="/admin/edittestmanage" element={<EdittestManage/>} />
- 
+      <Route path="/admin/editfees" element={<EditFees />} />
+      <Route path="/admin/edittestmanage" element={<EdittestManage />} />
       <Route path="/admin/feepayment" element={<FeePayment />} />
       <Route path="/admin/addpayment" element={<AddPayment />} />
       <Route path="/admin/editpayment" element={<EditPayment />} />
+      <Route path="/admin/getSalary" element={<GetSalary />} />
+      <Route path="/admin/editsalary" element={<EditSalary />} />
+      <Route path="/admin/addSalary" element={<AddSalary />} />
+      <Route path="/admin/viewSalary" element={<ViewSalary />} />
 
 
 
