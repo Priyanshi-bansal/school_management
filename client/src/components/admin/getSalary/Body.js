@@ -10,9 +10,12 @@ import {
   Edit as EditIcon,
  
 } from "@mui/icons-material";
+
+
 import {
   Button,
   Box,
+  InputLabel,
   Typography,
   Checkbox,
   Table,
@@ -43,6 +46,7 @@ const Body = () => {
     ]
   });
 
+
   const [faculty, setFaculty] = useState([
     {
       _id: "1",
@@ -72,6 +76,8 @@ const Body = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchedFaculty, setSearchedFaculty] = useState([]);
   const [selectedFaculty, setSelectedFaculty] = useState([]);
+
+
 
  
 
@@ -110,10 +116,7 @@ const Body = () => {
     setFaculty(updated);
     setSelectedFaculty((prev) => prev.filter((fid) => fid !== id));
   };
-  const handleClearFilters = () => {
-  setSearchQuery("");
-  setSearchedFaculty(faculty);
-};
+
 
 
   const handleStatusChange = (id, newStatus) => {
@@ -149,48 +152,69 @@ const Body = () => {
     <Box sx={{ flex: 0.8, mt: 3, p: 2 }}>
       <Box sx={{ mb: 4 }}>
         {/* Header */}
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <PaidIcon color="primary" sx={{ mr: 1, height: 42, width: 42 }} />
-          <Typography variant="h5">Salary Management</Typography>
-          <Chip label={`Total Faculty: ${faculty.length}`} sx={{ ml: 2 }} />
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Add />}
-            sx={{ ml: "auto" }}
-            onClick={() => navigate("/admin/addSalary")}
-          >
-            Add Salary Record
-          </Button>
-        </Box>
+       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                < PaidIcon color="primary" sx={{ mr: 1 }} />
+                <Typography variant="h5">Salary Structure</Typography>
+                <Chip
+                  label={`Total Classes: ${faculty.length}`}
+                  color="primary"
+                  variant="outlined"
+                  sx={{ ml: 2 }}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<Add />}
+                  onClick={() => navigate("/admin/addSalary")}
+                  sx={{
+                    ml: "auto",
+                    px: 3,
+                    py: 1.5,
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    borderRadius: "8px",
+                    boxShadow: 2,
+                    textTransform: "none",
+                  }}
+                >
+                  Add Salary
+                </Button>
+              </Box>
 
       
 
         {/* Search & Table */}
         <Paper sx={{ p: 3 }}>
-          <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-            <TextField
-              fullWidth
-              size="small"
-              label="Search Faculty"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                endAdornment: (
-                  <IconButton onClick={handleSearch}><Search /></IconButton>
-                )
-              }}
-            />
-             <Button
-            variant="outlined"
-            startIcon={<ClearAll />}
-            onClick={handleClearFilters}
-            size="small"
-            sx={{ height: "40px", whiteSpace: "nowrap" }}
-          >
-            Clear Filters
-          </Button>
-          </Box>
+          <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
+         
+                     <TextField
+                       name="searchQuery"
+                    
+                     
+                       label="Search"
+                       variant="outlined"
+                       size="small"
+         
+                       sx={{ flexGrow: 1, height: '40px' }}
+                       InputProps={{
+                         endAdornment: (
+                           <IconButton>
+                             <Search />
+                           </IconButton>
+                         ),
+                       }}
+                     />
+         
+                     <Button
+                       variant="outlined"
+                       startIcon={<ClearAll />}
+                   
+                       size="small"
+                       sx={{ height: '40px', whiteSpace: 'nowrap' }}
+                     >
+                       Clear Filters
+                     </Button>
+                   </Box>
 
           <TableContainer>
             <Table>
@@ -263,7 +287,7 @@ const Body = () => {
                         <Tooltip title="Edit">
                           <IconButton 
                              color="primary"
-                          onClick={() => navigate("/admin/viewSalary")}>
+                          onClick={() => navigate("/admin/editsalary")}>
                             <EditIcon />
                           </IconButton>
                         </Tooltip>

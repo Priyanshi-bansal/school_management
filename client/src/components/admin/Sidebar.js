@@ -170,10 +170,13 @@ const Sidebar = () => {
       header: "Management Salary",
       items: [
         { icon: <MenuBook />, label: " Salary Structure", path: "/admin/getSalary" },
+         { icon: <MenuBook />, label: "calculate salary", path: "/admin/calculateSalary" },
          
         // { icon: <Add />, label: "Management Salary", path: "/admin/addsubject" },
       
       ]
+
+    
     },
 ];
 
