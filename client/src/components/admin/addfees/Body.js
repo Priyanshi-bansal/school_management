@@ -142,64 +142,68 @@ const Body = () => {
             </div>
 
             {/* Fee Components Section */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                <School className="text-gray-500 mr-2" fontSize="small" />
-                Components
-              </label>
+           <div>
+  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+    <School className="text-gray-500 mr-2" fontSize="small" />
+    Components
+  </label>
 
-              {value.feeComponents.map((component, index) => (
-                <div key={index} className="grid grid-cols-12 gap-4 mb-3 items-end">
-                  <div className="col-span-5">
-                    <TextField
-                      fullWidth
-                      size="small" // 🔽 Makes the input box shorter
-                      label=" Name"
-                      placeholder="e.g., Tuition Fee"
-                      value={component.name}
-                      onChange={(e) =>
-                        handleFeeComponentChange(index, 'name', e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-                  <div className="col-span-5">
-                    <TextField
-                      fullWidth
-                      size="small" // 🔽 Makes the input box shorter
-                      label="Amount"
-                      placeholder="e.g., 5000"
-                      type="number"
-                      value={component.amount}
-                      onChange={(e) =>
-                        handleFeeComponentChange(index, 'amount', e.target.value)
-                      }
-                      required
-                    />
-                  </div>
-                  <div className="col-span-2 flex space-x-2">
-                    {index === value.feeComponents.length - 1 && (
-                      <IconButton
-                        color="primary"
-                        onClick={addFeeComponent}
-                        aria-label="add component"
-                      >
-                        <AddIcon />
-                      </IconButton>
-                    )}
-                    {value.feeComponents.length > 1 && (
-                      <IconButton
-                        color="error"
-                        onClick={() => removeFeeComponent(index)}
-                        aria-label="remove component"
-                      >
-                        <RemoveIcon />
-                      </IconButton>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+  {/* ⬇️ Apply spacing here */}
+  <div className="space-y-4">
+    {value.feeComponents.map((component, index) => (
+      <div key={index} className="grid grid-cols-12 gap-4 pb-5">
+        <div className="col-span-5">
+          <TextField
+            fullWidth
+            size="small"
+            label=" Name"
+            placeholder="e.g., Tuition Fee"
+            value={component.name}
+            onChange={(e) =>
+              handleFeeComponentChange(index, "name", e.target.value)
+            }
+            required
+          />
+        </div>
+        <div className="col-span-5">
+          <TextField
+            fullWidth
+            size="small"
+            label="Amount"
+            placeholder="e.g., 5000"
+            type="number"
+            value={component.amount}
+            onChange={(e) =>
+              handleFeeComponentChange(index, "amount", e.target.value)
+            }
+            required
+          />
+        </div>
+        <div className="col-span-2 flex space-x-2">
+          {index === value.feeComponents.length - 1 && (
+            <IconButton
+              color="primary"
+              onClick={addFeeComponent}
+              aria-label="add component"
+            >
+              <AddIcon />
+            </IconButton>
+          )}
+          {value.feeComponents.length > 1 && (
+            <IconButton
+              color="error"
+              onClick={() => removeFeeComponent(index)}
+              aria-label="remove component"
+            >
+              <RemoveIcon />
+            </IconButton>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
 
 
             <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">

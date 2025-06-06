@@ -120,6 +120,7 @@ import HomeWorkSubmissio from "./components/faculty/homeworksubmission/HomeWorkS
 import GradeSubmission from "./components/faculty/gradesubmission/GradeSubmission.js";
 import SendReminder from "./components/faculty/sendreminder/SendReminder.js";
 
+import CalculateSalary from "./components/admin/calculateSalary/CalculateSalary";
 
 
 const App = () => {
@@ -209,9 +210,14 @@ const App = () => {
       <Route path="/admin/editsalary" element={<EditSalary />} />
       <Route path="/admin/addSalary" element={<AddSalary />} />
       <Route path="/admin/viewSalary" element={<ViewSalary />} />
+
       <Route path="/admin/processsalarypayment" element={<ProcessSalaryPayment />} />
       <Route path="/admin/viewpsp" element={<ViewPSP />} />
       <Route path="/admin/addpsp" element={<AddPSP />} />
+
+      <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
+        
+
 
 
 
@@ -236,9 +242,9 @@ const App = () => {
       <Route path="/faculty/homework" element={<HomeWork />} />
       <Route path="/faculty/addhomework" element={<AddHomeWork />} />
       <Route path="/faculty/edithomework" element={<EditHomeWork />} />
-       <Route path="/faculty/homeworksubmission" element={<HomeWorkSubmissio />} />
-            <Route path="/faculty/gradesubmission" element={<GradeSubmission />} />
-                 <Route path="/faculty/sendreminder" element={<SendReminder />} />
+      <Route path="/faculty/homeworksubmission" element={<HomeWorkSubmissio />} />
+      <Route path="/faculty/gradesubmission" element={<GradeSubmission />} />
+      <Route path="/faculty/sendreminder" element={<SendReminder />} />
 
       {/* Student  */}
 
@@ -254,6 +260,7 @@ const App = () => {
       <Route path="/student/attendance" element={<Attendance />} />
       <Route path="/student/StudentTest" element={<StudentTest />} />
       <Route path="/student/DailyAttendance" element={<DailyAttendance />} />
+      
 
     </Routes>
   );
