@@ -54,8 +54,8 @@ import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
-import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
-import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
+import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
+import StuAttendance from "./components/admin/stuattendance/StuAttendance";
 
 import ManageSection from "./components/admin/managesection/ManageSection";
 import GetClass from "./components/admin/GetClass/GetClass";
@@ -109,10 +109,22 @@ import GetSalary from "./components/admin/getSalary/GetSalary";
 import EditSalary from "./components/admin/EditSlary/EditSalary";
 import AddSalary from "./components/admin/addSalary/AddSalary";
 import ViewSalary from "./components/admin/viewSalary/ViewSalary";
+import ProcessSalaryPayment from "./components/admin/procesSalarypayment/ProcessSalaryPayment";
+
+import AddPSP from "./components/admin/addPSP/AddPSP.js";
+import ViewPSP from "./components/admin/viewPSP/ViewPSP.js"
+import HomeWork from "./components/faculty/homework/HomeWork.js";
+import EditHomeWork from "./components/faculty/edithomework/EditHomeWork.js";
+import AddHomeWork from "./components/faculty/addhomework/AddHomeWork.js";
+import HomeWorkSubmissio from "./components/faculty/homeworksubmission/HomeWorkSubmissio.js";
+import GradeSubmission from "./components/faculty/gradesubmission/GradeSubmission.js";
+import SendReminder from "./components/faculty/sendreminder/SendReminder.js";
+
 import CalculateSalary from "./components/admin/calculateSalary/CalculateSalary";
 
 
 const App = () => {
+
   return (
     <Routes>
       <Route exact path="/" element={<Login />} />
@@ -198,8 +210,14 @@ const App = () => {
       <Route path="/admin/editsalary" element={<EditSalary />} />
       <Route path="/admin/addSalary" element={<AddSalary />} />
       <Route path="/admin/viewSalary" element={<ViewSalary />} />
-            <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
+
+      <Route path="/admin/processsalarypayment" element={<ProcessSalaryPayment />} />
+      <Route path="/admin/viewpsp" element={<ViewPSP />} />
+      <Route path="/admin/addpsp" element={<AddPSP />} />
+
+      <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
         
+
 
 
 
@@ -221,6 +239,12 @@ const App = () => {
       <Route path="/faculty/Marks" element={<Marks />} />
       <Route path="/faculty/StudentAttendance" element={<StudentAttendance />} />
       <Route path="/faculty/gettestadmin" element={<GettestAdmin />} />
+      <Route path="/faculty/homework" element={<HomeWork />} />
+      <Route path="/faculty/addhomework" element={<AddHomeWork />} />
+      <Route path="/faculty/edithomework" element={<EditHomeWork />} />
+      <Route path="/faculty/homeworksubmission" element={<HomeWorkSubmissio />} />
+      <Route path="/faculty/gradesubmission" element={<GradeSubmission />} />
+      <Route path="/faculty/sendreminder" element={<SendReminder />} />
 
       {/* Student  */}
 

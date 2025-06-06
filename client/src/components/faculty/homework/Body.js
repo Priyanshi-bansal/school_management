@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import {
-  Engineering as EngineeringIcon,
+  Assignment as AssignmentIcon,
   Delete as DeleteIcon,
   Search,
   ClearAll,
@@ -34,6 +34,7 @@ import {
   Stack,
   useMediaQuery,
   useTheme,
+  Avatar,
 } from "@mui/material";
 
 const Body = () => {
@@ -41,79 +42,106 @@ const Body = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [faculty, setFaculty] = useState([
+  const [homeworks, setHomeworks] = useState([
     {
       _id: "1",
-      name: "Dr. John Doe",
-      class: "10",
+      title: "Math Homework",
+      subject: { name: "Mathematics" },
+      class: { name: "10" },
+      section: { name: "A" },
       academicYear: "2024-2025",
-      classTeacher: "ravi",
+      assignedBy: { name: "Dr. John Doe" },
+      assignedDate: "2024-05-01",
+      dueDate: "2024-05-10",
+      submissionType: "file",
+      points: 100,
+      status: "published",
     },
     {
       _id: "2",
-      name: "Ms. Jane Smith",
-      class: "9",
+      title: "Science Project",
+      subject: { name: "Science" },
+      class: { name: "9" },
+      section: { name: "B" },
       academicYear: "2024-2025",
-      classTeacher: "rahul",
+      assignedBy: { name: "Ms. Jane Smith" },
+      assignedDate: "2024-05-02",
+      dueDate: "2024-05-15",
+      submissionType: "both",
+      points: 150,
+      status: "published",
     },
   ]);
 
-  const [departments, setDepartments] = useState([
-    { department: "Computer Science" },
-    { department: "Mechanical" },
-    { department: "Electrical" },
+  const [subjects, setSubjects] = useState([
+    { name: "Mathematics" },
+    { name: "Science" },
+    { name: "English" },
   ]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("all");
-  const [searchedFaculty, setSearchedFaculty] = useState(faculty);
-  const [selectedFaculty, setSelectedFaculty] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("all");
+  const [searchedHomeworks, setSearchedHomeworks] = useState(homeworks);
+  const [selectedHomeworks, setSelectedHomeworks] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setSearchedFaculty(faculty);
-  }, [faculty]);
+    setSearchedHomeworks(homeworks);
+  }, [homeworks]);
 
   const handleSearch = () => {
-    let filtered = [...faculty];
-    if (selectedDepartment !== "all") {
-      filtered = filtered.filter((f) => f.department === selectedDepartment);
+    let filtered = [...homeworks];
+    if (selectedSubject !== "all") {
+      filtered = filtered.filter((h) => h.subject.name === selectedSubject);
     }
     if (searchQuery.trim()) {
       filtered = filtered.filter(
-        (f) =>
-          f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          f.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          f.email?.toLowerCase().includes(searchQuery.toLowerCase())
+        (h) =>
+          h.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          h.assignedBy.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          h.description?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    setSearchedFaculty(filtered);
+    setSearchedHomeworks(filtered);
   };
 
   const handleCheckboxChange = (id) => {
-    setSelectedFaculty((prev) =>
-      prev.includes(id) ? prev.filter((fid) => fid !== id) : [...prev, id]
+    setSelectedHomeworks((prev) =>
+      prev.includes(id) ? prev.filter((hid) => hid !== id) : [...prev, id]
     );
   };
 
   const handleDelete = () => {
-    const updated = faculty.filter((f) => !selectedFaculty.includes(f._id));
-    setFaculty(updated);
-    setSelectedFaculty([]);
-    setSearchedFaculty(updated);
+    const updated = homeworks.filter((h) => !selectedHomeworks.includes(h._id));
+    setHomeworks(updated);
+    setSelectedHomeworks([]);
+    setSearchedHomeworks(updated);
   };
 
   const clearFilters = () => {
-    setSelectedDepartment("all");
+    setSelectedSubject("all");
     setSearchQuery("");
-    setSearchedFaculty(faculty);
+    setSearchedHomeworks(homeworks);
   };
 
   const handleDeleteSingle = (id) => {
-    const updatedFaculty = faculty.filter((f) => f._id !== id);
-    setFaculty(updatedFaculty);
-    setSearchedFaculty(updatedFaculty);
-    setSelectedFaculty((prev) => prev.filter((fid) => fid !== id));
+    const updatedHomeworks = homeworks.filter((h) => h._id !== id);
+    setHomeworks(updatedHomeworks);
+    setSearchedHomeworks(updatedHomeworks);
+    setSelectedHomeworks((prev) => prev.filter((hid) => hid !== id));
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "published":
+        return "success";
+      case "draft":
+        return "warning";
+      case "archived":
+        return "error";
+      default:
+        return "default";
+    }
   };
 
   return (
@@ -127,12 +155,12 @@ const Body = () => {
           sx={{ mb: 2 }}
         >
           <Box display="flex" alignItems="center" flexWrap="wrap" gap={1}>
-            <EngineeringIcon color="primary" sx={{ mr: 1 }} />
+            <AssignmentIcon color="primary" sx={{ mr: 1 }} />
             <Typography variant="h5" color="textPrimary">
-              Section Management
+              Homework Management
             </Typography>
             <Chip
-              label={`Total Faculty: ${faculty.length}`}
+              label={`Total Homeworks: ${homeworks.length}`}
               color="primary"
               variant="outlined"
               size={isSmallScreen ? "small" : "medium"}
@@ -143,7 +171,7 @@ const Body = () => {
             variant="contained"
             color="primary"
             startIcon={<Add />}
-            onClick={() => navigate("/admin/addsection")}
+            onClick={() => navigate("/faculty/addhomework")}
             sx={{
               px: { xs: 2, sm: 3 },
               py: 1,
@@ -157,7 +185,7 @@ const Body = () => {
               mt: { xs: 1, sm: 0 },
             }}
           >
-            Add Section
+            Add Homework
           </Button>
         </Stack>
 
@@ -169,16 +197,16 @@ const Body = () => {
             sx={{ mb: 3 }}
           >
             <FormControl sx={{ minWidth: { xs: "100%", sm: 200 }, height: '40px' }} size="small">
-              <InputLabel>Department</InputLabel>
+              <InputLabel>Subject</InputLabel>
               <Select
-                value={selectedDepartment}
-                onChange={(e) => setSelectedDepartment(e.target.value)}
-                label="Department"
+                value={selectedSubject}
+                onChange={(e) => setSelectedSubject(e.target.value)}
+                label="Subject"
               >
-                <MenuItem value="all">All Departments</MenuItem>
-                {departments.map((dp, idx) => (
-                  <MenuItem key={idx} value={dp.department}>
-                    {dp.department}
+                <MenuItem value="all">All Subjects</MenuItem>
+                {subjects.map((sub, idx) => (
+                  <MenuItem key={idx} value={sub.name}>
+                    {sub.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -188,7 +216,7 @@ const Body = () => {
               name="searchQuery"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              label="Search Faculty"
+              label="Search Homeworks"
               variant="outlined"
               size="small"
               fullWidth
@@ -228,56 +256,85 @@ const Body = () => {
                       <TableCell padding="checkbox">
                         <Checkbox
                           indeterminate={
-                            selectedFaculty.length > 0 &&
-                            selectedFaculty.length < searchedFaculty.length
+                            selectedHomeworks.length > 0 &&
+                            selectedHomeworks.length < searchedHomeworks.length
                           }
                           checked={
-                            searchedFaculty.length > 0 &&
-                            selectedFaculty.length === searchedFaculty.length
+                            searchedHomeworks.length > 0 &&
+                            selectedHomeworks.length === searchedHomeworks.length
                           }
                           onChange={() => {
                             if (
-                              selectedFaculty.length === searchedFaculty.length
+                              selectedHomeworks.length === searchedHomeworks.length
                             ) {
-                              setSelectedFaculty([]);
+                              setSelectedHomeworks([]);
                             } else {
-                              setSelectedFaculty(
-                                searchedFaculty.map((f) => f._id)
+                              setSelectedHomeworks(
+                                searchedHomeworks.map((h) => h._id)
                               );
                             }
                           }}
                         />
                       </TableCell>
                       <TableCell>#</TableCell>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Class</TableCell>
-                      <TableCell>Academic Year</TableCell>
-                      <TableCell>Class Teacher</TableCell>
+                      <TableCell>Title</TableCell>
+                      <TableCell>Subject</TableCell>
+                      <TableCell>Class/Section</TableCell>
+                      <TableCell>Assigned By</TableCell>
+                      <TableCell>Due Date</TableCell>
+                      <TableCell>Points</TableCell>
+                      <TableCell>Status</TableCell>
                       <TableCell>Action</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {searchedFaculty.length > 0 ? (
-                      searchedFaculty.map((fac, idx) => (
-                        <TableRow key={fac._id} hover>
+                    {searchedHomeworks.length > 0 ? (
+                      searchedHomeworks.map((hw, idx) => (
+                        <TableRow key={hw._id} hover>
                           <TableCell padding="checkbox">
                             <Checkbox
-                              checked={selectedFaculty.includes(fac._id)}
-                              onChange={() => handleCheckboxChange(fac._id)}
+                              checked={selectedHomeworks.includes(hw._id)}
+                              onChange={() => handleCheckboxChange(hw._id)}
                             />
                           </TableCell>
                           <TableCell>{idx + 1}</TableCell>
-                          <TableCell>{fac.name}</TableCell>
-                          <TableCell>{fac.class}</TableCell>
-                          <TableCell>{fac.academicYear}</TableCell>
-                          <TableCell>{fac.classTeacher}</TableCell>
+                          <TableCell>
+                            <Typography variant="body2" fontWeight="medium">
+                              {hw.title}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>{hw.subject?.name}</TableCell>
+                          <TableCell>
+                            {hw.class?.name} {hw.section?.name ? `/${hw.section.name}` : ''}
+                          </TableCell>
+                          <TableCell>
+                            <Stack direction="row" alignItems="center" spacing={1}>
+                              <Avatar sx={{ width: 24, height: 24, fontSize: '0.75rem' }}>
+                                {hw.assignedBy?.name?.charAt(0)}
+                              </Avatar>
+                              <Typography variant="body2">
+                                {hw.assignedBy?.name}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell>
+                            {new Date(hw.dueDate).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>{hw.points}</TableCell>
+                          <TableCell>
+                            <Chip
+                              label={hw.status}
+                              color={getStatusColor(hw.status)}
+                              size="small"
+                            />
+                          </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={1}>
                               <IconButton
                                 color="primary"
                                 size="small"
                                 onClick={() =>
-                                  navigate(`/admin/viewsectiondetail`)
+                                  navigate(`/admin/viewhomework/${hw._id}`)
                                 }
                               >
                                 <VisibilityIcon fontSize={isSmallScreen ? "small" : "medium"} />
@@ -287,9 +344,9 @@ const Body = () => {
                                 color="primary"
                                 size="small"
                                 onClick={() =>
-                                  navigate('/admin/editsection', {
+                                  navigate('/faculty/edithomework', {
                                     state: {
-                                      section: fac,
+                                      homework: hw,
                                     },
                                   })
                                 }
@@ -300,7 +357,7 @@ const Body = () => {
                               <IconButton
                                 color="error"
                                 size="small"
-                                onClick={() => handleDeleteSingle(fac._id)}
+                                onClick={() => handleDeleteSingle(hw._id)}
                               >
                                 <DeleteIcon fontSize={isSmallScreen ? "small" : "medium"} />
                               </IconButton>
@@ -310,8 +367,8 @@ const Body = () => {
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={7} sx={{ textAlign: "center", py: 4 }}>
-                          No faculty found matching your criteria
+                        <TableCell colSpan={10} sx={{ textAlign: "center", py: 4 }}>
+                          No homeworks found matching your criteria
                         </TableCell>
                       </TableRow>
                     )}
@@ -319,7 +376,7 @@ const Body = () => {
                 </Table>
               </TableContainer>
 
-              {selectedFaculty.length > 0 && (
+              {selectedHomeworks.length > 0 && (
                 <Box
                   sx={{
                     display: "flex",
@@ -333,7 +390,7 @@ const Body = () => {
                   }}
                 >
                   <Typography variant="body2">
-                    {selectedFaculty.length} faculty member(s) selected
+                    {selectedHomeworks.length} homework(s) selected
                   </Typography>
                   <Button
                     variant="contained"
