@@ -170,6 +170,7 @@ const Sidebar = () => {
       header: "Management Salary",
       items: [
         { icon: <MenuBook />, label: " Salary Structure", path: "/admin/getSalary" },
+            { icon: <MenuBook />, label: "Process Salary Payment", path: "/admin/processsalarypayment" },
          
         // { icon: <Add />, label: "Management Salary", path: "/admin/addsubject" },
       

@@ -58,7 +58,15 @@ const Sidebar = () => {
         { icon: <Event />, label: "Class Timetable", path: "#" },
         { icon: <Class />, label: "Exam Schedule", path: "#" }
       ]
+    },
+     { 
+      header: "Schedule",
+      items: [
+        { icon: <Event />, label: "Class Timetable", path: "#" },
+        { icon: <Class />, label: "Exam Schedule", path: "#" }
+      ]
     }
+
   ];
 
   return (

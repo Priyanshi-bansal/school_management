@@ -55,6 +55,14 @@ const Sidebar = () => {
         { icon: <Assessment />, label: "View Results", path: "/faculty/result" },
         { icon: <School />, label: "Class Performance", path: "/faculty/classperformance" }
       ]
+    },
+    { 
+      header: "Homework",
+      items: [
+        { icon: <Assessment />, label: "Homework", path: "/faculty/homework" },
+               { icon: <Assessment />, label: "Homework submission", path: "/faculty/homeworksubmission" },
+       
+      ]
     }
   ];
 
