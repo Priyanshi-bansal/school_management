@@ -11,9 +11,14 @@ import {
   Paper,
   Grid,
   Divider,
+  IconButton,
 } from '@mui/material';
-import { Add as AddIcon } from '@mui/icons-material';
+import { Paid as PaidIcon } from '@mui/icons-material';
 
+import {
+  Add as AddIcon,
+  Remove as RemoveIcon,
+} from "@mui/icons-material";
 const Body = () => {
   const initialData = {
     name: "Assistant Professor Salary Structure 2023",
@@ -23,14 +28,44 @@ const Body = () => {
   };
 
   const [formData, setFormData] = useState(initialData);
-  const [newComponent, setNewComponent] = useState({
-    name: "",
-    type: "earning",
-    calculationType: "fixed",
-    amount: 0,
-    percentage: 0,
-    basedOn: ""
-  });
+  const [salaryComponents, setSalaryComponents] = useState([
+    {
+      name: "",
+      type: "earning",
+      calculationType: "fixed",
+      amount: "",
+      percentage: "",
+      basedOn: "",
+    },
+  ]);
+
+
+  const addSalaryComponent = () => {
+    setSalaryComponents([
+      ...salaryComponents,
+      {
+        name: "",
+        type: "earning",
+        calculationType: "fixed",
+        amount: "",
+        percentage: "",
+        basedOn: "",
+      },
+    ]);
+  };
+
+  const removeSalaryComponent = (index) => {
+    const updatedComponents = [...salaryComponents];
+    updatedComponents.splice(index, 1);
+    setSalaryComponents(updatedComponents);
+  };
+
+  const handleSalaryComponentChange = (index, field, value) => {
+    const updatedComponents = [...salaryComponents];
+    updatedComponents[index][field] = value;
+    setSalaryComponents(updatedComponents);
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,32 +75,6 @@ const Body = () => {
     }));
   };
 
-  const handleNewComponentChange = (e) => {
-    const { name, value } = e.target;
-    setNewComponent(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const addComponent = () => {
-    if (!newComponent.name.trim()) return;
-
-    setFormData(prev => ({
-      ...prev,
-      components: [...prev.components, newComponent]
-    }));
-
-    setNewComponent({
-      name: "",
-      type: "earning",
-      calculationType: "fixed",
-      amount: 0,
-      percentage: 0,
-      basedOn: ""
-    });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitted structure:", formData);
@@ -73,9 +82,10 @@ const Body = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3,width:1000 }}>
       <Typography variant="h5" gutterBottom>
-        Salary Structure Form
+        <PaidIcon color="primary" sx={{ mr: 1, height: 42, width: 42 }} />
+        Edit salary
       </Typography>
 
       <Paper elevation={3} sx={{ p: 4 }}>
@@ -124,86 +134,81 @@ const Body = () => {
           <Divider sx={{ my: 4 }} />
 
           <Typography variant="h6" gutterBottom>
-            Add New Component
+            Salary Components
           </Typography>
 
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={3}>
-              <TextField
-                fullWidth
-                label="Component Name"
-                name="name"
-                value={newComponent.name}
-                onChange={handleNewComponentChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <FormControl fullWidth>
-                <InputLabel>Type</InputLabel>
-                <Select
-                  name="type"
-                  value={newComponent.type}
-                  onChange={handleNewComponentChange}
-                  label="Type"
-                  required
-                >
-                  <MenuItem value="earning">Earning</MenuItem>
-                  <MenuItem value="deduction">Deduction</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <FormControl fullWidth>
-                <InputLabel>Calculation Type</InputLabel>
-                <Select
-                  name="calculationType"
-                  value={newComponent.calculationType}
-                  onChange={handleNewComponentChange}
-                  label="Calculation Type"
-                  required
-                >
-                  <MenuItem value="fixed">Fixed Amount</MenuItem>
-                  <MenuItem value="percentage">Percentage</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {newComponent.calculationType === "fixed" ? (
-              <Grid item xs={6} md={2}>
+          {salaryComponents.map((component, index) => (
+            <Grid container spacing={2} alignItems="center" key={index}>
+              <Grid item xs={12} md={3}>
                 <TextField
                   fullWidth
-                  label="Amount"
-                  name="amount"
-                  type="number"
-                  value={newComponent.amount}
-                  onChange={handleNewComponentChange}
+                  label="Component Name"
+                  value={component.name}
+                  onChange={(e) => handleSalaryComponentChange(index, "name", e.target.value)}
                   required
-                  inputProps={{ min: 0 }}
                 />
               </Grid>
-            ) : (
-              <>
-                <Grid item xs={6} md={1}>
+
+              <Grid item xs={6} md={2}>
+                <FormControl fullWidth>
+                  <InputLabel>Type</InputLabel>
+                  <Select
+                    value={component.type}
+                    onChange={(e) => handleSalaryComponentChange(index, "type", e.target.value)}
+                    label="Type"
+                    required
+                  >
+                    <MenuItem value="earning">Earning</MenuItem>
+                    <MenuItem value="deduction">Deduction</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={6} md={2}>
+                <FormControl fullWidth>
+                  <InputLabel>Calculation Type</InputLabel>
+                  <Select
+                    value={component.calculationType}
+                    onChange={(e) => handleSalaryComponentChange(index, "calculationType", e.target.value)}
+                    label="Calculation Type"
+                    required
+                  >
+                    <MenuItem value="fixed">Fixed Amount</MenuItem>
+                    <MenuItem value="percentage">Percentage</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              {component.calculationType === "fixed" ? (
+                <Grid item xs={6} md={2}>
                   <TextField
                     fullWidth
-                    label="%"
-                    name="percentage"
+                    label="Amount"
                     type="number"
-                    value={newComponent.percentage}
-                    onChange={handleNewComponentChange}
-                    required
-                    inputProps={{ min: 0, max: 100 }}
+                    value={component.amount}
+                    onChange={(e) => handleSalaryComponentChange(index, "amount", e.target.value)}
+                    inputProps={{ min: 0 }}
                   />
                 </Grid>
-                {newComponent.calculationType === "percentage" && (
+              ) : (
+                <>
+                  <Grid item xs={6} md={1}>
+                    <TextField
+                      fullWidth
+                      label="%"
+                      type="number"
+                      value={component.percentage}
+                      onChange={(e) => handleSalaryComponentChange(index, "percentage", e.target.value)}
+                      inputProps={{ min: 0, max: 100 }}
+                    />
+                  </Grid>
                   <Grid item xs={6} md={2}>
                     <FormControl fullWidth>
                       <InputLabel>Based On</InputLabel>
                       <Select
-                        name="basedOn"
-                        value={newComponent.basedOn}
-                        onChange={handleNewComponentChange}
+                        value={component.basedOn}
+                        onChange={(e) => handleSalaryComponentChange(index, "basedOn", e.target.value)}
+                        label="Based On"
                         required
                       >
                         <MenuItem value="basic">Basic Salary</MenuItem>
@@ -211,29 +216,33 @@ const Body = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                )}
+                </>
+              )}
 
-              </>
-            )}
-
-            <Grid item xs={12} md={1}>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={addComponent}
-              
-              >
-                Add
-              </Button>
+              <Grid item xs={12} md={1}>
+                <div className="flex space-x-2">
+                  {index === salaryComponents.length - 1 && (
+                    <IconButton color="primary" onClick={addSalaryComponent}>
+                      <AddIcon />
+                    </IconButton>
+                  )}
+                  {salaryComponents.length > 1 && (
+                    <IconButton color="error" onClick={() => removeSalaryComponent(index)}>
+                      <RemoveIcon />
+                    </IconButton>
+                  )}
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
+          ))}
+
 
           <Divider sx={{ my: 4 }} />
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
             <Button variant="outlined" color="secondary">Cancel</Button>
             <Button type="submit" variant="contained" color="primary">
-              Save Structure
+              Edit Salary
             </Button>
           </Box>
         </form>

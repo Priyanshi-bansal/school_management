@@ -109,6 +109,7 @@ import GetSalary from "./components/admin/getSalary/GetSalary";
 import EditSalary from "./components/admin/EditSlary/EditSalary";
 import AddSalary from "./components/admin/addSalary/AddSalary";
 import ViewSalary from "./components/admin/viewSalary/ViewSalary";
+import CalculateSalary from "./components/admin/calculateSalary/CalculateSalary";
 
 
 const App = () => {
@@ -197,6 +198,8 @@ const App = () => {
       <Route path="/admin/editsalary" element={<EditSalary />} />
       <Route path="/admin/addSalary" element={<AddSalary />} />
       <Route path="/admin/viewSalary" element={<ViewSalary />} />
+            <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
+        
 
 
 
@@ -233,6 +236,7 @@ const App = () => {
       <Route path="/student/attendance" element={<Attendance />} />
       <Route path="/student/StudentTest" element={<StudentTest />} />
       <Route path="/student/DailyAttendance" element={<DailyAttendance />} />
+      
 
     </Routes>
   );

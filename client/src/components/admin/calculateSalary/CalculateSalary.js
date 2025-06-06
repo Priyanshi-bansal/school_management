@@ -3,7 +3,7 @@ import Header from "../Header";
 import Sidebar from "../Sidebar";
 import Body from "./Body";
 
-const CalendraManagement = () => {
+const CalculateSalary = () => {
   return (
     <div>
 
@@ -23,4 +23,4 @@ const CalendraManagement = () => {
   )
 }
 
-export default CalendraManagement
+export default CalculateSalary
