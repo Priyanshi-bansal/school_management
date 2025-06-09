@@ -17,6 +17,7 @@ import timetableRoutes from "./routes/timetableRoutes.js";
 import attendanceRoutes from "./routes/attendanceRoutes.js";
 import feeRoutes from "./routes/feeRoutes.js";
 import salaryRoutes from "./routes/salaryRoutes.js";
+import homeworkRoutes from "./routes/homeworkRoutes.js"
 
 const app = express();
 dotenv.config();
@@ -37,6 +38,7 @@ app.use("/api/timetable", timetableRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/fee", feeRoutes);
 app.use("/api/salary", salaryRoutes);
+app.use("/api/homework", homeworkRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.get("/", (req, res) => {
