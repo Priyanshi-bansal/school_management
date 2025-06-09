@@ -123,6 +123,10 @@ import SendReminder from "./components/faculty/sendreminder/SendReminder.js";
 import CalculateSalary from "./components/admin/calculateSalary/CalculateSalary";
 import Viewfeesstructure from "./components/admin/viewfeesStructure/Viewfeesstructure.js";
 
+import StudentHomework from "./components/student/studenthomework/StudentHomework.js";
+import EditStudentHomework from "./components/student/editstudenthomework/EditStudentHomework.js";
+import AddStudentHomework from "./components/student/addstudenthomework/AddStudentHomework.js";
+
 
 const App = () => {
 
@@ -217,10 +221,7 @@ const App = () => {
       <Route path="/admin/addpsp" element={<AddPSP />} />
 
       <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
-        <Route path="/admin/viewfeesstructure" element={<Viewfeesstructure />} />
-        
-
-
+      <Route path="/admin/viewfeesstructure" element={<Viewfeesstructure />} />
 
 
       {/* Faculty  */}
@@ -262,7 +263,13 @@ const App = () => {
       <Route path="/student/attendance" element={<Attendance />} />
       <Route path="/student/StudentTest" element={<StudentTest />} />
       <Route path="/student/DailyAttendance" element={<DailyAttendance />} />
-      
+      <Route path="/student/studenthomework" element={<StudentHomework/>} />
+      <Route path="/student/editstudenthomework" element={<EditStudentHomework />} />
+      <Route path="/student/addstudenthomework" element={<AddStudentHomework />} />
+
+
+
+
 
     </Routes>
   );
