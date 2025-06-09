@@ -519,7 +519,7 @@ import {
   Person,
   Group,
 } from "@mui/icons-material";
-import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+// import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 
 const Body= () => {
   const navigate = useNavigate();
@@ -890,7 +890,7 @@ const Body= () => {
                 />
               </FormGroup>
 
-              {!formData.sendNow && (
+              {/* {!formData.sendNow && (
                 <Grid container spacing={2} sx={{ mt: 1 }}>
                   <Grid item xs={12} sm={6}>
                     <DatePicker
@@ -934,7 +934,7 @@ const Body= () => {
                     />
                   </Grid>
                 </Grid>
-              )}
+              )} */}
             </Grid>
 
             {/* Summary */}
