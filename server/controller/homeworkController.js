@@ -1,9 +1,9 @@
-import Homework from "../models/Homework";
-import HomeworkSubmission from "../models/HomeworkSubmission";
-import HomeworkReminder from "../models/HomeworkRemainder";
-import Class from "../models/Class";
-import Section from "../models/Section";
-import Subject from "../models/subject";
+import Homework from "../models/Homework.js";
+import HomeworkSubmission from "../models/HomeworkSubmission.js";
+import HomeworkReminder from "../models/HomeworkRemainder.js";
+import Class from "../models/Class.js";
+import Section from "../models/Section.js";
+import Subject from "../models/subject.js";
 
 
   const createHomework = async (req, res) => {
