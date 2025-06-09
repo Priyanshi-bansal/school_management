@@ -54,8 +54,8 @@ import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
-import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
-import StuAttendance from "./components/admin/stuattendance/StuAttendance";
+import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
+import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
 
 import ManageSection from "./components/admin/managesection/ManageSection";
 import GetClass from "./components/admin/GetClass/GetClass";
@@ -121,6 +121,8 @@ import GradeSubmission from "./components/faculty/gradesubmission/GradeSubmissio
 import SendReminder from "./components/faculty/sendreminder/SendReminder.js";
 
 import CalculateSalary from "./components/admin/calculateSalary/CalculateSalary";
+import Viewfeesstructure from "./components/admin/viewfeesStructure/Viewfeesstructure.js";
+
 import StudentHomework from "./components/student/studenthomework/StudentHomework.js";
 import EditStudentHomework from "./components/student/editstudenthomework/EditStudentHomework.js";
 import AddStudentHomework from "./components/student/addstudenthomework/AddStudentHomework.js";
@@ -219,9 +221,7 @@ const App = () => {
       <Route path="/admin/addpsp" element={<AddPSP />} />
 
       <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
-
-
-
+      <Route path="/admin/viewfeesstructure" element={<Viewfeesstructure />} />
 
 
       {/* Faculty  */}

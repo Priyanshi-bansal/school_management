@@ -4,10 +4,12 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   AttachMoney as FeesIcon,
+  Visibility as VisibilityIcon,
   Search,
   ClearAll,
   Add,
 } from "@mui/icons-material";
+import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 
 import {
   Select,
@@ -24,6 +26,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+
   Paper,
   CircularProgress,
   Chip,
@@ -40,7 +43,7 @@ const mockData = [
     _id: "1",
     class: "10th Grade",
     academicYear: "2023-2024",
-    feeType: "Tuition",
+    createdBy: "Admin User",
     amount: 5000,
     dueDate: "2023-09-30",
     status: "Active"
@@ -49,10 +52,10 @@ const mockData = [
     _id: "2",
     class: "12th Grade",
     academicYear: "2023-2024",
-    feeType: "Examination",
+    createdBy: "Admin User",
     amount: 2000,
     dueDate: "2023-10-15",
-    status: "Active"
+    status: "Inactive"
   },
 ];
 
@@ -63,7 +66,7 @@ const Body = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-  
+
   const [allFees, setAllFees] = useState(mockData);
   const [selectedFees, setSelectedFees] = useState([]);
   const [filter, setFilter] = useState({ feeType: "all", searchQuery: "" });
@@ -128,33 +131,43 @@ const Body = () => {
   };
 
   return (
-    <Box sx={{ 
-      flex: 1, 
-      mt: { xs: 2, sm: 3 }, 
+    <Box sx={{
+      flex: 1,
+      mt: { xs: 2, sm: 3 },
       p: { xs: 1, sm: 3 },
       maxWidth: '100%',
       overflowX: 'auto'
     }}>
       <Box sx={{ mb: 4 }}>
-        <Box sx={{ 
-          display: "flex", 
+        <Box sx={{
+          display: "flex",
           flexDirection: { xs: "column", sm: "row" },
-          alignItems: { xs: "flex-start", sm: "center" }, 
+          alignItems: { xs: "flex-start", sm: "center" },
           mb: 2,
           gap: { xs: 1, sm: 2 }
         }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <FeesIcon color="primary" sx={{ mr: 1 }} />
+            <RiMoneyDollarCircleLine
+              style={{
+                fontSize: '50px', // Increase icon size here
+                color: '#1976d2',  // Example color (matches MUI 'primary.main')
+              
+                borderRadius: '50%',        // Optional rounded background
+                padding: '10px'             // Optional spacing
+              }}
+            />
+
+
             <Typography variant="h5">Fees Management</Typography>
           </Box>
-          
+
           <Chip
             label={`Total: ${filteredFees.length}`}
             color="primary"
             variant="outlined"
             sx={{ ml: { sm: 2 } }}
           />
-          
+
           <Button
             variant="contained"
             color="primary"
@@ -178,10 +191,10 @@ const Body = () => {
         </Box>
 
         <Paper elevation={3} sx={{ p: { xs: 1, sm: 3 }, borderRadius: 2 }}>
-          <Box sx={{ 
-            display: "flex", 
-            gap: 2, 
-            mb: 3, 
+          <Box sx={{
+            display: "flex",
+            gap: 2,
+            mb: 3,
             flexWrap: "wrap",
             flexDirection: { xs: "column", sm: "row" }
           }}>
@@ -226,8 +239,8 @@ const Body = () => {
               startIcon={<ClearAll />}
               onClick={handleClearFilters}
               size="small"
-              sx={{ 
-                height: "40px", 
+              sx={{
+                height: "40px",
                 whiteSpace: "nowrap",
                 width: { xs: '100%', sm: 'auto' }
               }}
@@ -272,8 +285,11 @@ const Body = () => {
                     />
                   </TableCell>
                   <TableCell>Class</TableCell>
-                  {!isMobile && <TableCell>Academic Year</TableCell>}
-                  
+                   <TableCell>Academic Year</TableCell>
+                  <TableCell>status</TableCell>
+                  <TableCell>createdBy</TableCell>
+
+
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -288,9 +304,25 @@ const Body = () => {
                         />
                       </TableCell>
                       <TableCell>{fee.class}</TableCell>
-                      {!isMobile && <TableCell>{fee.academicYear}</TableCell>}
-                     
+                       <TableCell>{fee.academicYear}</TableCell>
+                       <TableCell>{fee.status}</TableCell>
+
+                     <TableCell>{fee.createdBy}</TableCell>
                       <TableCell>
+
+                        <IconButton
+                          color="primary"
+                          size={isMobile ? "small" : "medium"}
+                          onClick={() =>
+                            navigate("/admin/viewfeesstructure", {
+                              state: { fee },
+                            })
+                          }
+                        >
+                          <VisibilityIcon fontSize={isMobile ? "small" : "medium"} />
+                        </IconButton>
+
+
                         <IconButton
                           color="primary"
                           size={isMobile ? "small" : "medium"}
