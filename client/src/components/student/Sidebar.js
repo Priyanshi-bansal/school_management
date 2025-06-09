@@ -60,10 +60,10 @@ const Sidebar = () => {
       ]
     },
      { 
-      header: "Schedule",
+      header: "Student Homework",
       items: [
-        { icon: <Event />, label: "Class Timetable", path: "#" },
-        { icon: <Class />, label: "Exam Schedule", path: "#" }
+        { icon: <Event />, label: "Homework", path: "/student/studenthomework" },
+      
       ]
     }
 
