@@ -1,265 +1,795 @@
+
 import React, { useState } from 'react';
 import {
   Box,
-  Button,
-  FormControl,
-  MenuItem,
-  Select,
-  TextField,
   Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Paper,
+  Grid,
+  Divider,
+  IconButton,
+  Checkbox,
+  Collapse,
+  FormControlLabel
 } from '@mui/material';
 import {
   Add as AddIcon,
-  Clear,
-  Payments,
-  DateRange,
-  Person,
-  Assignment,
-  Receipt,
-  Edit,
-  Comment,
-  AdminPanelSettings,
+  CurrencyExchange as CurrencyExchangeIcon,
+  Remove as RemoveIcon,
+  ExpandMore as ExpandMoreIcon,
+  ExpandLess as ExpandLessIcon,
+  EventRepeat as EventRepeatIcon,
+  CurrencyRupee as CurrencyRupeeIcon,
+
+  PriceChange as PriceChangeIcon,
+  Clear as ClearIcon
 } from '@mui/icons-material';
 
-const Spinner = ({ message }) => <span>{message}</span>;
 
 const Body = () => {
-  const [value, setValue] = useState({
-    studentName: '',
-    amountPaid: '',
-    paymentDate: '',
-    mode: '',
-    status: '',
-    transactionId: '',
-    remark: '',
-    createdBy: '',
+  const [formData, setFormData] = useState({
+    studentName: "",
+    academicYear: "",
+    components: [{
+      name: "Tuition Fee",
+      isOptional: false,
+      isRefundable: true,
+      earlyPaymentDiscount: {
+        active: false,
+        amount: 0,
+        percentage: 0,
+        applicableTill: ""
+      },
+      siblingDiscount: {
+        active: false,
+        percentage: 0,
+        maxDiscount: 0
+      },
+      installments: [{
+        name: "First Installment",
+        dueDate: "",
+        percentage: 100,
+        lateFee: {
+          active: false,
+          amount: 0,
+          percentage: 0,
+          applicableAfter: 0
+        }
+      }]
+    }]
   });
+  const component = formData.components[0];
+  const compIndex = 0;
 
-  const [error, setError] = useState({ backendError: '' });
-  const [loading, setLoading] = useState(false);
+  const [expandedComponent, setExpandedComponent] = useState(null);
+  const [expandedInstallment, setExpandedInstallment] = useState(null);
 
-  const students = ['Alice', 'Bob', 'Charlie'];
-  const modes = ['Cash', 'Online', 'Cheque'];
-  const statuses = ['Paid', 'Pending'];
-  const remarks = ['Fee for Term 1', 'Fee for Books', 'Late Payment'];
-  const createdByOptions = ['Admin', 'Accounts', 'Clerk'];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-  const resetForm = () => {
-    setValue({
-      studentName: '',
-      amountPaid: '',
-      paymentDate: '',
-      mode: '',
-      status: '',
-      transactionId: '',
-      remark: '',
-      createdBy: '',
+  const handleComponentChange = (index, field, value) => {
+    const updatedComponents = [...formData.components];
+    updatedComponents[index][field] = value;
+    setFormData(prev => ({
+      ...prev,
+      components: updatedComponents
+    }));
+  };
+
+  const handleEarlyPaymentChange = (compIndex, field, value) => {
+    const updatedComponents = [...formData.components];
+    updatedComponents[compIndex].earlyPaymentDiscount[field] = value;
+    setFormData(prev => ({
+      ...prev,
+      components: updatedComponents
+    }));
+  };
+
+  const handleSiblingDiscountChange = (compIndex, field, value) => {
+    const updatedComponents = [...formData.components];
+    updatedComponents[compIndex].siblingDiscount[field] = value;
+    setFormData(prev => ({
+      ...prev,
+      components: updatedComponents
+    }));
+  };
+
+  const handleInstallmentChange = (compIndex, instIndex, field, value) => {
+    const updatedComponents = [...formData.components];
+    updatedComponents[compIndex].installments[instIndex][field] = value;
+    setFormData(prev => ({
+      ...prev,
+      components: updatedComponents
+    }));
+  };
+
+  const handleLateFeeChange = (compIndex, instIndex, field, value) => {
+    const updatedComponents = [...formData.components];
+    updatedComponents[compIndex].installments[instIndex].lateFee[field] = value;
+    setFormData(prev => ({
+      ...prev,
+      components: updatedComponents
+    }));
+  };
+
+  const addComponent = () => {
+    setFormData(prev => ({
+      ...prev,
+      components: [...prev.components, {
+        name: "Tuition Fee",
+        isOptional: false,
+        isRefundable: true,
+        earlyPaymentDiscount: {
+          active: false,
+          amount: 0,
+          percentage: 0,
+          applicableTill: ""
+        },
+        siblingDiscount: {
+          active: false,
+          percentage: 0,
+          maxDiscount: 0
+        },
+        installments: [{
+          name: "First Installment",
+          dueDate: "",
+          percentage: 100,
+          lateFee: {
+            active: false,
+            amount: 0,
+            percentage: 0,
+            applicableAfter: 0
+          }
+        }]
+      }]
+    }));
+  };
+
+  const removeComponent = (index) => {
+    const updated = [...formData.components];
+    updated.splice(index, 1);
+    setFormData(prev => ({
+      ...prev,
+      components: updated
+    }));
+  };
+
+  const addInstallment = (compIndex) => {
+    const updatedComponents = [...formData.components];
+    updatedComponents[compIndex].installments.push({
+      name: `Installment ${updatedComponents[compIndex].installments.length + 1}`,
+      dueDate: "",
+      percentage: 0,
+      lateFee: {
+        active: false,
+        amount: 0,
+        percentage: 0,
+        applicableAfter: 0
+      }
     });
-    setError({ backendError: '' });
+    setFormData(prev => ({
+      ...prev,
+      components: updatedComponents
+    }));
+  };
+
+  const removeInstallment = (compIndex, instIndex) => {
+    const updatedComponents = [...formData.components];
+    updatedComponents[compIndex].installments.splice(instIndex, 1);
+    setFormData(prev => ({
+      ...prev,
+      components: updatedComponents
+    }));
+  };
+
+  const toggleComponentExpand = (index) => {
+    setExpandedComponent(expandedComponent === index ? null : index);
+  };
+
+  const toggleInstallmentExpand = (compIndex, instIndex) => {
+    const key = `${compIndex}-${instIndex}`;
+    setExpandedInstallment(expandedInstallment === key ? null : key);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    setTimeout(() => {
-      console.log('Submitted Data:', value);
-      resetForm();
-      setLoading(false);
-    }, 1000);
-  };
-
-  const handleChange = (field, val) => {
-    setValue({ ...value, [field]: val });
+    console.log("Submitted fee structure:", formData);
+    // Submit to backend here
   };
 
   return (
-    <div className="flex-1 p-6 bg-gray-50">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center mb-8">
-          <Payments className="text-indigo-600 mr-3" fontSize="large" />
-          <h1 className="text-2xl font-bold text-gray-800">Edit Student Payment</h1>
-        </div>
+    <Box sx={{ p: 3, backgroundColor: '#f9fafb', minHeight: '100vh' }}>
+      <Box sx={{ maxWidth: '1200px', mx: 'auto' }}>
+        {/* Header */}
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          mb: 4,
+          p: 2,
+          backgroundColor: 'white',
+          borderRadius: 2,
+          boxShadow: 1
+        }}>
+          <AddIcon color="primary" sx={{
+            mr: 2,
+            fontSize: '2.5rem',
+            backgroundColor: '#eef2ff',
+            p: 1,
+            borderRadius: '50%'
+          }} />
+          <Box>
+            <Typography variant="h5" sx={{ fontWeight: 600, color: '#1f2937' }}>
+              Fee payment 
+            </Typography>
+          
+          </Box>
+        </Box>
 
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
-          <form onSubmit={handleSubmit} className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Student Name */}
-              <FormControl fullWidth size="small">
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <Person className="text-gray-500 mr-2" fontSize="small" />
-                  Student Name
-                </label>
-                <Select
-                  required
-                  displayEmpty
-                  value={value.studentName}
-                  onChange={(e) => handleChange('studentName', e.target.value)}
-                >
-                  <MenuItem value=""><em>Select student</em></MenuItem>
-                  {students.map((s, idx) => (
-                    <MenuItem key={idx} value={s}>{s}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              {/* Amount Paid */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <Payments className="text-gray-500 mr-2" fontSize="small" />
-                  Amount Paid
-                </label>
-                <TextField
-                  type="number"
-                  required
-                  fullWidth
-                  size="small"
-                  placeholder="Enter amount"
-                  value={value.amountPaid}
-                  onChange={(e) => handleChange('amountPaid', e.target.value)}
-                />
-              </div>
-
-              {/* Payment Date */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <DateRange className="text-gray-500 mr-2" fontSize="small" />
-                  Payment Date
-                </label>
-                <TextField
-                  type="date"
-                  required
-                  fullWidth
-                  size="small"
-                  value={value.paymentDate}
-                  onChange={(e) => handleChange('paymentDate', e.target.value)}
-                />
-              </div>
-
-              {/* Mode */}
-              <FormControl fullWidth size="small">
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <Assignment className="text-gray-500 mr-2" fontSize="small" />
-                  Mode
-                </label>
-                <Select
-                  required
-                  displayEmpty
-                  value={value.mode}
-                  onChange={(e) => handleChange('mode', e.target.value)}
-                >
-                  <MenuItem value=""><em>Select mode</em></MenuItem>
-                  {modes.map((m, idx) => (
-                    <MenuItem key={idx} value={m}>{m}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              {/* Status */}
-              <FormControl fullWidth size="small">
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <Receipt className="text-gray-500 mr-2" fontSize="small" />
-                  Status
-                </label>
-                <Select
-                  required
-                  displayEmpty
-                  value={value.status}
-                  onChange={(e) => handleChange('status', e.target.value)}
-                >
-                  <MenuItem value=""><em>Select status</em></MenuItem>
-                  {statuses.map((s, idx) => (
-                    <MenuItem key={idx} value={s}>{s}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              {/* Transaction ID */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <Edit className="text-gray-500 mr-2" fontSize="small" />
-                  Transaction ID
-                </label>
+        {/* Form Card */}
+        <Paper elevation={0} sx={{
+          p: 4,
+          mb: 4,
+          borderRadius: 3,
+          border: '1px solid #e5e7eb',
+          backgroundColor: 'white'
+        }}>
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={4}>
                 <TextField
                   fullWidth
-                  size="small"
-                  placeholder="Enter transaction ID"
-                  value={value.transactionId}
-                  onChange={(e) => handleChange('transactionId', e.target.value)}
+                  label="student Name"
+                  name="StudentName"
+                  value={formData.studentName}
+                  onChange={handleChange}
+                  required
+                  variant="outlined"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
+                    }
+                  }}
                 />
-              </div>
-
-              {/* Remark - Dropdown */}
-              <FormControl fullWidth size="small">
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <Comment className="text-gray-500 mr-2" fontSize="small" />
-                  Remark
-                </label>
-                <Select
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  label="Academic Year"
+                  name="academicYear"
+                  value={formData.academicYear}
+                  onChange={handleChange}
                   required
-                  displayEmpty
-                  value={value.remark}
-                  onChange={(e) => handleChange('remark', e.target.value)}
-                >
-                  <MenuItem value=""><em>Select remark</em></MenuItem>
-                  {remarks.map((r, idx) => (
-                    <MenuItem key={idx} value={r}>{r}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              {/* Created By - Dropdown */}
-              <FormControl fullWidth size="small">
-                <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <AdminPanelSettings className="text-gray-500 mr-2" fontSize="small" />
-                  Created By
-                </label>
-                <Select
+                  variant="outlined"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <TextField
+                  fullWidth
+                  label="Amount"
+                  name="amount"
+                  value={formData.amount}
+                  onChange={handleChange}
                   required
-                  displayEmpty
-                  value={value.createdBy}
-                  onChange={(e) => handleChange('createdBy', e.target.value)}
-                >
-                  <MenuItem value=""><em>Select user</em></MenuItem>
-                  {createdByOptions.map((c, idx) => (
-                    <MenuItem key={idx} value={c}>{c}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
+                  variant="outlined"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '10px',
+                    }
+                  }}
+                />
+              </Grid>
+            </Grid>
 
-            {/* Actions */}
-            <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
+            <Divider sx={{ my: 4, borderColor: '#e5e7eb' }} />
+
+            <Typography variant="h6" sx={{ fontWeight: 600, color: '#1f2937', mb: 3 }}>
+              <PriceChangeIcon color="primary" sx={{
+                mr: 2,
+                fontSize: '2.5rem',
+                backgroundColor: '#eef2ff',
+                p: 1,
+                borderRadius: '50%'
+              }} />
+              Fee Discount Components
+
+            </Typography>
+            <Box
+              sx={{
+                p: 3,
+                mb: 3,
+                borderRadius: 2,
+                border: '1px solid #e5e7eb',
+                backgroundColor: '#f9fafb'
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  gap: 2,
+                  flexWrap: 'wrap'
+                }}
+                onClick={() => toggleComponentExpand(compIndex)}
+              ></Box>
+
+              <Box sx={{ mt: 3 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 500, mb: 1 }}>
+                  <CurrencyExchangeIcon color="primary" sx={{
+                    mr: 2,
+                    fontSize: '2.5rem',
+                    backgroundColor: '#eef2ff',
+                    p: 1,
+                    borderRadius: '50%'
+                  }} />
+                  Fee Discount
+                </Typography>
+
+                {/* Early Payment Discount */}
+                <Box sx={{
+                  p: 2,
+                  mb: 2,
+                  borderRadius: 1,
+                  border: '1px solid #e5e7eb',
+                  backgroundColor: 'white'
+                }}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={component.earlyPaymentDiscount.active}
+                        onChange={(e) => handleEarlyPaymentChange(compIndex, "active", e.target.checked)}
+                      />
+                    }
+                    label="Early Payment Discount"
+                  />
+                  {component.earlyPaymentDiscount.active && (
+                    <Grid container spacing={2} sx={{ mt: 1 }}>
+                      <Grid item xs={12} md={4}>
+                        <TextField
+                          fullWidth
+                          label="Discount Amount"
+                          type="number"
+                          value={component.earlyPaymentDiscount.amount}
+                          onChange={(e) => handleEarlyPaymentChange(compIndex, "amount", e.target.value)}
+                          size="small"
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        <TextField
+                          fullWidth
+                          label="Discount Percentage"
+                          type="number"
+                          value={component.earlyPaymentDiscount.percentage}
+                          onChange={(e) => handleEarlyPaymentChange(compIndex, "percentage", e.target.value)}
+                          inputProps={{ min: 0, max: 100 }}
+                          size="small"
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={4}>
+                        <TextField
+                          fullWidth
+                          label="Applicable Till"
+                          type="date"
+                          value={component.earlyPaymentDiscount.applicableTill}
+                          onChange={(e) => handleEarlyPaymentChange(compIndex, "applicableTill", e.target.value)}
+                          InputLabelProps={{ shrink: true }}
+                          size="small"
+                        />
+                      </Grid>
+                    </Grid>
+                  )}
+                </Box>
+
+                {/* Sibling Discount */}
+                <Box sx={{
+                  p: 2,
+                  mb: 2,
+                  borderRadius: 1,
+                  border: '1px solid #e5e7eb',
+                  backgroundColor: 'white'
+                }}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={component.siblingDiscount.active}
+                        onChange={(e) => handleSiblingDiscountChange(compIndex, "active", e.target.checked)}
+                      />
+                    }
+                    label="Sibling Discount"
+                  />
+                  {component.siblingDiscount.active && (
+                    <Grid container spacing={2} sx={{ mt: 1 }}>
+                      <Grid item xs={12} md={6}>
+                        <TextField
+                          fullWidth
+                          label="Discount Percentage"
+                          type="number"
+                          value={component.siblingDiscount.percentage}
+                          onChange={(e) => handleSiblingDiscountChange(compIndex, "percentage", e.target.value)}
+                          inputProps={{ min: 0, max: 100 }}
+                          size="small"
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <TextField
+                          fullWidth
+                          label="Maximum Discount"
+                          type="number"
+                          value={component.siblingDiscount.maxDiscount}
+                          onChange={(e) => handleSiblingDiscountChange(compIndex, "maxDiscount", e.target.value)}
+                          size="small"
+                        />
+                      </Grid>
+                    </Grid>
+                  )}
+                </Box>
+
+                {/* Installments */}
+                <Typography variant="subtitle1" sx={{ fontWeight: 500, mb: 1 }}>
+                  <EventRepeatIcon color="primary" sx={{
+                    mr: 2,
+                    fontSize: '2.5rem',
+                    backgroundColor: '#eef2ff',
+                    p: 1,
+                    borderRadius: '50%'
+                  }} />
+                  Installments
+                </Typography>
+
+                {component.installments.map((installment, instIndex) => (
+                  <Box
+                    key={instIndex}
+                    sx={{
+                      p: 2,
+                      mb: 2,
+                      borderRadius: 1,
+                      border: '1px solid #e5e7eb',
+                      backgroundColor: 'white'
+                    }}
+                  >
+                    <Box sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer'
+                    }} onClick={() => toggleInstallmentExpand(compIndex, instIndex)}>
+                      <Typography sx={{ fontWeight: 500 }}>
+                        {installment.name}
+                      </Typography>
+                      <Box>
+                        {component.installments.length > 1 && (
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              removeInstallment(compIndex, instIndex);
+                            }}
+                            size="small"
+                            sx={{ mr: 1 }}
+                          >
+                            <RemoveIcon fontSize="small" color="error" />
+                          </IconButton>
+                        )}
+                        {expandedInstallment === `${compIndex}-${instIndex}` ? (
+                          <ExpandLessIcon fontSize="small" />
+                        ) : (
+                          <ExpandMoreIcon fontSize="small" />
+                        )}
+                      </Box>
+                    </Box>
+
+                    <Collapse in={expandedInstallment === `${compIndex}-${instIndex}`}>
+                      <Grid container spacing={2} sx={{ mt: 1 }}>
+                        <Grid item xs={12} md={4}>
+                          <TextField
+                            fullWidth
+                            label="Installment Name"
+                            value={installment.name}
+                            onChange={(e) => handleInstallmentChange(compIndex, instIndex, "name", e.target.value)}
+                            size="small"
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                          <TextField
+                            fullWidth
+                            label="Due Date"
+                            type="date"
+                            value={installment.dueDate}
+                            onChange={(e) => handleInstallmentChange(compIndex, instIndex, "dueDate", e.target.value)}
+                            InputLabelProps={{ shrink: true }}
+                            size="small"
+                          />
+                        </Grid>
+                        <Grid item xs={12} md={4}>
+                          <TextField
+                            fullWidth
+                            label="Percentage"
+                            type="number"
+                            value={installment.percentage}
+                            onChange={(e) => handleInstallmentChange(compIndex, instIndex, "percentage", e.target.value)}
+                            inputProps={{ min: 0, max: 100 }}
+                            size="small"
+                          />
+                        </Grid>
+                      </Grid>
+
+                      {/* Late Fee */}
+                      <Box sx={{ mt: 2, pl: 2, borderLeft: '2px solid #e5e7eb' }}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={installment.lateFee.active}
+                              onChange={(e) => handleLateFeeChange(compIndex, instIndex, "active", e.target.checked)}
+                            />
+                          }
+                          label="Late Fee"
+                        />
+                        {installment.lateFee.active && (
+                          <Grid container spacing={2} sx={{ mt: 1 }}>
+                            <Grid item xs={12} md={4}>
+                              <TextField
+                                fullWidth
+                                label="Late Fee Amount"
+                                type="number"
+                                value={installment.lateFee.amount}
+                                onChange={(e) => handleLateFeeChange(compIndex, instIndex, "amount", e.target.value)}
+                                size="small"
+                              />
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                              <TextField
+                                fullWidth
+                                label="Late Fee Percentage"
+                                type="number"
+                                value={installment.lateFee.percentage}
+                                onChange={(e) => handleLateFeeChange(compIndex, instIndex, "percentage", e.target.value)}
+                                inputProps={{ min: 0, max: 100 }}
+                                size="small"
+                              />
+                            </Grid>
+                            <Grid item xs={12} md={4}>
+                              <TextField
+                                fullWidth
+                                label="Applicable After (days)"
+                                type="number"
+                                value={installment.lateFee.applicableAfter}
+                                onChange={(e) => handleLateFeeChange(compIndex, instIndex, "applicableAfter", e.target.value)}
+                                size="small"
+                              />
+                            </Grid>
+                          </Grid>
+                        )}
+                      </Box>
+                    </Collapse>
+                  </Box>
+                ))}
+
+                <Button
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={() => addInstallment(compIndex)}
+                  size="small"
+                  sx={{ mt: 1 }}
+                >
+                  Add Installment
+                </Button>
+              </Box>
+            </Box>
+
+
+ <Divider sx={{ my: 4, borderColor: '#e5e7eb' }} />
+
+            <Typography variant="h6" sx={{ fontWeight: 600, color: '#1f2937', mb: 3 }}>
+              <CurrencyRupeeIcon color="primary" sx={{
+                mr: 2,
+                fontSize: '2.5rem',
+                backgroundColor: '#eef2ff',
+                p: 1,
+                borderRadius: '50%'
+              }} />
+              Fee Components
+            </Typography>
+
+            {formData.components.map((component, compIndex) => (
+              <Box
+                key={compIndex}
+                sx={{
+                  p: 3,
+                  mb: 3,
+                  borderRadius: 2,
+                  border: '1px solid #e5e7eb',
+                  backgroundColor: '#f9fafb'
+                }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    gap: 2, //
+                    flexWrap: 'wrap' // 
+                  }}
+                  onClick={() => toggleComponentExpand(compIndex)}
+                >
+                  {/* Component Name Select */}
+                  <Box sx={{ flex: 1 }}>
+                    <FormControl fullWidth size="small">
+                      <InputLabel> Name</InputLabel>
+                      <Select
+                        value={component.name}
+                        onChange={(e) =>
+                          handleComponentChange(compIndex, 'name', e.target.value)
+                        }
+                        label=" Name"
+                        sx={{
+                          borderRadius: '8px'
+                        }}
+                      >
+                        <MenuItem value="Tuition Fee">Tuition Fee</MenuItem>
+                        <MenuItem value="Hostel Fee">Hostel Fee</MenuItem>
+                        <MenuItem value="Transport Fee">Transport Fee</MenuItem>
+                        <MenuItem value="Library Fee">Library Fee</MenuItem>
+                        <MenuItem value="Examination Fee">Examination Fee</MenuItem>
+                        <MenuItem value="Activity Fee">Activity Fee</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+
+
+                  <Box sx={{ flex: 1 }}>
+                    <FormControl fullWidth size="small">
+                      <TextField
+                        fullWidth
+                        label="Amount"
+                        type="number"
+                        value={component.earlyPaymentDiscount.amount}
+                        onChange={(e) =>
+                          handleEarlyPaymentChange(compIndex, 'amount', e.target.value)
+                        }
+                        size="small"
+                      />
+                    </FormControl>
+                  </Box>
+
+                  {/* Optional, Refundable, Remove and Expand Icons */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2 }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={component.isOptional}
+                          onChange={(e) =>
+                            handleComponentChange(compIndex, 'isOptional', e.target.checked)
+                          }
+                        />
+                      }
+                      label="Optional"
+                      sx={{ mr: 0 }}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={component.isRefundable}
+                          onChange={(e) =>
+                            handleComponentChange(compIndex, 'isRefundable', e.target.checked)
+                          }
+                        />
+                      }
+                      label="Refundable"
+                    />
+                    <IconButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeComponent(compIndex);
+                      }}
+                    >
+                      <RemoveIcon color="error" />
+                    </IconButton>
+
+                  </Box>
+                </Box>
+
+              </Box>
+            ))}
+
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={addComponent}
+              sx={{ mt: 2 }}
+            >
+              Edit Component
+            </Button>
+
+            <Divider sx={{ my: 4, borderColor: '#e5e7eb' }} />
+
+            <Box sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: 2,
+              pt: 2
+            }}>
               <Button
                 variant="outlined"
-                startIcon={<Clear />}
-                onClick={resetForm}
+                color="secondary"
+                startIcon={<ClearIcon />}
+                onClick={() => setFormData({
+                  className: "",
+                  academicYear: "",
+                  components: [{
+                    name: "Tuition Fee",
+                    isOptional: false,
+                    isRefundable: true,
+                    earlyPaymentDiscount: {
+                      active: false,
+                      amount: 0,
+                      percentage: 0,
+                      applicableTill: ""
+                    },
+                    siblingDiscount: {
+                      active: false,
+                      percentage: 0,
+                      maxDiscount: 0
+                    },
+                    installments: [{
+                      name: "First Installment",
+                      dueDate: "",
+                      percentage: 100,
+                      lateFee: {
+                        active: false,
+                        amount: 0,
+                        percentage: 0,
+                        applicableAfter: 0
+                      }
+                    }]
+                  }]
+                })}
+                sx={{
+                  borderRadius: '8px',
+                  textTransform: 'none',
+                  px: 3,
+                  py: 1
+                }}
               >
                 Clear Form
               </Button>
               <Button
                 type="submit"
                 variant="contained"
-                startIcon={<AddIcon />}
-                className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
-                disabled={loading}
+                color="primary"
+                sx={{
+                  borderRadius: '8px',
+                  textTransform: 'none',
+                  px: 3,
+                  py: 1,
+                  boxShadow: 'none',
+                  '&:hover': {
+                    boxShadow: 'none'
+                  }
+                }}
               >
-                {loading ? <Spinner message="Saving Payment..." /> : 'update Payment'}
+                Save Fee payment
               </Button>
-            </div>
-
-            {/* Error Message */}
-            {error.backendError && (
-              <Box className="mt-4 p-3 bg-red-50 rounded-lg">
-                <Typography className="text-red-600 text-sm">
-                  {error.backendError}
-                </Typography>
-              </Box>
-            )}
+            </Box>
           </form>
-        </div>
-      </div>
-    </div>
+        </Paper>
+      </Box>
+    </Box>
   );
 };
 

@@ -54,8 +54,8 @@ import StudentTest from "./components/student/StudentTest/StudentTest";
 import DailyAttendance from "./components/student/DailyAttendance/DailyAttendance";
 import StudentAttendance from "./components/faculty/StudentAttendance/StudentAttendance";
 
-import FacultyAttendance from "./components/admin/FacultyAttendance/FacultyAttendance";
-import StuAttendance from "./components/admin/StuAttendance/StuAttendance";
+import FacultyAttendance from "./components/admin/facultyattendance/FacultyAttendance";
+import StuAttendance from "./components/admin/stuattendance/StuAttendance";
 
 import ManageSection from "./components/admin/managesection/ManageSection";
 import GetClass from "./components/admin/GetClass/GetClass";
@@ -126,11 +126,15 @@ import Viewfeesstructure from "./components/admin/viewfeesStructure/Viewfeesstru
 import StudentHomework from "./components/student/studenthomework/StudentHomework.js";
 import EditStudentHomework from "./components/student/editstudenthomework/EditStudentHomework.js";
 import AddStudentHomework from "./components/student/addstudenthomework/AddStudentHomework.js";
+import ViewpaymentFee from "./components/admin/viewpaymentFee/ViewpaymentFee.js";
 import SubmitHomework from "./components/student/submithomework/SubmitHomework.js";
 import GradeView from "./components/student/gradeview/GradeView.js";
 import UpcomingView from "./components/student/upcomingview/UpcomingView.js";
 import SubmitView from "./components/student/submitview/SubmitView.js";
 import ViewCalendra from "./components/admin/viewcalendra/ViewCalendra.js";
+import EditNotice from "./components/admin/editnotice/EditNotice.js";
+import EditFaculty from "./components/admin/editfaculty/EditFaculty.js";
+
 
 
 const App = () => {
@@ -200,7 +204,6 @@ const App = () => {
       <Route path="/admin/viewchapter" element={<ViewChapter />} />
       <Route path="/admin/editchapter" element={<EditChapter />} />
       <Route path="/admin/timetablemanagement" element={<TimeTableManagement />} />
-
       <Route path="/admin/dailytimetable" element={<DailyTimeTable />} />
       <Route path="/admin/classtimetable" element={<ClassTimeTable />} />
       <Route path="/admin/addtimetable" element={<AddtimeTable />} />
@@ -220,16 +223,21 @@ const App = () => {
       <Route path="/admin/editsalary" element={<EditSalary />} />
       <Route path="/admin/addSalary" element={<AddSalary />} />
       <Route path="/admin/viewSalary" element={<ViewSalary />} />
-
       <Route path="/admin/processsalarypayment" element={<ProcessSalaryPayment />} />
       <Route path="/admin/viewpsp" element={<ViewPSP />} />
       <Route path="/admin/addpsp" element={<AddPSP />} />
-
       <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
+      
+      <Route path="/admin/viewfeesstructure" element={<Viewfeesstructure />} />
+      <Route path="/admin/editnotice" element={<EditNotice />} />
+      <Route path="/admin/editfaculty" element={<EditFaculty />} />
+
 
       <Route path="/admin/viewfeesstructure" element={<Viewfeesstructure />} />
+      <Route path="/admin/viewpaymentfee" element={<ViewpaymentFee />} />
 
       <Route path="/admin/viewcalendra" element={<ViewCalendra />} />
+
 
 
       {/* Faculty  */}

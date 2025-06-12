@@ -31,9 +31,10 @@ import {
   TextField,
   IconButton,
   Alert,
+  Grid,
 } from "@mui/material";
 
-// Updated mock data with unique _id fields
+// Mock Data
 const mockData = [
   {
     _id: "1",
@@ -58,20 +59,16 @@ const departments = ["Engineering", "Science", "Arts"];
 const Body = () => {
   const navigate = useNavigate();
   const [allFaculty, setAllFaculty] = useState(mockData);
-
   const [selectedFaculty, setSelectedFaculty] = useState([]);
   const [filter, setFilter] = useState({ department: "all", searchQuery: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
 
-  // Filter by department - your data has no department field so this filter does nothing
-  // You can remove or extend this if you add department to data
   const faculty =
     filter.department === "all"
       ? allFaculty
       : allFaculty.filter((f) => f.department === filter.department);
 
-  // Search by startTime or endTime (since you don’t have other fields)
   const searchedFaculty = useMemo(() => {
     const q = filter.searchQuery.toLowerCase();
     return faculty.filter(
@@ -128,24 +125,37 @@ const Body = () => {
   };
 
   return (
-    <Box sx={{ flex: 0.8, mt: 3, p: 3 }}>
+    <Box sx={{ flex: 0.8, mt: 3, p: { xs: 2, sm: 3 } }}>
       <Box sx={{ mb: 4 }}>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-          <EngineeringIcon color="primary" sx={{ mr: 1 }} />
-          <Typography variant="h5">Time Table</Typography>
+        {/* Top Bar */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "flex-start", sm: "center" },
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <EngineeringIcon color="primary" />
+            <Typography variant="h5">Time Table</Typography>
+          </Box>
+
           <Chip
             label={`Total Classes: ${faculty.length}`}
             color="primary"
             variant="outlined"
-            sx={{ ml: 2 }}
           />
+
+          <Box sx={{ flexGrow: 1 }} />
+
           <Button
             variant="contained"
             color="primary"
             startIcon={<Add />}
             onClick={() => navigate("/admin/AddTimetablemanagement")}
             sx={{
-              ml: "auto",
               px: 3,
               py: 1.5,
               fontWeight: "bold",
@@ -153,75 +163,83 @@ const Body = () => {
               borderRadius: "8px",
               boxShadow: 2,
               textTransform: "none",
+              width: { xs: "100%", sm: "auto" },
             }}
           >
             Add Time
           </Button>
         </Box>
 
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-          <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel>Department</InputLabel>
-              <Select
-                name="department"
-                value={filter.department}
+        {/* Filters */}
+        <Paper elevation={3} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
+            <Grid item xs={12} sm={4}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Department</InputLabel>
+                <Select
+                  name="department"
+                  value={filter.department}
+                  onChange={handleFilterChange}
+                  label="Department"
+                >
+                  <MenuItem value="all">All Departments</MenuItem>
+                  {departments.map((dp, idx) => (
+                    <MenuItem key={idx} value={dp}>
+                      {dp}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={5}>
+              <TextField
+                name="searchQuery"
+                value={filter.searchQuery}
                 onChange={handleFilterChange}
-                label="Department"
+                label="Search"
+                variant="outlined"
                 size="small"
-                sx={{ height: "40px" }}
+                fullWidth
+                InputProps={{
+                  endAdornment: (
+                    <IconButton>
+                      <Search />
+                    </IconButton>
+                  ),
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={3}>
+              <Button
+                variant="outlined"
+                startIcon={<ClearAll />}
+                onClick={handleClearFilters}
+                size="small"
+                fullWidth
+                sx={{ height: "40px", whiteSpace: "nowrap" }}
               >
-                <MenuItem value="all">All Departments</MenuItem>
-                {departments.map((dp, idx) => (
-                  <MenuItem key={idx} value={dp}>
-                    {dp}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                Clear Filters
+              </Button>
+            </Grid>
+          </Grid>
 
-            <TextField
-              name="searchQuery"
-              value={filter.searchQuery}
-              onChange={handleFilterChange}
-              label="Search"
-              variant="outlined"
-              size="small"
-              sx={{ flexGrow: 1, height: "40px" }}
-              InputProps={{
-                endAdornment: (
-                  <IconButton>
-                    <Search />
-                  </IconButton>
-                ),
-              }}
-            />
-
-            <Button
-              variant="outlined"
-              startIcon={<ClearAll />}
-              onClick={handleClearFilters}
-              size="small"
-              sx={{ height: "40px", whiteSpace: "nowrap" }}
-            >
-              Clear Filters
-            </Button>
-          </Box>
-
+          {/* Loading & Error */}
           {loading && (
             <Box sx={{ textAlign: "center", my: 4 }}>
               <CircularProgress />
             </Box>
           )}
-
           {(error.noFacultyError || error.backendError) && (
             <Alert severity="error">
               {error.noFacultyError || error.backendError}
             </Alert>
           )}
 
-          <TableContainer component={Paper} sx={{ mb: 3 }}>
-            <Table>
+          {/* Table */}
+          <TableContainer component={Paper} sx={{ mb: 3, overflowX: "auto" }}>
+            <Table size="small">
               <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
                 <TableRow>
                   <TableCell padding="checkbox">
@@ -243,7 +261,6 @@ const Body = () => {
                       }
                     />
                   </TableCell>
-
                   <TableCell>Start Time</TableCell>
                   <TableCell>End Time</TableCell>
                   <TableCell>Period Number</TableCell>
@@ -262,25 +279,15 @@ const Body = () => {
                           onChange={() => handleCheckboxChange(fac._id)}
                         />
                       </TableCell>
-
                       <TableCell>{fac.startTime}</TableCell>
                       <TableCell>{fac.endTime}</TableCell>
                       <TableCell>{fac.periodNumber}</TableCell>
-                      <TableCell>{fac.isBreak ? "No" : "yes"}</TableCell>
-                   
-                    <TableCell>{fac.breakName ? "Morning" : "-"}</TableCell>
-
-
-
+                      <TableCell>{fac.isBreak ? "No" : "Yes"}</TableCell>
+                      <TableCell>{fac.breakName ? "Morning" : "-"}</TableCell>
                       <TableCell>
-                        <IconButton
-                          color="primary"
-                          onClick={() => navigate("")}
-                          sx={{ mr: 1 }}
-                        >
+                        <IconButton color="primary" sx={{ mr: 1 }}>
                           <VisibilityIcon />
                         </IconButton>
-
                         <IconButton
                           color="primary"
                           onClick={() =>
@@ -288,10 +295,10 @@ const Body = () => {
                               state: { section: fac },
                             })
                           }
+                          sx={{ mr: 1 }}
                         >
                           <EditIcon />
                         </IconButton>
-
                         <IconButton
                           color="error"
                           onClick={() => handleDeleteSingle(fac._id)}
@@ -312,13 +319,16 @@ const Body = () => {
             </Table>
           </TableContainer>
 
+          {/* Bulk Delete */}
           {selectedFaculty.length > 0 && (
             <Box
               sx={{
                 display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
                 justifyContent: "space-between",
                 alignItems: "center",
-                p: 1,
+                gap: 2,
+                p: 2,
                 backgroundColor: "action.selected",
                 borderRadius: 1,
               }}
@@ -330,6 +340,8 @@ const Body = () => {
                 startIcon={<DeleteIcon />}
                 onClick={handleDelete}
                 disabled={loading}
+                fullWidth={true}
+                sx={{ maxWidth: { sm: 200 } }}
               >
                 Delete Selected
               </Button>
