@@ -265,7 +265,7 @@ const Body = () => {
                         <TableCell>
                           <IconButton
                             color="primary"
-                            onClick={() => navigate(`/admin/viewcalendra/${event._id}`)}
+                            onClick={() => navigate(`/admin/viewcalendra`)}
                             sx={{ mr: 1 }}
                             aria-label="view"
                           >

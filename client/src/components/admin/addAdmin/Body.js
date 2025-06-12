@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { 
+import {
   Engineering as AdminIcon,
   Person,
   Cake,
   Email,
   Phone,
   School,
-  Image
+  Image,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
 import { addAdmin } from "../../../redux/actions/adminActions";
-import { Select, MenuItem, Button, Avatar, Box, Typography } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  Button,
+  Avatar,
+  Box,
+  Typography,
+} from "@mui/material";
 import Spinner from "../../../utils/Spinner";
 import { ADD_ADMIN, SET_ERRORS } from "../../../redux/actionTypes";
 
@@ -19,7 +26,7 @@ const Body = () => {
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
   const departments = useSelector((state) => state.admin.allDepartment);
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const [value, setValue] = useState({
@@ -37,7 +44,7 @@ const Body = () => {
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
-      setValue(prev => ({ ...prev, email: "" }));
+      setValue((prev) => ({ ...prev, email: "" }));
     }
   }, [store.errors]);
 
@@ -59,11 +66,11 @@ const Body = () => {
     } else {
       setLoading(true);
     }
-  }, [store.errors, store.admin.adminAdded]);
+  }, [store.errors, store.admin.adminAdded, dispatch]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
-  }, []);
+  }, [dispatch]);
 
   const resetForm = () => {
     setValue({
@@ -96,7 +103,7 @@ const Body = () => {
               {/* Left Column */}
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Person className="text-gray-500 mr-2" fontSize="small" />
                     Full Name
                   </label>
@@ -106,12 +113,14 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.name}
-                    onChange={(e) => setValue({ ...value, name: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, name: e.target.value })
+                    }
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Cake className="text-gray-500 mr-2" fontSize="small" />
                     Date of Birth
                   </label>
@@ -121,12 +130,14 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="date"
                     value={value.dob}
-                    onChange={(e) => setValue({ ...value, dob: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, dob: e.target.value })
+                    }
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Email className="text-gray-500 mr-2" fontSize="small" />
                     Email Address
                   </label>
@@ -136,10 +147,14 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="email"
                     value={value.email}
-                    onChange={(e) => setValue({ ...value, email: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, email: e.target.value })
+                    }
                   />
                   {error.emailError && (
-                    <p className="text-red-500 text-xs mt-1">{error.emailError}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {error.emailError}
+                    </p>
                   )}
                 </div>
               </div>
@@ -147,7 +162,7 @@ const Body = () => {
               {/* Right Column */}
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <School className="text-gray-500 mr-2" fontSize="small" />
                     Department
                   </label>
@@ -156,14 +171,16 @@ const Body = () => {
                     displayEmpty
                     className="w-full"
                     value={value.department}
-                    onChange={(e) => setValue({ ...value, department: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, department: e.target.value })
+                    }
                     sx={{
-                      borderRadius: '8px',
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#d1d5db',
+                      borderRadius: "8px",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#d1d5db",
                       },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: '#6366f1',
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#6366f1",
                       },
                     }}
                   >
@@ -179,7 +196,7 @@ const Body = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Phone className="text-gray-500 mr-2" fontSize="small" />
                     Contact Number
                   </label>
@@ -189,12 +206,14 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="tel"
                     value={value.contactNumber}
-                    onChange={(e) => setValue({ ...value, contactNumber: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, contactNumber: e.target.value })
+                    }
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Image className="text-gray-500 mr-2" fontSize="small" />
                     Profile Picture
                   </label>
@@ -203,7 +222,9 @@ const Body = () => {
                       <FileBase
                         type="file"
                         multiple={false}
-                        onDone={({ base64 }) => setValue({ ...value, avatar: base64 })}
+                        onDone={({ base64 }) =>
+                          setValue({ ...value, avatar: base64 })
+                        }
                         className="block w-full text-sm text-gray-500
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-lg file:border-0

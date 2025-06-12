@@ -5,7 +5,7 @@ import {
   CalendarToday as CalendarIcon,
   Grade as GradeIcon,
   Description as DescriptionIcon,
-  DateRange as DateRangeIcon
+  DateRange as DateRangeIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -16,7 +16,7 @@ import {
   InputAdornment,
   Box,
   Alert,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import Spinner from "../../../utils/Spinner";
 import { addAdmin } from "../../../redux/actions/adminActions";
@@ -39,7 +39,12 @@ const Body = () => {
   });
 
   const subjects = [
-    "Mathematics", "Science", "English", "History", "Geography", "Computer Science"
+    "Mathematics",
+    "Science",
+    "English",
+    "History",
+    "Geography",
+    "Computer Science",
   ];
   const sections = ["A", "B", "C", "D"];
 
@@ -53,7 +58,11 @@ const Body = () => {
     const newErrors = {};
     if (!formData.subject) newErrors.subject = "Subject is required";
     if (!formData.section) newErrors.section = "Section is required";
-    if (!formData.year || formData.year < 2000 || formData.year > new Date().getFullYear() + 5) {
+    if (
+      !formData.year ||
+      formData.year < 2000 ||
+      formData.year > new Date().getFullYear() + 5
+    ) {
       newErrors.year = "Enter a valid year";
     }
     if (!formData.test) newErrors.test = "Test name is required";
@@ -68,9 +77,9 @@ const Body = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -105,10 +114,13 @@ const Body = () => {
         <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
           <form onSubmit={handleSubmit} className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <SubjectIcon fontSize="small" className="text-gray-500 mr-2" /> Subject
+                  <SubjectIcon
+                    fontSize="small"
+                    className="text-gray-500 mr-2"
+                  />{" "}
+                  Subject
                 </label>
                 <Select
                   value={formData.subject}
@@ -117,17 +129,24 @@ const Body = () => {
                   displayEmpty
                   className="w-full"
                 >
-                  <MenuItem value=""><em>Select subject</em></MenuItem>
+                  <MenuItem value="">
+                    <em>Select subject</em>
+                  </MenuItem>
                   {subjects.map((subj) => (
-                    <MenuItem key={subj} value={subj}>{subj}</MenuItem>
+                    <MenuItem key={subj} value={subj}>
+                      {subj}
+                    </MenuItem>
                   ))}
                 </Select>
-                {errors.subject && <p className="text-red-500 text-xs mt-1">{errors.subject}</p>}
+                {errors.subject && (
+                  <p className="text-red-500 text-xs mt-1">{errors.subject}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <ClassIcon fontSize="small" className="text-gray-500 mr-2" /> Section
+                  <ClassIcon fontSize="small" className="text-gray-500 mr-2" />{" "}
+                  Section
                 </label>
                 <Select
                   value={formData.section}
@@ -136,17 +155,27 @@ const Body = () => {
                   displayEmpty
                   className="w-full"
                 >
-                  <MenuItem value=""><em>Select section</em></MenuItem>
+                  <MenuItem value="">
+                    <em>Select section</em>
+                  </MenuItem>
                   {sections.map((sec) => (
-                    <MenuItem key={sec} value={sec}>{sec}</MenuItem>
+                    <MenuItem key={sec} value={sec}>
+                      {sec}
+                    </MenuItem>
                   ))}
                 </Select>
-                {errors.section && <p className="text-red-500 text-xs mt-1">{errors.section}</p>}
+                {errors.section && (
+                  <p className="text-red-500 text-xs mt-1">{errors.section}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <CalendarIcon fontSize="small" className="text-gray-500 mr-2" /> Year
+                  <CalendarIcon
+                    fontSize="small"
+                    className="text-gray-500 mr-2"
+                  />{" "}
+                  Year
                 </label>
                 <input
                   type="number"
@@ -156,12 +185,18 @@ const Body = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="e.g. 2023"
                 />
-                {errors.year && <p className="text-red-500 text-xs mt-1">{errors.year}</p>}
+                {errors.year && (
+                  <p className="text-red-500 text-xs mt-1">{errors.year}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <DescriptionIcon fontSize="small" className="text-gray-500 mr-2" /> Test Name
+                  <DescriptionIcon
+                    fontSize="small"
+                    className="text-gray-500 mr-2"
+                  />{" "}
+                  Test Name
                 </label>
                 <input
                   type="text"
@@ -171,12 +206,15 @@ const Body = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="Enter test name"
                 />
-                {errors.test && <p className="text-red-500 text-xs mt-1">{errors.test}</p>}
+                {errors.test && (
+                  <p className="text-red-500 text-xs mt-1">{errors.test}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <GradeIcon fontSize="small" className="text-gray-500 mr-2" /> Total Marks
+                  <GradeIcon fontSize="small" className="text-gray-500 mr-2" />{" "}
+                  Total Marks
                 </label>
                 <input
                   type="number"
@@ -186,12 +224,20 @@ const Body = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   placeholder="e.g. 100"
                 />
-                {errors.totalMarks && <p className="text-red-500 text-xs mt-1">{errors.totalMarks}</p>}
+                {errors.totalMarks && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.totalMarks}
+                  </p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <DateRangeIcon fontSize="small" className="text-gray-500 mr-2" /> Test Date
+                  <DateRangeIcon
+                    fontSize="small"
+                    className="text-gray-500 mr-2"
+                  />{" "}
+                  Test Date
                 </label>
                 <input
                   type="date"
@@ -200,13 +246,17 @@ const Body = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                 />
-                {errors.date && <p className="text-red-500 text-xs mt-1">{errors.date}</p>}
+                {errors.date && (
+                  <p className="text-red-500 text-xs mt-1">{errors.date}</p>
+                )}
               </div>
             </div>
 
             {/* Form Actions */}
             <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
-              <Button variant="outlined" onClick={resetForm}>Clear Form</Button>
+              <Button variant="outlined" onClick={resetForm}>
+                Clear Form
+              </Button>
               <Button
                 type="submit"
                 variant="contained"
@@ -214,7 +264,12 @@ const Body = () => {
                 className="bg-indigo-600 hover:bg-indigo-700 text-white"
               >
                 {loading ? (
-                  <Spinner message="Creating Test..." height={24} width={140} color="#fff" />
+                  <Spinner
+                    message="Creating Test..."
+                    height={24}
+                    width={140}
+                    color="#fff"
+                  />
                 ) : (
                   "Create Test"
                 )}
@@ -224,14 +279,22 @@ const Body = () => {
             {/* Alerts */}
             {submitSuccess && (
               <Box mt={4}>
-                <Alert severity="success" onClose={() => setSubmitSuccess(false)}>
+                <Alert
+                  severity="success"
+                  onClose={() => setSubmitSuccess(false)}
+                >
                   Test created successfully!
                 </Alert>
               </Box>
             )}
             {errors.backendError && (
               <Box mt={4}>
-                <Alert severity="error" onClose={() => setErrors(prev => ({ ...prev, backendError: "" }))}>
+                <Alert
+                  severity="error"
+                  onClose={() =>
+                    setErrors((prev) => ({ ...prev, backendError: "" }))
+                  }
+                >
                   {errors.backendError}
                 </Alert>
               </Box>

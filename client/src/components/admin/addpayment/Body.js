@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -7,7 +7,7 @@ import {
   Select,
   TextField,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Add as AddIcon,
   Clear,
@@ -19,43 +19,43 @@ import {
   Edit,
   Comment,
   AdminPanelSettings,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
 const Spinner = ({ message }) => <span>{message}</span>;
 
 const Body = () => {
   const [value, setValue] = useState({
-    studentName: '',
-    amountPaid: '',
-    paymentDate: '',
-    mode: '',
-    status: '',
-    transactionId: '',
-    remark: '',
-    createdBy: '',
+    studentName: "",
+    amountPaid: "",
+    paymentDate: "",
+    mode: "",
+    status: "",
+    transactionId: "",
+    remark: "",
+    createdBy: "",
   });
 
-  const [error, setError] = useState({ backendError: '' });
+  const [error, setError] = useState({ backendError: "" });
   const [loading, setLoading] = useState(false);
 
-  const students = ['Alice', 'Bob', 'Charlie'];
-  const modes = ['Cash', 'Online', 'Cheque'];
-  const statuses = ['Paid', 'Pending'];
-  const remarks = ['Fee for Term 1', 'Fee for Books', 'Late Payment'];
-  const createdByOptions = ['Admin', 'Accounts', 'Clerk'];
+  const students = ["Alice", "Bob", "Charlie"];
+  const modes = ["Cash", "Online", "Cheque"];
+  const statuses = ["Paid", "Pending"];
+  const remarks = ["Fee for Term 1", "Fee for Books", "Late Payment"];
+  const createdByOptions = ["Admin", "Accounts", "Clerk"];
 
   const resetForm = () => {
     setValue({
-      studentName: '',
-      amountPaid: '',
-      paymentDate: '',
-      mode: '',
-      status: '',
-      transactionId: '',
-      remark: '',
-      createdBy: '',
+      studentName: "",
+      amountPaid: "",
+      paymentDate: "",
+      mode: "",
+      status: "",
+      transactionId: "",
+      remark: "",
+      createdBy: "",
     });
-    setError({ backendError: '' });
+    setError({ backendError: "" });
   };
 
   const handleSubmit = (e) => {
@@ -63,7 +63,7 @@ const Body = () => {
     setLoading(true);
 
     setTimeout(() => {
-      console.log('Submitted Data:', value);
+      console.log("Submitted Data:", value);
       resetForm();
       setLoading(false);
     }, 1000);
@@ -78,7 +78,9 @@ const Body = () => {
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center mb-8">
           <Payments className="text-indigo-600 mr-3" fontSize="large" />
-          <h1 className="text-2xl font-bold text-gray-800">Add Student Payment</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Add Student Payment
+          </h1>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
@@ -94,11 +96,15 @@ const Body = () => {
                   required
                   displayEmpty
                   value={value.studentName}
-                  onChange={(e) => handleChange('studentName', e.target.value)}
+                  onChange={(e) => handleChange("studentName", e.target.value)}
                 >
-                  <MenuItem value=""><em>Select student</em></MenuItem>
+                  <MenuItem value="">
+                    <em>Select student</em>
+                  </MenuItem>
                   {students.map((s, idx) => (
-                    <MenuItem key={idx} value={s}>{s}</MenuItem>
+                    <MenuItem key={idx} value={s}>
+                      {s}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -116,7 +122,7 @@ const Body = () => {
                   size="small"
                   placeholder="Enter amount"
                   value={value.amountPaid}
-                  onChange={(e) => handleChange('amountPaid', e.target.value)}
+                  onChange={(e) => handleChange("amountPaid", e.target.value)}
                 />
               </div>
 
@@ -132,7 +138,7 @@ const Body = () => {
                   fullWidth
                   size="small"
                   value={value.paymentDate}
-                  onChange={(e) => handleChange('paymentDate', e.target.value)}
+                  onChange={(e) => handleChange("paymentDate", e.target.value)}
                 />
               </div>
 
@@ -146,11 +152,15 @@ const Body = () => {
                   required
                   displayEmpty
                   value={value.mode}
-                  onChange={(e) => handleChange('mode', e.target.value)}
+                  onChange={(e) => handleChange("mode", e.target.value)}
                 >
-                  <MenuItem value=""><em>Select mode</em></MenuItem>
+                  <MenuItem value="">
+                    <em>Select mode</em>
+                  </MenuItem>
                   {modes.map((m, idx) => (
-                    <MenuItem key={idx} value={m}>{m}</MenuItem>
+                    <MenuItem key={idx} value={m}>
+                      {m}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -165,11 +175,15 @@ const Body = () => {
                   required
                   displayEmpty
                   value={value.status}
-                  onChange={(e) => handleChange('status', e.target.value)}
+                  onChange={(e) => handleChange("status", e.target.value)}
                 >
-                  <MenuItem value=""><em>Select status</em></MenuItem>
+                  <MenuItem value="">
+                    <em>Select status</em>
+                  </MenuItem>
                   {statuses.map((s, idx) => (
-                    <MenuItem key={idx} value={s}>{s}</MenuItem>
+                    <MenuItem key={idx} value={s}>
+                      {s}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -185,7 +199,9 @@ const Body = () => {
                   size="small"
                   placeholder="Enter transaction ID"
                   value={value.transactionId}
-                  onChange={(e) => handleChange('transactionId', e.target.value)}
+                  onChange={(e) =>
+                    handleChange("transactionId", e.target.value)
+                  }
                 />
               </div>
 
@@ -199,11 +215,15 @@ const Body = () => {
                   required
                   displayEmpty
                   value={value.remark}
-                  onChange={(e) => handleChange('remark', e.target.value)}
+                  onChange={(e) => handleChange("remark", e.target.value)}
                 >
-                  <MenuItem value=""><em>Select remark</em></MenuItem>
+                  <MenuItem value="">
+                    <em>Select remark</em>
+                  </MenuItem>
                   {remarks.map((r, idx) => (
-                    <MenuItem key={idx} value={r}>{r}</MenuItem>
+                    <MenuItem key={idx} value={r}>
+                      {r}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -211,18 +231,25 @@ const Body = () => {
               {/* Created By - Dropdown */}
               <FormControl fullWidth size="small">
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <AdminPanelSettings className="text-gray-500 mr-2" fontSize="small" />
+                  <AdminPanelSettings
+                    className="text-gray-500 mr-2"
+                    fontSize="small"
+                  />
                   Created By
                 </label>
                 <Select
                   required
                   displayEmpty
                   value={value.createdBy}
-                  onChange={(e) => handleChange('createdBy', e.target.value)}
+                  onChange={(e) => handleChange("createdBy", e.target.value)}
                 >
-                  <MenuItem value=""><em>Select user</em></MenuItem>
+                  <MenuItem value="">
+                    <em>Select user</em>
+                  </MenuItem>
                   {createdByOptions.map((c, idx) => (
-                    <MenuItem key={idx} value={c}>{c}</MenuItem>
+                    <MenuItem key={idx} value={c}>
+                      {c}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -244,7 +271,11 @@ const Body = () => {
                 className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
                 disabled={loading}
               >
-                {loading ? <Spinner message="Saving Payment..." /> : 'Save Payment'}
+                {loading ? (
+                  <Spinner message="Saving Payment..." />
+                ) : (
+                  "Save Payment"
+                )}
               </Button>
             </div>
 

@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { 
+import {
   Add as AddIcon,
   School as DepartmentIcon,
   Delete as DeleteIcon,
   Check as CheckIcon,
-  Refresh as RefreshIcon
+  Refresh as RefreshIcon,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { 
-  addDepartment, 
+import {
+  addDepartment,
   deleteDepartment,
-  getAllDepartment
+  getAllDepartment,
 } from "../../../redux/actions/adminActions";
 import Spinner from "../../../utils/Spinner";
 import { ADD_DEPARTMENT, SET_ERRORS } from "../../../redux/actionTypes";
-import { 
-  Button, 
-  Avatar, 
-  TextField, 
-  Box, 
+import {
+  Button,
+  Avatar,
+  TextField,
+  Box,
   Typography,
   IconButton,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Divider
+  Divider,
 } from "@mui/material";
 
 const Body = () => {
@@ -59,9 +59,9 @@ const Body = () => {
     await dispatch(addDepartment({ department }));
     setDepartment("");
     // Immediately add to local state before refresh
-    setLocalDepartments(prev => [
+    setLocalDepartments((prev) => [
       ...prev,
-      { _id: Date.now().toString(), department } // Temporary ID until real one comes
+      { _id: Date.now().toString(), department }, // Temporary ID until real one comes
     ]);
   };
 
@@ -69,7 +69,7 @@ const Body = () => {
     if (window.confirm(`Are you sure you want to delete ${dept.department}?`)) {
       await dispatch(deleteDepartment(dept._id));
       // Immediately remove from local state
-      setLocalDepartments(prev => prev.filter(d => d._id !== dept._id));
+      setLocalDepartments((prev) => prev.filter((d) => d._id !== dept._id));
     }
   };
 
@@ -101,9 +101,14 @@ const Body = () => {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center">
             <DepartmentIcon className="text-indigo-600 mr-3" fontSize="large" />
-            <h1 className="text-2xl font-bold text-gray-800">Department Management</h1>
+            <h1 className="text-2xl font-bold text-gray-800">
+              Department Management
+            </h1>
           </div>
-          <IconButton onClick={refreshDepartments} className="text-gray-500 hover:text-indigo-600">
+          <IconButton
+            onClick={refreshDepartments}
+            className="text-gray-500 hover:text-indigo-600"
+          >
             <RefreshIcon />
           </IconButton>
         </div>
@@ -115,7 +120,7 @@ const Body = () => {
               <AddIcon className="text-green-600 mr-2" />
               Add New Department
             </h2>
-            
+
             <form onSubmit={handleSubmit}>
               <div className="flex items-start space-x-4">
                 <TextField
@@ -129,7 +134,10 @@ const Body = () => {
                   helperText={error.departmentError}
                   InputProps={{
                     startAdornment: (
-                      <DepartmentIcon className="text-gray-500 mr-2" fontSize="small" />
+                      <DepartmentIcon
+                        className="text-gray-500 mr-2"
+                        fontSize="small"
+                      />
                     ),
                   }}
                 />
@@ -164,7 +172,7 @@ const Body = () => {
                 Existing Departments ({localDepartments.length})
               </h2>
             </div>
-            
+
             {localDepartments.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 No departments added yet

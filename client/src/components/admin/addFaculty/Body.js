@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { 
+import {
   Add as AddIcon,
   Person,
   Cake,
@@ -9,21 +9,21 @@ import {
   Image,
   Work,
   Transgender,
-  Clear
+  Clear,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
 import { addFaculty } from "../../../redux/actions/adminActions";
-import { 
-  Select, 
-  MenuItem, 
-  Button, 
-  Avatar, 
-  TextField, 
-  Box, 
+import {
+  Select,
+  MenuItem,
+  Button,
+  Avatar,
+  TextField,
+  Box,
   Typography,
   FormControl,
-  InputLabel
+  InputLabel,
 } from "@mui/material";
 import Spinner from "../../../utils/Spinner";
 import { ADD_FACULTY, SET_ERRORS } from "../../../redux/actionTypes";
@@ -43,13 +43,13 @@ const Body = () => {
     avatar: "",
     joiningYear: new Date().getFullYear().toString(),
     gender: "",
-    designation: ""
+    designation: "",
   });
 
   useEffect(() => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
-      setValue(prev => ({ ...prev, email: "" }));
+      setValue((prev) => ({ ...prev, email: "" }));
     }
   }, [store.errors]);
 
@@ -70,7 +70,7 @@ const Body = () => {
       avatar: "",
       joiningYear: new Date().getFullYear().toString(),
       gender: "",
-      designation: ""
+      designation: "",
     });
     setError({});
   };
@@ -116,7 +116,9 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.name}
-                    onChange={(e) => setValue({ ...value, name: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, name: e.target.value })
+                    }
                   />
                 </div>
 
@@ -130,7 +132,9 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="date"
                     value={value.dob}
-                    onChange={(e) => setValue({ ...value, dob: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, dob: e.target.value })
+                    }
                   />
                 </div>
 
@@ -145,10 +149,14 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="email"
                     value={value.email}
-                    onChange={(e) => setValue({ ...value, email: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, email: e.target.value })
+                    }
                   />
                   {error.emailError && (
-                    <p className="text-red-500 text-xs mt-1">{error.emailError}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {error.emailError}
+                    </p>
                   )}
                 </div>
 
@@ -163,7 +171,9 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.designation}
-                    onChange={(e) => setValue({ ...value, designation: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, designation: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -179,14 +189,16 @@ const Body = () => {
                     <Select
                       required
                       value={value.department}
-                      onChange={(e) => setValue({ ...value, department: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, department: e.target.value })
+                      }
                       sx={{
-                        borderRadius: '8px',
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#d1d5db',
+                        borderRadius: "8px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#d1d5db",
                         },
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#6366f1',
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#6366f1",
                         },
                       }}
                     >
@@ -204,21 +216,26 @@ const Body = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                    <Transgender className="text-gray-500 mr-2" fontSize="small" />
+                    <Transgender
+                      className="text-gray-500 mr-2"
+                      fontSize="small"
+                    />
                     Gender
                   </label>
                   <FormControl fullWidth>
                     <Select
                       required
                       value={value.gender}
-                      onChange={(e) => setValue({ ...value, gender: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, gender: e.target.value })
+                      }
                       sx={{
-                        borderRadius: '8px',
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#d1d5db',
+                        borderRadius: "8px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#d1d5db",
                         },
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#6366f1',
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#6366f1",
                         },
                       }}
                     >
@@ -243,7 +260,9 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="tel"
                     value={value.contactNumber}
-                    onChange={(e) => setValue({ ...value, contactNumber: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, contactNumber: e.target.value })
+                    }
                   />
                 </div>
 
@@ -257,7 +276,9 @@ const Body = () => {
                       <FileBase
                         type="file"
                         multiple={false}
-                        onDone={({ base64 }) => setValue({ ...value, avatar: base64 })}
+                        onDone={({ base64 }) =>
+                          setValue({ ...value, avatar: base64 })
+                        }
                         className="block w-full text-sm text-gray-500
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-lg file:border-0

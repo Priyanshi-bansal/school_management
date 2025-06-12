@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -6,59 +6,59 @@ import {
   MenuItem,
   Select,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Add as AddIcon,
   Clear,
   CheckCircle,
   School,
   People,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
 const Spinner = ({ message }) => <span>{message}</span>;
 
 const Body = () => {
   const [value, setValue] = useState({
-    class: '',
-    section: '',
-    academicYear: '',
-    effectiveFrom: '',
-    effectiveTill: '',
-    isActive: '',
+    class: "",
+    section: "",
+    academicYear: "",
+    effectiveFrom: "",
+    effectiveTill: "",
+    isActive: "",
   });
 
-  const [error, setError] = useState({ backendError: '' });
+  const [error, setError] = useState({ backendError: "" });
   const [loading, setLoading] = useState(false);
 
-  const classes = ['6', '7', '8', '9', '10'];
-  const sections = ['A', 'B', 'C'];
-  const academicYears = ['2023-2024', '2024-2025', '2025-2026'];
+  const classes = ["6", "7", "8", "9", "10"];
+  const sections = ["A", "B", "C"];
+  const academicYears = ["2023-2024", "2024-2025", "2025-2026"];
 
   const resetForm = () => {
     setValue({
-      class: '',
-      section: '',
-      academicYear: '',
-      effectiveFrom: '',
-      effectiveTill: '',
-      isActive: '',
+      class: "",
+      section: "",
+      academicYear: "",
+      effectiveFrom: "",
+      effectiveTill: "",
+      isActive: "",
     });
-    setError({ backendError: '' });
+    setError({ backendError: "" });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     setTimeout(() => {
-      console.log('Submitted Data:', value);
+      console.log("Submitted Data:", value);
       resetForm();
       setLoading(false);
     }, 1000);
   };
 
   const handleChange = (field, val) => {
-    if (field === 'isActive') {
-      setValue({ ...value, [field]: val === 'true' });
+    if (field === "isActive") {
+      setValue({ ...value, [field]: val === "true" });
     } else {
       setValue({ ...value, [field]: val });
     }
@@ -69,7 +69,9 @@ const Body = () => {
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center mb-8">
           <AddIcon className="text-indigo-600 mr-3" fontSize="large" />
-          <h1 className="text-2xl font-bold text-gray-800">Add Class Time Table</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Add Class Time Table
+          </h1>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
@@ -86,7 +88,7 @@ const Body = () => {
                     required
                     displayEmpty
                     value={value.class}
-                    onChange={(e) => handleChange('class', e.target.value)}
+                    onChange={(e) => handleChange("class", e.target.value)}
                   >
                     <MenuItem value="">
                       <em>Select class</em>
@@ -111,7 +113,7 @@ const Body = () => {
                     required
                     displayEmpty
                     value={value.section}
-                    onChange={(e) => handleChange('section', e.target.value)}
+                    onChange={(e) => handleChange("section", e.target.value)}
                   >
                     <MenuItem value="">
                       <em>Select section</em>
@@ -135,7 +137,9 @@ const Body = () => {
                     required
                     displayEmpty
                     value={value.academicYear}
-                    onChange={(e) => handleChange('academicYear', e.target.value)}
+                    onChange={(e) =>
+                      handleChange("academicYear", e.target.value)
+                    }
                   >
                     <MenuItem value="">
                       <em>Select academic year</em>
@@ -159,7 +163,9 @@ const Body = () => {
                   required
                   className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
                   value={value.effectiveFrom}
-                  onChange={(e) => handleChange('effectiveFrom', e.target.value)}
+                  onChange={(e) =>
+                    handleChange("effectiveFrom", e.target.value)
+                  }
                 />
               </div>
 
@@ -173,22 +179,27 @@ const Body = () => {
                   required
                   className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
                   value={value.effectiveTill}
-                  onChange={(e) => handleChange('effectiveTill', e.target.value)}
+                  onChange={(e) =>
+                    handleChange("effectiveTill", e.target.value)
+                  }
                 />
               </div>
 
               {/* Is Active */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                  <CheckCircle className="text-gray-500 mr-2" fontSize="small" />
+                  <CheckCircle
+                    className="text-gray-500 mr-2"
+                    fontSize="small"
+                  />
                   Is Active
                 </label>
                 <FormControl fullWidth size="small">
                   <Select
                     required
                     displayEmpty
-                    value={value.isActive === '' ? '' : String(value.isActive)}
-                    onChange={(e) => handleChange('isActive', e.target.value)}
+                    value={value.isActive === "" ? "" : String(value.isActive)}
+                    onChange={(e) => handleChange("isActive", e.target.value)}
                   >
                     <MenuItem value="">
                       <em>Select status</em>
@@ -201,7 +212,11 @@ const Body = () => {
             </div>
 
             <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
-              <Button variant="outlined" startIcon={<Clear />} onClick={resetForm}>
+              <Button
+                variant="outlined"
+                startIcon={<Clear />}
+                onClick={resetForm}
+              >
                 Clear Form
               </Button>
               <Button
@@ -211,13 +226,15 @@ const Body = () => {
                 className="bg-indigo-600 hover:bg-indigo-700 shadow-sm"
                 disabled={loading}
               >
-                {loading ? <Spinner message="Adding..." /> : 'Add Time Table'}
+                {loading ? <Spinner message="Adding..." /> : "Add Time Table"}
               </Button>
             </div>
 
             {error.backendError && (
               <Box className="mt-4 p-3 bg-red-50 rounded-lg">
-                <Typography className="text-red-600 text-sm">{error.backendError}</Typography>
+                <Typography className="text-red-600 text-sm">
+                  {error.backendError}
+                </Typography>
               </Box>
             )}
           </form>
