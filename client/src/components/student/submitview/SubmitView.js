@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react'
 import Header from "../Header";
 import Sidebar from "../Sidebar";
 import Body from "./Body";
 
-const AddDepartment = () => {
+const SubmitView = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+   <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="flex flex-col h-screen">
         <Header />
         <div className="flex flex-1 overflow-hidden">
@@ -16,7 +16,7 @@ const AddDepartment = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AddDepartment;
+export default SubmitView

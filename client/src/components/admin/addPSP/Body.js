@@ -26,8 +26,18 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const months = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const paymentModes = ["Cash", "Bank Transfer", "Cheque"];
@@ -58,7 +68,12 @@ const Body = () => {
 
   return (
     <Box sx={{ p: { xs: 2, sm: 3 } }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
         <Stack direction="row" spacing={1} alignItems="center">
           <Save color="primary" />
           <Typography variant="h5">Add Salary Payment</Typography>
@@ -127,7 +142,9 @@ const Body = () => {
                 }
               >
                 {months.map((m) => (
-                  <MenuItem key={m} value={m}>{m}</MenuItem>
+                  <MenuItem key={m} value={m}>
+                    {m}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -166,7 +183,9 @@ const Body = () => {
                 }
               >
                 {paymentModes.map((mode) => (
-                  <MenuItem key={mode} value={mode}>{mode}</MenuItem>
+                  <MenuItem key={mode} value={mode}>
+                    {mode}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -180,12 +199,14 @@ const Body = () => {
                 label="Status"
                 startAdornment={
                   <InputAdornment position="start">
-                      <AssignmentTurnedIn />
+                    <AssignmentTurnedIn />
                   </InputAdornment>
                 }
               >
                 {statusOptions.map((st) => (
-                  <MenuItem key={st} value={st}>{st}</MenuItem>
+                  <MenuItem key={st} value={st}>
+                    {st}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -233,7 +254,11 @@ const Body = () => {
             <Button variant="outlined" onClick={() => navigate(-1)}>
               Cancel
             </Button>
-            <Button variant="contained" startIcon={<Save />} onClick={handleSubmit}>
+            <Button
+              variant="contained"
+              startIcon={<Save />}
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           </Box>

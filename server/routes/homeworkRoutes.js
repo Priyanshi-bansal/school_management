@@ -1,7 +1,5 @@
 import express from "express";
-import HomeworkController from "../controllers/homeworkController";
-import authMiddleware from "../middleware/auth";
-import uploadMiddleware from "../middleware/fileUploadMiddleware";
+import upload from "../middleware/fileUploadMiddleware.js";
 import {
   createHomework,
   getHomeworkForClass,
@@ -19,13 +17,13 @@ import {
   uploadHomework,
   addFilesToHomework,
   deleteHomeworkFile,
-} from "../controllers/homeworkController.js";
+} from "../controller/homeworkController.js";
 
 const router = express.Router();
 
 // Create homework
 router.post("/:classId/:sectionId/:subjectId", 
-    uploadMiddleware.array("files"),
+    upload.array("files"),
     createHomework);
 
 // Get homework for class/subject
@@ -55,14 +53,14 @@ router.get("/", getStudentHomework);
 // Submit homework
 router.post(
   "/:homeworkId/submit",
-  uploadMiddleware.array("files"),
+  upload.array("files"),
   submitHomework
 );
 
 // Update submission
 router.put(
   "/submissions/:submissionId",
-  uploadMiddleware.array("files"),
+  upload.array("files"),
   updateSubmission
 );
 
@@ -75,14 +73,14 @@ router.post("/submissions/:submissionId/comments", addComment);
 // Upload homework files
 router.post(
   "/:homeworkId/upload",
-  uploadMiddleware.array("files"),
+  upload.array("files"),
   uploadHomework
 );
 
 // Add files to homework
 router.post(
   "/:homeworkId/files",
-  uploadMiddleware.array("files"),
+  upload.array("files"),
   addFilesToHomework
 );
 

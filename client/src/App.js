@@ -127,6 +127,12 @@ import StudentHomework from "./components/student/studenthomework/StudentHomewor
 import EditStudentHomework from "./components/student/editstudenthomework/EditStudentHomework.js";
 import AddStudentHomework from "./components/student/addstudenthomework/AddStudentHomework.js";
 import ViewpaymentFee from "./components/admin/viewpaymentFee/ViewpaymentFee.js";
+import SubmitHomework from "./components/student/submithomework/SubmitHomework.js";
+import GradeView from "./components/student/gradeview/GradeView.js";
+import UpcomingView from "./components/student/upcomingview/UpcomingView.js";
+import SubmitView from "./components/student/submitview/SubmitView.js";
+import ViewCalendra from "./components/admin/viewcalendra/ViewCalendra.js";
+
 
 
 const App = () => {
@@ -219,8 +225,11 @@ const App = () => {
       <Route path="/admin/viewpsp" element={<ViewPSP />} />
       <Route path="/admin/addpsp" element={<AddPSP />} />
       <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
+
       <Route path="/admin/viewfeesstructure" element={<Viewfeesstructure />} />
       <Route path="/admin/viewpaymentfee" element={<ViewpaymentFee />} />
+
+      <Route path="/admin/viewcalendra" element={<ViewCalendra />} />
 
 
       {/* Faculty  */}
@@ -265,6 +274,13 @@ const App = () => {
       <Route path="/student/studenthomework" element={<StudentHomework />} />
       <Route path="/student/editstudenthomework" element={<EditStudentHomework />} />
       <Route path="/student/addstudenthomework" element={<AddStudentHomework />} />
+      <Route path="/student/submithomework" element={<SubmitHomework />} />
+      <Route path="/student/upcomingview" element={<UpcomingView />} />
+
+      <Route path="/student/submitview" element={<SubmitView />} />
+
+      <Route path="/student/gradeview" element={<GradeView />} />
+
 
 
 

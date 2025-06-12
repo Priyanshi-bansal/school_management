@@ -542,8 +542,8 @@ import {sendEmailWithAttachment} from '../services/emailService.js';
   }
 
  const FeePayments =  async (req, res) => {
-    try {
-      const { fromDate, toDate, academicYear, class: className } = req.query;
+    try { 
+      const { fromDate, toDate, academicYear, class: className} = req.query;
       const filter = {};
       
       if (fromDate && toDate) {

@@ -184,71 +184,7 @@ export const addAdmin = async (req, res) => {
   }
 };
 
-export const createNotice = async (req, res) => {
-  try {
-    const { from, content, topic, date, noticeFor } = req.body;
 
-    const errors = { noticeError: String };
-    const exisitingNotice = await Notice.findOne({ topic, content, date });
-    if (exisitingNotice) {
-      errors.noticeError = "Notice already created";
-      return res.status(400).json(errors);
-    }
-    const newNotice = await new Notice({
-      from,
-      content,
-      topic,
-      noticeFor,
-      date,
-    });
-    await newNotice.save();
-    return res.status(200).json({
-      success: true,
-      message: "Notice created successfully",
-      response: newNotice,
-    });
-  } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
-  }
-};
-
-export const addDepartment = async (req, res) => {
-  try {
-    const errors = { departmentError: String };
-    const { department } = req.body;
-    const existingDepartment = await Department.findOne({ department });
-    if (existingDepartment) {
-      errors.departmentError = "Department already added";
-      return res.status(400).json(errors);
-    }
-    const departments = await Department.find({});
-    let add = departments.length + 1;
-    let departmentCode;
-    if (add < 9) {
-      departmentCode = "0" + add.toString();
-    } else {
-      departmentCode = add.toString();
-    }
-
-    const newDepartment = await new Department({
-      department,
-      departmentCode,
-    });
-
-    await newDepartment.save();
-    return res.status(200).json({
-      success: true,
-      message: "Department added successfully",
-      response: newDepartment,
-    });
-  } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
-  }
-};
 
 export const addFaculty = async (req, res) => {
   try {
@@ -334,21 +270,7 @@ export const getFaculty = async (req, res) => {
     res.status(500).json(errors);
   }
 };
-export const getNotice = async (req, res) => {
-  try {
-    const errors = { noNoticeError: String };
-    const notices = await Notice.find({});
-    if (notices.length === 0) {
-      errors.noNoticeError = "No Notice Found";
-      return res.status(404).json(errors);
-    }
-    res.status(200).json({ result: notices });
-  } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
-  }
-};
+
 
 export const addSubject = async (req, res) => {
   try {
@@ -493,21 +415,6 @@ export const deleteSubject = async (req, res) => {
   }
 };
 
-export const deleteDepartment = async (req, res) => {
-  try {
-    const { department } = req.body;
-
-    await Department.findOneAndDelete({ department });
-
-    res.status(200).json({ message: "Department Deleted" });
-  } catch (error) {
-    const errors = { backendError: String };
-    errors.backendError = error;
-    res.status(500).json(errors);
-  }
-};
-
-
 
 export const addStudent = async (req, res) => {
   try {
@@ -639,14 +546,7 @@ export const getAllAdmin = async (req, res) => {
   }
 };
 
-export const getAllDepartment = async (req, res) => {
-  try {
-    const departments = await Department.find();
-    res.status(200).json(departments);
-  } catch (error) {
-    console.log("Backend Error", error);
-  }
-};
+
 export const getAllSubject = async (req, res) => {
   try {
     const subjects = await Subject.find();
