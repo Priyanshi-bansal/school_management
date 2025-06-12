@@ -20,8 +20,6 @@ import {
   deleteFaculty,
   deleteStudent,
   deleteSubject,
-  createNotice,
-  getNotice,
   getOrganizationIPs, addOrganizationIP, deleteOrganizationIP
 } from "../controller/adminController.js";
 const router = express.Router();
@@ -29,7 +27,6 @@ console.log("Routes Page");
 router.post("/login", adminLogin);
 router.post("/updatepassword", auth, updatedPassword);
 router.get("/getallstudent", auth, getAllStudent);
-router.post("/createnotice", auth, createNotice);
 router.get("/getallfaculty", auth, getAllFaculty);
 router.get("/getallsubject", auth, getAllSubject);
 router.get("/getalladmin", auth, getAllAdmin);
@@ -41,7 +38,7 @@ router.post("/addsubject", auth, addSubject);
 router.post("/getsubject", auth, getSubject);
 router.post("/addstudent", auth, addStudent);
 router.post("/getstudent", auth, getStudent);
-router.post("/getnotice", auth, getNotice);
+
 router.post("/getadmin", auth, getAdmin);
 router.post("/deleteadmin", auth, deleteAdmin);
 router.post("/deletefaculty", auth, deleteFaculty);
