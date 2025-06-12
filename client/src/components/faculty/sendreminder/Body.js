@@ -391,7 +391,7 @@ const Body = () => {
                   </Grid>
                 </Grid>
               )} */}
-
+              </Box>
             </Grid>
 
             {/* Summary */}

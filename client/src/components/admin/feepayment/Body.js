@@ -5,7 +5,8 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import DownloadIcon from "@mui/icons-material/Download";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Search, ClearAll } from "@mui/icons-material";
+import { Search, ClearAll, Add } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import {
   Box,
   Typography,
@@ -39,7 +40,7 @@ const Body = () => {
       mode: "Online",
       status: "Paid",
       transactionId: "TXN12345",
-      remark: "First installment",
+      updateBy: "First installment",
       createdBy: "Admin",
       department: "Computer Science",
     },
@@ -50,7 +51,7 @@ const Body = () => {
       mode: "Cash",
       status: "Pending",
       transactionId: "TXN67890",
-      remark: "Due clearance",
+      updateBy: "Due clearance",
       createdBy: "Clerk",
       department: "Mechanical",
     },
@@ -83,7 +84,7 @@ const Body = () => {
           p.mode.toLowerCase().includes(searchQuery.toLowerCase()) ||
           p.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
           p.transactionId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          p.remark.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.updateBy.toLowerCase().includes(searchQuery.toLowerCase()) ||
           p.createdBy.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
@@ -126,9 +127,20 @@ const Body = () => {
           <Button
             variant="contained"
             color="primary"
-            startIcon={<AddCircleOutlineIcon />}
-            onClick={() => navigate("/admin/addpayment")}
-            sx={{ whiteSpace: "nowrap" }}
+            startIcon={<Add />}
+            onClick={() => navigate("/admin/addfees")}
+            sx={{
+              ml: { sm: "auto" },
+              mt: { xs: 1, sm: 0 },
+              px: 3,
+              py: 1.5,
+              fontWeight: "bold",
+              fontSize: "16px",
+              borderRadius: "8px",
+              boxShadow: 2,
+              textTransform: "none",
+              width: { xs: '100%', sm: 'auto' }
+            }}
           >
             Add Payment
           </Button>
@@ -177,7 +189,7 @@ const Body = () => {
 
             <IconButton
               onClick={clearFilters}
-              color="error"
+              color="primary"
               sx={{
                 border: "1px solid #ccc",
                 borderRadius: 1,
@@ -207,8 +219,7 @@ const Body = () => {
                     <TableCell>Amount Paid</TableCell>
                     <TableCell>Mode</TableCell>
                     <TableCell>Status</TableCell>
-                    <TableCell>Transaction ID</TableCell>
-                    <TableCell>Remark</TableCell>
+                    <TableCell>updateBy</TableCell>
                     <TableCell>Created By</TableCell>
                     <TableCell>Receipt</TableCell>
                     <TableCell>Action</TableCell>
@@ -231,27 +242,33 @@ const Body = () => {
                             size="small"
                           />
                         </TableCell>
-                        <TableCell>{payment.transactionId}</TableCell>
-                        <TableCell>{payment.remark}</TableCell>
+
+                        <TableCell>{payment.updateBy}</TableCell>
                         <TableCell>{payment.createdBy}</TableCell>
                         <TableCell>
-  <Box display="flex" alignItems="center" gap={1}>
-    <IconButton
-      color="primary"
-      size="small"
-      onClick={() => handleDownload(payment)}
-    >
-      <DownloadIcon />
-    </IconButton>
-    <IconButton
-      color="primary"
-      size="small"
-      onClick={() => handleViewReceipt(payment)}
-    >
-      <VisibilityIcon />
-    </IconButton>
-  </Box>
-</TableCell>
+                          <Box display="flex" alignItems="center" gap={1}>
+                            <IconButton
+                              color="primary"
+                              size="small"
+                              onClick={() => handleDownload(payment)}
+                            >
+                              <DownloadIcon />
+                            </IconButton>
+
+                            <IconButton
+                              color="primary"
+                              onClick={() =>
+                                navigate("/admin/viewpaymentfee", {
+                                  state: { payment },
+                                })
+                              }
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+
+
+                          </Box>
+                        </TableCell>
                         <TableCell>
                           <IconButton
                             color="primary"

@@ -135,7 +135,7 @@ const Body = () => {
               textTransform: "none",
             }}
           >
-            Add Section
+            Add Test
           </Button>
         </Box>
       </Box>
