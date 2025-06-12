@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { 
+import {
   Add as AddIcon,
   Person,
   Cake,
@@ -8,24 +8,21 @@ import {
   School,
   Image,
   Transgender,
-  Groups,
   FamilyRestroom,
-  Clear
+  Clear,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import FileBase from "react-file-base64";
 import { addStudent } from "../../../redux/actions/adminActions";
-import { 
-  Select, 
-  MenuItem, 
-  Button, 
-  Avatar, 
-  TextField, 
-  Box, 
+import {
+  Select,
+  MenuItem,
+  Button,
+  Avatar,
+  Box,
   Typography,
   FormControl,
-  InputLabel,
-  Divider
+  Divider,
 } from "@mui/material";
 import Spinner from "../../../utils/Spinner";
 import { ADD_STUDENT, SET_ERRORS } from "../../../redux/actionTypes";
@@ -59,7 +56,7 @@ const Body = () => {
     if (Object.keys(store.errors).length !== 0) {
       setError(store.errors);
       errorRef.current.scrollIntoView({ behavior: "smooth" });
-      setValue(prev => ({ ...prev, email: "" }));
+      setValue((prev) => ({ ...prev, email: "" }));
     }
   }, [store.errors]);
 
@@ -99,11 +96,11 @@ const Body = () => {
         dispatch({ type: ADD_STUDENT, payload: false });
       }
     }
-  }, [store.errors, store.admin.studentAdded]);
+  }, [store.errors, store.admin.studentAdded, dispatch]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="flex-1 p-6 bg-gray-50">
@@ -111,7 +108,9 @@ const Body = () => {
         {/* Header */}
         <div className="flex items-center mb-8">
           <AddIcon className="text-indigo-600 mr-3" fontSize="large" />
-          <h1 className="text-2xl font-bold text-gray-800">Student Registration</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Student Registration
+          </h1>
         </div>
 
         {/* Form Card */}
@@ -120,13 +119,16 @@ const Body = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column - Student Information */}
               <div className="space-y-5">
-                <Typography variant="h6" className="text-gray-700 mb-4 flex items-center">
+                <Typography
+                  variant="h6"
+                  className="text-gray-700 mb-4 flex items-center"
+                >
                   <Person className="text-indigo-600 mr-2" />
                   Student Details
                 </Typography>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Person className="text-gray-500 mr-2" fontSize="small" />
                     Full Name
                   </label>
@@ -136,13 +138,15 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.name}
-                    onChange={(e) => setValue({ ...value, name: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, name: e.target.value })
+                    }
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                       <Cake className="text-gray-500 mr-2" fontSize="small" />
                       Date of Birth
                     </label>
@@ -151,25 +155,32 @@ const Body = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                       type="date"
                       value={value.dob}
-                      onChange={(e) => setValue({ ...value, dob: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, dob: e.target.value })
+                      }
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-                      <Transgender className="text-gray-500 mr-2" fontSize="small" />
+                    <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                      <Transgender
+                        className="text-gray-500 mr-2"
+                        fontSize="small"
+                      />
                       Gender
                     </label>
                     <FormControl fullWidth>
                       <Select
                         required
                         value={value.gender}
-                        onChange={(e) => setValue({ ...value, gender: e.target.value })}
+                        onChange={(e) =>
+                          setValue({ ...value, gender: e.target.value })
+                        }
                         sx={{
-                          borderRadius: '8px',
-                          height: '42px',
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#d1d5db',
+                          borderRadius: "8px",
+                          height: "42px",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#d1d5db",
                           },
                         }}
                       >
@@ -183,7 +194,7 @@ const Body = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Email className="text-gray-500 mr-2" fontSize="small" />
                     Email Address
                   </label>
@@ -193,16 +204,20 @@ const Body = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="email"
                     value={value.email}
-                    onChange={(e) => setValue({ ...value, email: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, email: e.target.value })
+                    }
                   />
                   {error.emailError && (
-                    <p className="text-red-500 text-xs mt-1">{error.emailError}</p>
+                    <p className="text-red-500 text-xs mt-1">
+                      {error.emailError}
+                    </p>
                   )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                       <Phone className="text-gray-500 mr-2" fontSize="small" />
                       Contact Number
                     </label>
@@ -212,7 +227,9 @@ const Body = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                       type="tel"
                       value={value.contactNumber}
-                      onChange={(e) => setValue({ ...value, contactNumber: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, contactNumber: e.target.value })
+                      }
                     />
                   </div>
 
@@ -226,13 +243,15 @@ const Body = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                       type="text"
                       value={value.batch}
-                      onChange={(e) => setValue({ ...value, batch: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, batch: e.target.value })
+                      }
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                     <Image className="text-gray-500 mr-2" fontSize="small" />
                     Profile Picture
                   </label>
@@ -241,7 +260,9 @@ const Body = () => {
                       <FileBase
                         type="file"
                         multiple={false}
-                        onDone={({ base64 }) => setValue({ ...value, avatar: base64 })}
+                        onDone={({ base64 }) =>
+                          setValue({ ...value, avatar: base64 })
+                        }
                         className="block w-full text-sm text-gray-500
                           file:mr-4 file:py-2 file:px-4
                           file:rounded-lg file:border-0
@@ -263,26 +284,31 @@ const Body = () => {
 
               {/* Right Column - Academic & Family Information */}
               <div className="space-y-5">
-                <Typography variant="h6" className="text-gray-700 mb-4 flex items-center">
+                <Typography
+                  variant="h6"
+                  className="text-gray-700 mb-4 flex items-center"
+                >
                   <School className="text-indigo-600 mr-2" />
                   Academic Information
                 </Typography>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
                       Department
                     </label>
                     <FormControl fullWidth>
                       <Select
                         required
                         value={value.department}
-                        onChange={(e) => setValue({ ...value, department: e.target.value })}
+                        onChange={(e) =>
+                          setValue({ ...value, department: e.target.value })
+                        }
                         sx={{
-                          borderRadius: '8px',
-                          height: '42px',
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#d1d5db',
+                          borderRadius: "8px",
+                          height: "42px",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#d1d5db",
                           },
                         }}
                       >
@@ -304,12 +330,14 @@ const Body = () => {
                       <Select
                         required
                         value={value.year}
-                        onChange={(e) => setValue({ ...value, year: e.target.value })}
+                        onChange={(e) =>
+                          setValue({ ...value, year: e.target.value })
+                        }
                         sx={{
-                          borderRadius: '8px',
-                          height: '42px',
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: '#d1d5db',
+                          borderRadius: "8px",
+                          height: "42px",
+                          "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#d1d5db",
                           },
                         }}
                       >
@@ -331,12 +359,14 @@ const Body = () => {
                     <Select
                       required
                       value={value.section}
-                      onChange={(e) => setValue({ ...value, section: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, section: e.target.value })
+                      }
                       sx={{
-                        borderRadius: '8px',
-                        height: '42px',
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#d1d5db',
+                        borderRadius: "8px",
+                        height: "42px",
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#d1d5db",
                         },
                       }}
                     >
@@ -350,7 +380,10 @@ const Body = () => {
 
                 <Divider className="my-4" />
 
-                <Typography variant="h6" className="text-gray-700 mb-4 flex items-center">
+                <Typography
+                  variant="h6"
+                  className="text-gray-700 mb-4 flex items-center"
+                >
                   <FamilyRestroom className="text-indigo-600 mr-2" />
                   Parent Information
                 </Typography>
@@ -366,7 +399,9 @@ const Body = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                       type="text"
                       value={value.fatherName}
-                      onChange={(e) => setValue({ ...value, fatherName: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, fatherName: e.target.value })
+                      }
                     />
                   </div>
 
@@ -380,7 +415,9 @@ const Body = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                       type="text"
                       value={value.motherName}
-                      onChange={(e) => setValue({ ...value, motherName: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, motherName: e.target.value })
+                      }
                     />
                   </div>
                 </div>
@@ -396,7 +433,12 @@ const Body = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                       type="tel"
                       value={value.fatherContactNumber}
-                      onChange={(e) => setValue({ ...value, fatherContactNumber: e.target.value })}
+                      onChange={(e) =>
+                        setValue({
+                          ...value,
+                          fatherContactNumber: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
@@ -410,7 +452,12 @@ const Body = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                       type="tel"
                       value={value.motherContactNumber}
-                      onChange={(e) => setValue({ ...value, motherContactNumber: e.target.value })}
+                      onChange={(e) =>
+                        setValue({
+                          ...value,
+                          motherContactNumber: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>

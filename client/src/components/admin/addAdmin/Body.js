@@ -19,6 +19,7 @@ import {
 import FileBase from "react-file-base64";
 import { useDispatch, useSelector } from "react-redux";
 import { addAdmin } from "../../../redux/actions/adminActions";
+
 import Spinner from "../../../utils/Spinner";
 import { ADD_ADMIN, SET_ERRORS } from "../../../redux/actionTypes";
 
@@ -64,11 +65,11 @@ const Body = () => {
         dispatch({ type: ADD_ADMIN, payload: false });
       }
     }
-  }, [store.errors, store.admin.adminAdded]);
+  }, [store.errors, store.admin.adminAdded, dispatch]);
 
   useEffect(() => {
     dispatch({ type: SET_ERRORS, payload: {} });
-  }, []);
+  }, [dispatch]);
 
   const resetForm = () => {
     setValue({
@@ -202,6 +203,154 @@ const Body = () => {
                   )}
                 </div>
               </div>
+{/* =======
+       
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200">
+          <form onSubmit={handleSubmit} className="p-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             
+              <div className="space-y-5">
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Person className="text-gray-500 mr-2" fontSize="small" />
+                    Full Name
+                  </label>
+                  <input
+                    placeholder="Enter full name"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    type="text"
+                    value={value.name}
+                    onChange={(e) =>
+                      setValue({ ...value, name: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Cake className="text-gray-500 mr-2" fontSize="small" />
+                    Date of Birth
+                  </label>
+                  <input
+                    placeholder="Select date"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    type="date"
+                    value={value.dob}
+                    onChange={(e) =>
+                      setValue({ ...value, dob: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Email className="text-gray-500 mr-2" fontSize="small" />
+                    Email Address
+                  </label>
+                  <input
+                    placeholder="Enter email"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    type="email"
+                    value={value.email}
+                    onChange={(e) =>
+                      setValue({ ...value, email: e.target.value })
+                    }
+                  />
+                  {error.emailError && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {error.emailError}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="space-y-5">
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <School className="text-gray-500 mr-2" fontSize="small" />
+                    Department
+                  </label>
+                  <Select
+                    required
+                    displayEmpty
+                    className="w-full"
+                    value={value.department}
+                    onChange={(e) =>
+                      setValue({ ...value, department: e.target.value })
+                    }
+                    sx={{
+                      borderRadius: "8px",
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#d1d5db",
+                      },
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#6366f1",
+                      },
+                    }}
+                  >
+                    <MenuItem value="">
+                      <em>Select department</em>
+                    </MenuItem>
+                    {departments?.map((dp, idx) => (
+                      <MenuItem key={idx} value={dp.department}>
+                        {dp.department}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Phone className="text-gray-500 mr-2" fontSize="small" />
+                    Contact Number
+                  </label>
+                  <input
+                    placeholder="Enter phone number"
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                    type="tel"
+                    value={value.contactNumber}
+                    onChange={(e) =>
+                      setValue({ ...value, contactNumber: e.target.value })
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-gray-700 mb-1 flex items-center">
+                    <Image className="text-gray-500 mr-2" fontSize="small" />
+                    Profile Picture
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-1">
+                      <FileBase
+                        type="file"
+                        multiple={false}
+                        onDone={({ base64 }) =>
+                          setValue({ ...value, avatar: base64 })
+                        }
+                        className="block w-full text-sm text-gray-500
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-lg file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-indigo-50 file:text-indigo-700
+                          hover:file:bg-indigo-100"
+                      />
+                    </div>
+                    {value.avatar && (
+                      <Avatar
+                        src={value.avatar}
+                        sx={{ width: 48, height: 48 }}
+                        className="border-2 border-white shadow-sm"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+>>>>>>> c01fec09ca167dfe3c8cf7cac45e9771162a1419 */}
             </div>
           </div>
 
@@ -247,6 +396,7 @@ const Body = () => {
     </div>
   );
 };
+
 
 // Reusable input component
 const FormField = ({

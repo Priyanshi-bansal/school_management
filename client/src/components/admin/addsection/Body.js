@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -6,45 +6,45 @@ import {
   MenuItem,
   Select,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 import {
   Add as AddIcon,
   Clear,
   Person,
   School,
   Work,
-} from '@mui/icons-material';
+} from "@mui/icons-material";
 
 const Spinner = ({ message }) => <span>{message}</span>;
 
 const Body = () => {
   const [value, setValue] = useState({
-    name: '',
-    academicYear: '',
-    class: '',
-    capacity: '',
+    name: "",
+    academicYear: "",
+    class: "",
+    capacity: "",
   });
 
   const [error, setError] = useState({
-    backendError: '',
+    backendError: "",
   });
 
   const [loading, setLoading] = useState(false);
 
   const departments = [
-    { department: 'Class 10A' },
-    { department: 'Class 9B' },
-    { department: 'Class 8C' },
+    { department: "Class 10A" },
+    { department: "Class 9B" },
+    { department: "Class 8C" },
   ];
 
   const resetForm = () => {
     setValue({
-      name: '',
-      academicYear: '',
-      class: '',
-      capacity: '',
+      name: "",
+      academicYear: "",
+      class: "",
+      capacity: "",
     });
-    setError({ backendError: '' });
+    setError({ backendError: "" });
   };
 
   const handleSubmit = (e) => {
@@ -53,7 +53,7 @@ const Body = () => {
 
     // Simulated API call
     setTimeout(() => {
-      console.log('Submitted Data:', value);
+      console.log("Submitted Data:", value);
       resetForm();
       setLoading(false);
     }, 1000);
@@ -86,7 +86,9 @@ const Body = () => {
                     className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.name}
-                    onChange={(e) => setValue({ ...value, name: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, name: e.target.value })
+                    }
                   />
                 </div>
 
@@ -102,7 +104,9 @@ const Body = () => {
                     className="w-full h-[40px] px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                     type="text"
                     value={value.academicYear}
-                    onChange={(e) => setValue({ ...value, academicYear: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, academicYear: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -120,20 +124,22 @@ const Body = () => {
                       required
                       displayEmpty
                       value={value.class}
-                      onChange={(e) => setValue({ ...value, class: e.target.value })}
+                      onChange={(e) =>
+                        setValue({ ...value, class: e.target.value })
+                      }
                       sx={{
-                        height: '40px',
-                        '& .MuiSelect-select': {
-                          paddingTop: '8px',
-                          paddingBottom: '8px',
+                        height: "40px",
+                        "& .MuiSelect-select": {
+                          paddingTop: "8px",
+                          paddingBottom: "8px",
                         },
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#d1d5db',
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#d1d5db",
                         },
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: '#6366f1',
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "#6366f1",
                         },
-                        borderRadius: '8px',
+                        borderRadius: "8px",
                       }}
                     >
                       <MenuItem value="">
@@ -161,13 +167,13 @@ const Body = () => {
                     type="number"
                     min="1"
                     value={value.capacity}
-                    onChange={(e) => setValue({ ...value, capacity: e.target.value })}
+                    onChange={(e) =>
+                      setValue({ ...value, capacity: e.target.value })
+                    }
                   />
                 </div>
               </div>
             </div>
-
-
 
             {/* Form Actions */}
             <div className="flex justify-end space-x-4 mt-8 pt-4 border-t border-gray-200">
@@ -189,7 +195,7 @@ const Body = () => {
                 {loading ? (
                   <Spinner message="Adding Section..." />
                 ) : (
-                  'Add Section'
+                  "Add Section"
                 )}
               </Button>
             </div>

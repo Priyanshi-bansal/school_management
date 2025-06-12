@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -12,12 +12,12 @@ import {
   Grid,
   Divider,
   IconButton,
-} from '@mui/material';
-import { Paid as PaidIcon } from '@mui/icons-material';
+} from "@mui/material";
+import { Paid as PaidIcon } from "@mui/icons-material";
 
 import {
   Add as AddIcon,
-  CurrencyExchange  as CurrencyExchangeIcon,
+  CurrencyExchange as CurrencyExchangeIcon,
   Description as DescriptionIcon,
   AccessTime as AccessTimeIcon,
   Remove as RemoveIcon,
@@ -28,7 +28,7 @@ const Body = () => {
     name: "Assistant Professor Salary Structure 2023",
     applicableFrom: "2023-04-01",
     status: "active",
-    components: []
+    components: [],
   };
 
   const [formData, setFormData] = useState(initialData);
@@ -42,7 +42,6 @@ const Body = () => {
       basedOn: "",
     },
   ]);
-
 
   const addSalaryComponent = () => {
     setSalaryComponents([
@@ -70,12 +69,11 @@ const Body = () => {
     setSalaryComponents(updatedComponents);
   };
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -86,7 +84,7 @@ const Body = () => {
   };
 
   return (
-    <Box sx={{ p: 3,width:1000 , color:'black' }}>
+    <Box sx={{ p: 3, width: 1000, color: "black" }}>
       <Typography variant="h5" gutterBottom>
         <PaidIcon color="primary" sx={{ mr: 1, height: 42, width: 42 }} />
         Salary Structure Form
@@ -97,14 +95,14 @@ const Body = () => {
           <Grid container spacing={3}>
             <Grid item xs={12} md={4}>
               <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-  <PaidIcon  sx={{ mr: 1, height: 22, width: 22 }} />
-                    Structure Name
-                  </label>
+                <PaidIcon sx={{ mr: 1, height: 22, width: 22 }} />
+                Structure Name
+              </label>
               <TextField
                 fullWidth
                 placeholder="Structure Name"
                 name="name"
-                  size="small"
+                size="small"
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -112,14 +110,13 @@ const Body = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
-               <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-  <InsertDriveFileIcon  sx={{ mr: 1, height: 22, width: 22 }} />
-
-                    Applicable From
-                  </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                <InsertDriveFileIcon sx={{ mr: 1, height: 22, width: 22 }} />
+                Applicable From
+              </label>
               <TextField
                 fullWidth
-                 placeholder="Applicable From"
+                placeholder="Applicable From"
                 name="applicableFrom"
                 type="date"
                 size="small"
@@ -130,20 +127,17 @@ const Body = () => {
               />
             </Grid>
             <Grid item xs={12} md={4}>
-               <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
-  <AccessTimeIcon sx={{ mr: 1, height: 22, width: 22 }} />
-
-                   Status
-                  </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                <AccessTimeIcon sx={{ mr: 1, height: 22, width: 22 }} />
+                Status
+              </label>
               <FormControl fullWidth>
-              
                 <Select
-                 placeholder="Applicable From"
+                  placeholder="Applicable From"
                   name="status"
-                        size="small"
+                  size="small"
                   value={formData.status}
                   onChange={handleChange}
-                 
                   required
                 >
                   <MenuItem value="active">Active</MenuItem>
@@ -157,8 +151,7 @@ const Body = () => {
           <Divider sx={{ my: 4 }} />
 
           <Typography variant="h6" gutterBottom>
-         <CurrencyExchangeIcon  sx={{ mr: 1, height: 22, width: 22 }} />
-
+            <CurrencyExchangeIcon sx={{ mr: 1, height: 22, width: 22 }} />
             Salary Components
           </Typography>
 
@@ -167,10 +160,12 @@ const Body = () => {
               <Grid item xs={12} md={3}>
                 <TextField
                   fullWidth
-                 size="small"
+                  size="small"
                   label="Component Name"
                   value={component.name}
-                  onChange={(e) => handleSalaryComponentChange(index, "name", e.target.value)}
+                  onChange={(e) =>
+                    handleSalaryComponentChange(index, "name", e.target.value)
+                  }
                   required
                 />
               </Grid>
@@ -179,9 +174,11 @@ const Body = () => {
                 <FormControl fullWidth>
                   <InputLabel>Type</InputLabel>
                   <Select
-                      size="small"
+                    size="small"
                     value={component.type}
-                    onChange={(e) => handleSalaryComponentChange(index, "type", e.target.value)}
+                    onChange={(e) =>
+                      handleSalaryComponentChange(index, "type", e.target.value)
+                    }
                     label="Type"
                     required
                   >
@@ -195,9 +192,15 @@ const Body = () => {
                 <FormControl fullWidth>
                   <InputLabel>Calculation Type</InputLabel>
                   <Select
-                      size="small"
+                    size="small"
                     value={component.calculationType}
-                    onChange={(e) => handleSalaryComponentChange(index, "calculationType", e.target.value)}
+                    onChange={(e) =>
+                      handleSalaryComponentChange(
+                        index,
+                        "calculationType",
+                        e.target.value
+                      )
+                    }
                     label="Calculation Type"
                     required
                   >
@@ -211,11 +214,17 @@ const Body = () => {
                 <Grid item xs={6} md={2}>
                   <TextField
                     fullWidth
-                        size="small"
+                    size="small"
                     label="Amount"
                     type="number"
                     value={component.amount}
-                    onChange={(e) => handleSalaryComponentChange(index, "amount", e.target.value)}
+                    onChange={(e) =>
+                      handleSalaryComponentChange(
+                        index,
+                        "amount",
+                        e.target.value
+                      )
+                    }
                     inputProps={{ min: 0 }}
                   />
                 </Grid>
@@ -227,7 +236,13 @@ const Body = () => {
                       label="%"
                       type="number"
                       value={component.percentage}
-                      onChange={(e) => handleSalaryComponentChange(index, "percentage", e.target.value)}
+                      onChange={(e) =>
+                        handleSalaryComponentChange(
+                          index,
+                          "percentage",
+                          e.target.value
+                        )
+                      }
                       inputProps={{ min: 0, max: 100 }}
                     />
                   </Grid>
@@ -236,7 +251,13 @@ const Body = () => {
                       <InputLabel>Based On</InputLabel>
                       <Select
                         value={component.basedOn}
-                        onChange={(e) => handleSalaryComponentChange(index, "basedOn", e.target.value)}
+                        onChange={(e) =>
+                          handleSalaryComponentChange(
+                            index,
+                            "basedOn",
+                            e.target.value
+                          )
+                        }
                         label="Based On"
                         required
                       >
@@ -256,7 +277,10 @@ const Body = () => {
                     </IconButton>
                   )}
                   {salaryComponents.length > 1 && (
-                    <IconButton color="error" onClick={() => removeSalaryComponent(index)}>
+                    <IconButton
+                      color="error"
+                      onClick={() => removeSalaryComponent(index)}
+                    >
                       <RemoveIcon />
                     </IconButton>
                   )}
@@ -264,12 +288,13 @@ const Body = () => {
               </Grid>
             </Grid>
           ))}
-      
 
           <Divider sx={{ my: 4 }} />
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button variant="outlined" color="secondary">Cancel</Button>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+            <Button variant="outlined" color="secondary">
+              Cancel
+            </Button>
             <Button type="submit" variant="contained" color="primary">
               Save Structure
             </Button>
