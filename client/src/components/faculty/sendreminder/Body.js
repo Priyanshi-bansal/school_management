@@ -273,7 +273,7 @@ const Body = () => {
                 border: `1px solid ${theme.palette.divider}`,
                 borderRadius: 1,
                 p: 2
-              }}>
+              }}/>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
                   <Typography variant="subtitle1" fontWeight="medium">
                     <Group sx={{ verticalAlign: 'middle', mr: 1 }} />
@@ -391,7 +391,7 @@ const Body = () => {
                   </Grid>
                 </Grid>
               )} */}
-              </Box>
+
             </Grid>
 
             {/* Summary */}

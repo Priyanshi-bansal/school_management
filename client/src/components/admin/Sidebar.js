@@ -5,16 +5,33 @@ import {
   Person,
   Engineering,
   Add,
+  EventNote,
   PersonOutline,
   Delete,
   MenuBook,
   School,
+   AccountBalanceWallet, Payment,
+  LibraryBooks,
+  SupervisorAccount,
   Groups,
+ DateRange,
+ Description,
+ Quiz,
+ Class,
+  ViewAgenda,
+  Apartment,
+  HowToReg, PeopleOutline,
+
+  Payments,
+  AssignmentInd,
+    AccessTime, CalendarToday, Today,
+  Calculate,
   AdminPanelSettings,
   Notifications
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import decode from "jwt-decode";
+
 
 const Sidebar = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -55,14 +72,16 @@ const Sidebar = () => {
     { 
       header: "Department Management",
       items: [
-        { icon: <Engineering />, label: "Manage Department", path: "/admin/adddepartment" },
+     { icon: <Apartment />, label: "Manage Department", path: "/admin/adddepartment" }
+
         // { icon: <Delete />, label: "Manage Department", path: "/admin/managedepartment" }
       ]
     },
     { 
       header: "Faculty Management",
       items: [
-        { icon: <Engineering />, label: "Manage Faculty", path: "/admin/allfaculty" },
+       { icon: <SupervisorAccount />, label: "Manage Faculty", path: "/admin/allfaculty" }
+
         // { icon: <Add />, label: "Add Faculty", path: "/admin/addfaculty" },
         // { icon: <Delete />, label: "Delete Faculty", path: "/admin/deletefaculty" }
       ]
@@ -78,7 +97,8 @@ const Sidebar = () => {
     { 
       header: "Subject Management",
       items: [
-        { icon: <MenuBook />, label: "Manage Subjects", path: "/admin/allsubject" },
+       { icon: <LibraryBooks />, label: "Manage Subjects", path: "/admin/allsubject" }
+
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
@@ -86,7 +106,7 @@ const Sidebar = () => {
      { 
       header: "section Management",
       items: [
-        { icon: <MenuBook />, label: "Manage section", path: "/admin/managesection" },
+      { icon: <ViewAgenda />, label: "Manage Section", path: "/admin/managesection" }
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
@@ -94,7 +114,7 @@ const Sidebar = () => {
      { 
       header: "class Management",
       items: [
-        { icon: <MenuBook />, label: "Manage Class", path: "/admin/GetClass" },
+   { icon: <Class />, label: "Manage Class", path: "/admin/GetClass" }
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
@@ -102,15 +122,16 @@ const Sidebar = () => {
       { 
       header: "Acedmic Management",
       items: [
-        { icon: <MenuBook />, label: "manage Academic", path: "/admin/getacademic" },
+      { icon: <EventNote />, label: "Manage Academic", path: "/admin/getacademic" }
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
     },
       { 
-      header: "Acedmic Calendra Management",
+      header: "Acedmic Calendar Management",
       items: [
-        { icon: <MenuBook />, label: "Calendra Management ", path: "/admin/calendramanagement" },
+       { icon: <DateRange />, label: "Calendar Management", path: "/admin/calendramanagement" }
+
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
@@ -118,7 +139,8 @@ const Sidebar = () => {
      { 
       header: "Syllabus Management",
       items: [
-        { icon: <MenuBook />, label: "syllabus Management ", path: "/admin/syllabusmanagement" },
+   { icon: <Description />, label: "Syllabus Management", path: "/admin/syllabusmanagement" }
+
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
@@ -126,9 +148,12 @@ const Sidebar = () => {
      { 
       header: "Time Table Management",
       items: [
-        { icon: <MenuBook />, label: "Time Slot  ", path: "/admin/timetablemanagement" },
-          { icon: <MenuBook />, label: "Daily Time Table  ", path: "/admin/dailytimetable" },
-            { icon: <MenuBook />, label: "Class Time Table  ", path: "/admin/classtimetable" },
+       { icon: <AccessTime />, label: "Time Slot", path: "/admin/timetablemanagement" },
+
+{ icon: <Today />, label: "Daily Time Table", path: "/admin/dailytimetable" },
+
+{ icon: <CalendarToday />, label: "Class Time Table", path: "/admin/classtimetable" },
+
         // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
       ]
@@ -136,8 +161,8 @@ const Sidebar = () => {
      { 
       header: "Attendance",
     items: [
-      { icon: <MenuBook />, label: "FacultyAttendance", path: "/admin/facultyattendance" },
-      { icon: <MenuBook />, label: "StudentAttendance", path: "/admin/stuattendance" },
+    { icon: <HowToReg />, label: "Faculty Attendance", path: "/admin/facultyattendance" },
+  { icon: <PeopleOutline />, label: "Student Attendance", path: "/admin/stuattendance" }
       // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
       // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
     ]
@@ -145,7 +170,7 @@ const Sidebar = () => {
   {
     header: "Assign class teacher",
     items: [
-      { icon: <MenuBook />, label: "AssignTeacher", path: "/admin/AssignTeacher" },
+   { icon: <AssignmentInd />, label: "Assign Teacher", path: "/admin/AssignTeacher" }
       // { icon: <Add />, label: "Add Subject", path: "/admin/addsubject" },
       // { icon: <Delete />, label: "Delete Subject", path: "/admin/deletesubject" }
     ]
@@ -154,14 +179,16 @@ const Sidebar = () => {
       header: "Manage test",
       items: [
         // { icon: <Add />, label: "Add Admin", path: "/admin/gettestadmin" },
-        { icon: <MenuBook />, label: "Manage test", path: "/admin/gettestadmin" }
+       { icon: <Quiz />, label: "Manage Test", path: "/admin/gettestadmin" }
       ]
     },
       { 
       header: "Fees Management",
       items: [
-        { icon: <MenuBook />, label: "Fees Structure", path: "/admin/feesStructure" },
-          { icon: <MenuBook />, label: "Fees Payment", path: "/admin/feepayment" },
+       { icon: <AccountBalanceWallet />, label: "Fees Structure", path: "/admin/feesStructure" },
+
+{ icon: <Payment />, label: "Fees Payment", path: "/admin/feepayment" },
+
         // { icon: <Add />, label: "Fees Management", path: "/admin/addsubject" },
         // { icon: <Delete />, label: "Delete Fees Management", path: "/admin/deletesFees Management" }
       ]
@@ -169,11 +196,9 @@ const Sidebar = () => {
      { 
       header: "Management Salary",
       items: [
-        { icon: <MenuBook />, label: " Salary Structure", path: "/admin/getSalary" },
-
-        { icon: <MenuBook />, label: "Process Salary Payment", path: "/admin/processsalarypayment" },
-
-        { icon: <MenuBook />, label: "calculate salary", path: "/admin/calculateSalary" },
+         { icon: <AccountBalanceWallet />, label: "Salary Structure", path: "/admin/getSalary" },
+  { icon: <Payments />, label: "Process Salary Payment", path: "/admin/processsalarypayment" },
+  { icon: <Calculate />, label: "Calculate Salary", path: "/admin/calculateSalary" }
 
          
         // { icon: <Add />, label: "Management Salary", path: "/admin/addsubject" },

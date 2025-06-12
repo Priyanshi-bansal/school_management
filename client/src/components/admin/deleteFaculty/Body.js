@@ -164,55 +164,58 @@ const Body = () => {
         </Box>
 
         <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-          <Box sx={{ 
-            display: 'flex', 
-            flexWrap: 'wrap', 
-            gap: 2, 
-            mb: 3,
-            alignItems: 'center'
-          }}>
-            <FormControl sx={{ minWidth: 200 }}>
-              <InputLabel>Department</InputLabel>
-              <Select
-                name="department"
-                value={filter.department}
-                onChange={handleFilterChange}
-                label="Department"
-              >
-                <MenuItem value="all">All Departments</MenuItem>
-                {departments?.map((dp, idx) => (
-                  <MenuItem key={idx} value={dp.department}>
-                    {dp.department}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+        <Box sx={{ 
+  display: 'flex', 
+  flexWrap: 'wrap', 
+  gap: 2, 
+  mb: 3,
+  alignItems: 'center'
+}}>
+  <FormControl sx={{ width: 200 }}>
+    <InputLabel>Department</InputLabel>
+    <Select
+      name="department"
+      value={filter.department}
+      onChange={handleFilterChange}
+      label="Department"
+    >
+      <MenuItem value="all">All Departments</MenuItem>
+      {departments?.map((dp, idx) => (
+        <MenuItem key={idx} value={dp.department}>
+          {dp.department}
+        </MenuItem>
+      ))}
+    </Select>
+  </FormControl>
 
-            <TextField
-              name="searchQuery"
-              value={filter.searchQuery}
-              onChange={handleFilterChange}
-              label="Search Faculty"
-              variant="outlined"
-              size="small"
-              sx={{ flexGrow: 1 }}
-              InputProps={{
-                endAdornment: (
-                  <IconButton onClick={handleSearch}>
-                    <Search />
-                  </IconButton>
-                )
-              }}
-            />
+  <TextField
+    name="searchQuery"
+    value={filter.searchQuery}
+    onChange={handleFilterChange}
+    label="Search Faculty"
+    variant="outlined"
+    size="small"
+    sx={{ width: 200 }}
+    InputProps={{
+      endAdornment: (
+        <IconButton onClick={handleSearch}>
+          <Search />
+        </IconButton>
+      )
+    }}
+  />
 
-            <Button
-              variant="outlined"
-              startIcon={<ClearAll />}
-              onClick={handleClearFilters}
-            >
-              Clear Filters
-            </Button>
-          </Box>
+  <Button
+    size="small"
+    variant="outlined"
+    startIcon={<ClearAll />}
+    onClick={handleClearFilters}
+    sx={{ width: 200 }}
+  >
+    Clear Filters
+  </Button>
+</Box>
+
 
           {loading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>

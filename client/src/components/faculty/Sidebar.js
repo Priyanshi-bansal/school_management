@@ -6,8 +6,15 @@ import {
   Assignment,
   Add,
   Event,
+  AssignmentTurnedIn,
   School,
   Assessment,
+    Quiz,
+   Grade,
+  AddTask,
+ 
+  HowToReg,
+  FactCheck,
   Logout
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
@@ -40,12 +47,17 @@ const Sidebar = () => {
     { 
       header: "Teaching",
       items: [
-        { icon: <Assignment />, label: "Create Test", path: "/faculty/createtest" },
-        {icon:<Assignment />, label: "Get Test", path: "/faculty/gettest"},
-        { icon: <Add />, label: "Upload Marks", path: "/faculty/uploadmarks" },
-        { icon:<Add />, label: " Marks", path: "/faculty/Marks" },
-        { icon: <Event />, label: "Mark Attendance", path: "/faculty/markattendance" },
-          { icon: <Event />, label: "Student Attendance", path: "/faculty/StudentAttendance" }
+        { icon: <Quiz />, label: "Create Test", path: "/faculty/createtest" },
+
+  { icon: <AssignmentTurnedIn />, label: "Get Test", path: "/faculty/gettest" },
+
+  { icon: <AddTask />, label: "Upload Marks", path: "/faculty/uploadmarks" },
+
+{ icon: <Grade />, label: "Marks", path: "/faculty/Marks" },
+
+  { icon: <HowToReg />, label: "Mark Attendance", path: "/faculty/markattendance" },
+
+  { icon: <FactCheck />, label: "Student Attendance", path: "/faculty/StudentAttendance" }
 
       ]
     },
@@ -59,8 +71,10 @@ const Sidebar = () => {
     { 
       header: "Homework",
       items: [
-        { icon: <Assessment />, label: "Homework", path: "/faculty/homework" },
-               { icon: <Assessment />, label: "Homework submission", path: "/faculty/homeworksubmission" },
+        { icon: <Assignment />, label: "Homework", path: "/faculty/homework" },
+
+{ icon: <AssignmentTurnedIn />, label: "Homework Submission", path: "/faculty/homeworksubmission" }
+
        
       ]
     }

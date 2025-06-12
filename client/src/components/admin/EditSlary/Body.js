@@ -1,251 +1,396 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
-  Typography,
   TextField,
-  Button,
-  Select,
   MenuItem,
-  InputLabel,
-  FormControl,
+  Typography,
+  Stack,
+  Button,
   Paper,
-  Grid,
-  Divider,
-  IconButton,
-} from '@mui/material';
-import { Paid as PaidIcon } from '@mui/icons-material';
-
+  FormControl,
+  InputLabel,
+  Select,
+  InputAdornment,
+} from "@mui/material";
 import {
-  Add as AddIcon,
-  Remove as RemoveIcon,
+  Save,
+  ArrowBack,
+  CalendarToday,
+  Person,
+  DateRange,
+  Payment,
+  Paid,
+  MoneyOff,
+  AssignmentTurnedIn,
+  AccountBalance,
+  Description,
+  Work,
+  EventAvailable,
+  EventBusy,
+  Calculate,
+  Note,
+  Receipt,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+const paymentModes = ["Cash", "Bank Transfer", "Cheque"];
+
 const Body = () => {
-  const initialData = {
-    name: "Assistant Professor Salary Structure 2023",
-    applicableFrom: "2023-04-01",
-    status: "active",
-    components: []
-  };
+  const navigate = useNavigate();
 
-  const [formData, setFormData] = useState(initialData);
-  const [salaryComponents, setSalaryComponents] = useState([
-    {
-      name: "",
-      type: "earning",
-      calculationType: "fixed",
-      amount: "",
-      percentage: "",
-      basedOn: "",
-    },
-  ]);
-
-
-  const addSalaryComponent = () => {
-    setSalaryComponents([
-      ...salaryComponents,
-      {
-        name: "",
-        type: "earning",
-        calculationType: "fixed",
-        amount: "",
-        percentage: "",
-        basedOn: "",
-      },
-    ]);
-  };
-
-  const removeSalaryComponent = (index) => {
-    const updatedComponents = [...salaryComponents];
-    updatedComponents.splice(index, 1);
-    setSalaryComponents(updatedComponents);
-  };
-
-  const handleSalaryComponentChange = (index, field, value) => {
-    const updatedComponents = [...salaryComponents];
-    updatedComponents[index][field] = value;
-    setSalaryComponents(updatedComponents);
-  };
-
+  const [form, setForm] = useState({
+    facultyId: "",
+    salaryStructureId: "",
+    month: "",
+    year: "",
+    paymentDate: "",
+    paymentMode: "",
+    bankDetails: "",
+    chequeDetails: "",
+    workingDays: "",
+    presentDays: "",
+    leaveDays: "",
+    lopDays: "",
+    earnings: "",
+    deductions: "",
+    netSalary: "",
+    remarks: "",
+  });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted structure:", formData);
-    // Send to backend here
+  const handleSubmit = () => {
+    console.log("Submitting Salary Payment:", form);
+    // Submit logic here...
   };
 
   return (
-    <Box sx={{ p: 3,width:1000 }}>
-      <Typography variant="h5" gutterBottom>
-        <PaidIcon color="primary" sx={{ mr: 1, height: 42, width: 42 }} />
-        Edit salary
-      </Typography>
+    <Box sx={{ p: { xs: 2, sm: 3 } }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Save color="primary" />
+          <Typography variant="h5">Edit Salary Payment</Typography>
+        </Stack>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBack />}
+          onClick={() => navigate(-1)}
+          sx={{ textTransform: "none", borderRadius: 2 }}
+        >
+          Back
+        </Button>
+      </Stack>
 
-      <Paper elevation={3} sx={{ p: 4 }}>
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                label="Structure Name"
-                name="name"
-                value={formData.name}
+      <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+        <Stack spacing={2}>
+          {/* Faculty ID + Salary Structure ID */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <TextField
+              label="Faculty ID"
+              name="facultyId"
+              value={form.facultyId}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Person />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="Salary Structure ID"
+              name="salaryStructureId"
+              value={form.salaryStructureId}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Receipt />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
+
+          {/* Month + Year */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Month</InputLabel>
+              <Select
+                name="month"
+                value={form.month}
                 onChange={handleChange}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                label="Applicable From"
-                name="applicableFrom"
-                type="date"
-                value={formData.applicableFrom}
+                label="Month"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <DateRange />
+                  </InputAdornment>
+                }
+              >
+                {months.map((m) => (
+                  <MenuItem key={m} value={m}>{m}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <TextField
+              label="Year"
+              name="year"
+              type="number"
+              value={form.year}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <DateRange />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
+
+          {/* Payment Date + Payment Mode */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <TextField
+              label="Payment Date"
+              name="paymentDate"
+              type="date"
+              value={form.paymentDate}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarToday />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <FormControl fullWidth size="small">
+              <InputLabel>Payment Mode</InputLabel>
+              <Select
+                name="paymentMode"
+                value={form.paymentMode}
                 onChange={handleChange}
-                InputLabelProps={{ shrink: true }}
-                required
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <FormControl fullWidth>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  label="Status"
-                  required
-                >
-                  <MenuItem value="active">Active</MenuItem>
-                  <MenuItem value="inactive">Inactive</MenuItem>
-                  <MenuItem value="draft">Draft</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
+                label="Payment Mode"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Payment />
+                  </InputAdornment>
+                }
+              >
+                {paymentModes.map((mode) => (
+                  <MenuItem key={mode} value={mode}>{mode}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
 
-          <Divider sx={{ my: 4 }} />
+          {/* Bank/Cheque Details (conditional) */}
+          {form.paymentMode === "Bank Transfer" && (
+            <TextField
+              label="Bank Details"
+              name="bankDetails"
+              value={form.bankDetails}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountBalance />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
 
-          <Typography variant="h6" gutterBottom>
-            Salary Components
-          </Typography>
+          {form.paymentMode === "Cheque" && (
+            <TextField
+              label="Cheque Details"
+              name="chequeDetails"
+              value={form.chequeDetails}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Description />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
 
-          {salaryComponents.map((component, index) => (
-            <Grid container spacing={2} alignItems="center" key={index}>
-              <Grid item xs={12} md={3}>
-                <TextField
-                  fullWidth
-                  label="Component Name"
-                  value={component.name}
-                  onChange={(e) => handleSalaryComponentChange(index, "name", e.target.value)}
-                  required
-                />
-              </Grid>
+          {/* Attendance Details */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <TextField
+              label="Working Days"
+              name="workingDays"
+              type="number"
+              value={form.workingDays}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Work />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="Present Days"
+              name="presentDays"
+              type="number"
+              value={form.presentDays}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EventAvailable />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
 
-              <Grid item xs={6} md={2}>
-                <FormControl fullWidth>
-                  <InputLabel>Type</InputLabel>
-                  <Select
-                    value={component.type}
-                    onChange={(e) => handleSalaryComponentChange(index, "type", e.target.value)}
-                    label="Type"
-                    required
-                  >
-                    <MenuItem value="earning">Earning</MenuItem>
-                    <MenuItem value="deduction">Deduction</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <TextField
+              label="Leave Days"
+              name="leaveDays"
+              type="number"
+              value={form.leaveDays}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EventBusy />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="LOP Days"
+              name="lopDays"
+              type="number"
+              value={form.lopDays}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MoneyOff />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
 
-              <Grid item xs={6} md={2}>
-                <FormControl fullWidth>
-                  <InputLabel>Calculation Type</InputLabel>
-                  <Select
-                    value={component.calculationType}
-                    onChange={(e) => handleSalaryComponentChange(index, "calculationType", e.target.value)}
-                    label="Calculation Type"
-                    required
-                  >
-                    <MenuItem value="fixed">Fixed Amount</MenuItem>
-                    <MenuItem value="percentage">Percentage</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
+          {/* Salary Calculations */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <TextField
+              label="Earnings"
+              name="earnings"
+              type="number"
+              value={form.earnings}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Paid />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="Deductions"
+              name="deductions"
+              type="number"
+              value={form.deductions}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MoneyOff />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
 
-              {component.calculationType === "fixed" ? (
-                <Grid item xs={6} md={2}>
-                  <TextField
-                    fullWidth
-                    label="Amount"
-                    type="number"
-                    value={component.amount}
-                    onChange={(e) => handleSalaryComponentChange(index, "amount", e.target.value)}
-                    inputProps={{ min: 0 }}
-                  />
-                </Grid>
-              ) : (
-                <>
-                  <Grid item xs={6} md={1}>
-                    <TextField
-                      fullWidth
-                      label="%"
-                      type="number"
-                      value={component.percentage}
-                      onChange={(e) => handleSalaryComponentChange(index, "percentage", e.target.value)}
-                      inputProps={{ min: 0, max: 100 }}
-                    />
-                  </Grid>
-                  <Grid item xs={6} md={2}>
-                    <FormControl fullWidth>
-                      <InputLabel>Based On</InputLabel>
-                      <Select
-                        value={component.basedOn}
-                        onChange={(e) => handleSalaryComponentChange(index, "basedOn", e.target.value)}
-                        label="Based On"
-                        required
-                      >
-                        <MenuItem value="basic">Basic Salary</MenuItem>
-                        <MenuItem value="gross">Gross Salary</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                </>
-              )}
+          <TextField
+            label="Net Salary"
+            name="netSalary"
+            type="number"
+            value={form.netSalary}
+            onChange={handleChange}
+            fullWidth
+            size="small"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Calculate />
+                </InputAdornment>
+              ),
+            }}
+          />
 
-              <Grid item xs={12} md={1}>
-                <div className="flex space-x-2">
-                  {index === salaryComponents.length - 1 && (
-                    <IconButton color="primary" onClick={addSalaryComponent}>
-                      <AddIcon />
-                    </IconButton>
-                  )}
-                  {salaryComponents.length > 1 && (
-                    <IconButton color="error" onClick={() => removeSalaryComponent(index)}>
-                      <RemoveIcon />
-                    </IconButton>
-                  )}
-                </div>
-              </Grid>
-            </Grid>
-          ))}
+          <TextField
+            label="Remarks"
+            name="remarks"
+            value={form.remarks}
+            onChange={handleChange}
+            fullWidth
+            size="small"
+            multiline
+            rows={3}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Note />
+                </InputAdornment>
+              ),
+            }}
+          />
 
-
-          <Divider sx={{ my: 4 }} />
-
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button variant="outlined" color="secondary">Cancel</Button>
-            <Button type="submit" variant="contained" color="primary">
-              Edit Salary
+          {/* Buttons */}
+          <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+            <Button variant="outlined" onClick={() => navigate(-1)}>
+              Cancel
+            </Button>
+            <Button variant="contained" startIcon={<Save />} onClick={handleSubmit}>
+              Update
             </Button>
           </Box>
-        </form>
+        </Stack>
       </Paper>
     </Box>
   );
