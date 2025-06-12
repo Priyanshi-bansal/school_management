@@ -121,6 +121,8 @@ import GradeSubmission from "./components/faculty/gradesubmission/GradeSubmissio
 import SendReminder from "./components/faculty/sendreminder/SendReminder.js";
 
 import CalculateSalary from "./components/admin/calculateSalary/CalculateSalary";
+import Viewfeesstructure from "./components/admin/viewfeesStructure/Viewfeesstructure.js";
+
 import StudentHomework from "./components/student/studenthomework/StudentHomework.js";
 import EditStudentHomework from "./components/student/editstudenthomework/EditStudentHomework.js";
 import AddStudentHomework from "./components/student/addstudenthomework/AddStudentHomework.js";
@@ -129,6 +131,8 @@ import GradeView from "./components/student/gradeview/GradeView.js";
 import UpcomingView from "./components/student/upcomingview/UpcomingView.js";
 import SubmitView from "./components/student/submitview/SubmitView.js";
 import ViewCalendra from "./components/admin/viewcalendra/ViewCalendra.js";
+import EditNotice from "./components/admin/editnotice/EditNotice.js";
+import EditFaculty from "./components/admin/editfaculty/EditFaculty.js";
 
 
 const App = () => {
@@ -224,9 +228,15 @@ const App = () => {
       <Route path="/admin/addpsp" element={<AddPSP />} />
 
       <Route path="/admin/calculateSalary" element={<CalculateSalary />} />
+
       <Route path="/admin/viewcalendra" element={<ViewCalendra />} />
 
 
+
+
+      <Route path="/admin/viewfeesstructure" element={<Viewfeesstructure />} />
+      <Route path="/admin/editnotice" element={<EditNotice />} />
+      <Route path="/admin/editfaculty" element={<EditFaculty />} />
 
 
 

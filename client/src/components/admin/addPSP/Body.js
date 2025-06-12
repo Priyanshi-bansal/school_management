@@ -22,6 +22,14 @@ import {
   Paid,
   MoneyOff,
   AssignmentTurnedIn,
+  AccountBalance,
+  Description,
+  Work,
+  EventAvailable,
+  EventBusy,
+  Calculate,
+  Note,
+  Receipt,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
@@ -31,20 +39,27 @@ const months = [
 ];
 
 const paymentModes = ["Cash", "Bank Transfer", "Cheque"];
-const statusOptions = ["Approved", "Pending", "Rejected"];
 
 const Body = () => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
     facultyId: "",
+    salaryStructureId: "",
     month: "",
     year: "",
     paymentDate: "",
     paymentMode: "",
-    status: "Pending",
+    bankDetails: "",
+    chequeDetails: "",
+    workingDays: "",
+    presentDays: "",
+    leaveDays: "",
+    lopDays: "",
     earnings: "",
     deductions: "",
+    netSalary: "",
+    remarks: "",
   });
 
   const handleChange = (e) => {
@@ -75,7 +90,7 @@ const Body = () => {
 
       <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
         <Stack spacing={2}>
-          {/* Faculty ID + Payment Date in one row */}
+          {/* Faculty ID + Salary Structure ID */}
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <TextField
               label="Faculty ID"
@@ -93,18 +108,16 @@ const Body = () => {
               }}
             />
             <TextField
-              label="Payment Date"
-              name="paymentDate"
-              type="date"
-              value={form.paymentDate}
+              label="Salary Structure ID"
+              name="salaryStructureId"
+              value={form.salaryStructureId}
               onChange={handleChange}
               fullWidth
               size="small"
-              InputLabelProps={{ shrink: true }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <CalendarToday />
+                    <Receipt />
                   </InputAdornment>
                 ),
               }}
@@ -150,8 +163,25 @@ const Body = () => {
             />
           </Stack>
 
-          {/* Payment Mode + Status */}
+          {/* Payment Date + Payment Mode */}
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <TextField
+              label="Payment Date"
+              name="paymentDate"
+              type="date"
+              value={form.paymentDate}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarToday />
+                  </InputAdornment>
+                ),
+              }}
+            />
             <FormControl fullWidth size="small">
               <InputLabel>Payment Mode</InputLabel>
               <Select
@@ -170,28 +200,117 @@ const Body = () => {
                 ))}
               </Select>
             </FormControl>
-
-            <FormControl fullWidth size="small">
-              <InputLabel>Status</InputLabel>
-              <Select
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-                label="Status"
-                startAdornment={
-                  <InputAdornment position="start">
-                      <AssignmentTurnedIn />
-                  </InputAdornment>
-                }
-              >
-                {statusOptions.map((st) => (
-                  <MenuItem key={st} value={st}>{st}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
           </Stack>
 
-          {/* Earnings + Deductions */}
+          {/* Bank/Cheque Details (conditional) */}
+          {form.paymentMode === "Bank Transfer" && (
+            <TextField
+              label="Bank Details"
+              name="bankDetails"
+              value={form.bankDetails}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountBalance />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+
+          {form.paymentMode === "Cheque" && (
+            <TextField
+              label="Cheque Details"
+              name="chequeDetails"
+              value={form.chequeDetails}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Description />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+
+          {/* Attendance Details */}
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <TextField
+              label="Working Days"
+              name="workingDays"
+              type="number"
+              value={form.workingDays}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Work />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="Present Days"
+              name="presentDays"
+              type="number"
+              value={form.presentDays}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EventAvailable />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
+
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+            <TextField
+              label="Leave Days"
+              name="leaveDays"
+              type="number"
+              value={form.leaveDays}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EventBusy />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label="LOP Days"
+              name="lopDays"
+              type="number"
+              value={form.lopDays}
+              onChange={handleChange}
+              fullWidth
+              size="small"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MoneyOff />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Stack>
+
+          {/* Salary Calculations */}
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
             <TextField
               label="Earnings"
@@ -209,7 +328,6 @@ const Body = () => {
                 ),
               }}
             />
-
             <TextField
               label="Deductions"
               name="deductions"
@@ -227,6 +345,41 @@ const Body = () => {
               }}
             />
           </Stack>
+
+          <TextField
+            label="Net Salary"
+            name="netSalary"
+            type="number"
+            value={form.netSalary}
+            onChange={handleChange}
+            fullWidth
+            size="small"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Calculate />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <TextField
+            label="Remarks"
+            name="remarks"
+            value={form.remarks}
+            onChange={handleChange}
+            fullWidth
+            size="small"
+            multiline
+            rows={3}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Note />
+                </InputAdornment>
+              ),
+            }}
+          />
 
           {/* Buttons */}
           <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>

@@ -6,11 +6,15 @@ import {
   Assignment,
   School,
   Event,
+   HowToReg,
+   CalendarToday, EventNote,
+    Quiz,
+    Today,
   BarChart,
   PieChart,
   Timeline,
   Class,
-  Assessment,
+
   Logout
 } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
@@ -45,24 +49,23 @@ const Sidebar = () => {
       items: [
         { icon: <Assignment />, label: "Test Results", path: "/student/testresult" },
         { icon: <School />, label: "Subjects", path: "/student/subjectlist" },
-        { icon: <Assessment />, label: "Attendance", path: "/student/attendance" },
-           { icon: <Assessment />, label: "Get Test", path: "/student/StudentTest" },
-            { icon: <Assessment />, label: "Daily Attendance", path: "/student/DailyAttendance" }
-        
+         { icon: <HowToReg />, label: "Attendance", path: "/student/attendance" },
+  { icon: <Quiz />, label: "Get Test", path: "/student/StudentTest" },
+  { icon: <Today />, label: "Daily Attendance", path: "/student/DailyAttendance" }
 
       ]
     },
     { 
       header: "Schedule",
       items: [
-        { icon: <Event />, label: "Class Timetable", path: "#" },
-        { icon: <Class />, label: "Exam Schedule", path: "#" }
+       { icon: <CalendarToday />, label: "Class Timetable", path: "#" },
+  { icon: <EventNote />, label: "Exam Schedule", path: "#" }
       ]
     },
      { 
       header: "Student Homework",
       items: [
-        { icon: <Event />, label: "Homework", path: "/student/studenthomework" },
+       { icon: <Assignment />, label: "Homework", path: "/student/studenthomework" }
       
       ]
     }

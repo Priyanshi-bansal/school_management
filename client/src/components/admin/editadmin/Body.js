@@ -259,7 +259,7 @@ const FormField = ({
   errorMsg,
 }) => (
   <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+    <label className=" text-sm font-medium text-gray-700 mb-1 flex items-center">
       {icon && <span className="text-gray-500 mr-2">{icon}</span>}
       {label}
     </label>

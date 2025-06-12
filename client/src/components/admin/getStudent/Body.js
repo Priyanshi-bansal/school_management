@@ -206,75 +206,68 @@ const Body = () => {
           </Typography>
           <Divider sx={{ mb: 2 }} />
 
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", sm: "row" },
-              flexWrap: "wrap",
-              gap: 2
-            }}
-          >
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Department</InputLabel>
-              <Select
-                name="department"
-                value={filter.department}
-                onChange={handleFilterChange}
-                label="Department"
-              >
-                <MenuItem value="all">All Departments</MenuItem>
-                {departments?.map((dp, idx) => (
-                  <MenuItem key={idx} value={dp.department}>
-                    {dp.department}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+        <Box
+  sx={{
+    display: "flex",
+    flexDirection: { xs: "column", sm: "row" },
+    flexWrap: "wrap",
+    gap: 2,
+  }}
+>
+  <FormControl sx={{ width: 250 }} size="small">
+    <InputLabel>Department</InputLabel>
+    <Select
+      name="department"
+      value={filter.department}
+      onChange={handleFilterChange}
+      label="Department"
+    >
+      <MenuItem value="all">All Departments</MenuItem>
+      {departments?.map((dp, idx) => (
+        <MenuItem key={idx} value={dp.department}>
+          {dp.department}
+        </MenuItem>
+      ))}
+    </Select>
+  </FormControl>
 
-            <FormControl sx={{ minWidth: 200 }} size="small">
-              <InputLabel>Year</InputLabel>
-              <Select
-                name="year"
-                value={filter.year}
-                onChange={handleFilterChange}
-                label="Year"
-              >
-                <MenuItem value="all">All Years</MenuItem>
-                <MenuItem value="1">1st Year</MenuItem>
-                <MenuItem value="2">2nd Year</MenuItem>
-                <MenuItem value="3">3rd Year</MenuItem>
-                <MenuItem value="4">4th Year</MenuItem>
-              </Select>
-            </FormControl>
+  <FormControl sx={{ width: 250 }} size="small">
+    <InputLabel>Year</InputLabel>
+    <Select
+      name="year"
+      value={filter.year}
+      onChange={handleFilterChange}
+      label="Year"
+    >
+      <MenuItem value="all">All Years</MenuItem>
+      <MenuItem value="1">1st Year</MenuItem>
+      <MenuItem value="2">2nd Year</MenuItem>
+      <MenuItem value="3">3rd Year</MenuItem>
+      <MenuItem value="4">4th Year</MenuItem>
+    </Select>
+  </FormControl>
 
-            <TextField
-              name="searchQuery"
-              value={filter.searchQuery}
-              onChange={handleFilterChange}
-              label="Search Students"
-              variant="outlined"
-              size="small"
-              fullWidth={isMobile}
-            />
+  <TextField
+    sx={{ width: 230}}
+    name="searchQuery"
+    value={filter.searchQuery}
+    onChange={handleFilterChange}
+    label="Search Students"
+    variant="outlined"
+    size="small"
+  />
 
-            <Button
-              variant="outlined"
-              startIcon={<ClearAll />}
-              onClick={handleClearFilters}
-              size="small"
-            >
-              Clear
-            </Button>
+  <Button
+    sx={{ width: 250}}
+    variant="outlined"
+    startIcon={<ClearAll />}
+    onClick={handleClearFilters}
+    size="small"
+  >
+    Clear
+  </Button>
+</Box>
 
-            <Button
-              variant="contained"
-              startIcon={<Search />}
-              onClick={handleSearch}
-              size="small"
-            >
-              Search
-            </Button>
-          </Box>
 
           {/* Loading */}
           {loading && (

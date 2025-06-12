@@ -39,6 +39,8 @@ import {
   Group,
   CheckCircle,
 } from "@mui/icons-material";
+// import { DatePicker, TimePicker } from "@mui/x-date-pickers";
+
 
 const Body = () => {
   const navigate = useNavigate();
@@ -271,7 +273,7 @@ const Body = () => {
                 border: `1px solid ${theme.palette.divider}`,
                 borderRadius: 1,
                 p: 2
-              }}>
+              }}/>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
                   <Typography variant="subtitle1" fontWeight="medium">
                     <Group sx={{ verticalAlign: 'middle', mr: 1 }} />
@@ -343,12 +345,53 @@ const Body = () => {
                   </Typography>
                 )}
 
-                {errors.recipients && (
-                  <Typography variant="caption" color="error" mt={1} display="block">
-                    Please select at least one recipient
-                  </Typography>
-                )}
-              </Box>
+
+              {/* {!formData.sendNow && (
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  <Grid item xs={12} sm={6}>
+                    <DatePicker
+                      label="Scheduled Date"
+                      value={formData.scheduledDate}
+                      onChange={(newValue) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          scheduledDate: newValue
+                        }));
+                        if (errors.scheduledDate) {
+                          setErrors(prev => ({
+                            ...prev,
+                            scheduledDate: false
+                          }));
+                        }
+                      }}
+                      renderInput={(params) => (
+                        <TextField 
+                          {...params} 
+                          fullWidth 
+                          error={errors.scheduledDate}
+                          helperText={errors.scheduledDate ? "Please select a date" : ""}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TimePicker
+                      label="Scheduled Time"
+                      value={formData.scheduledTime}
+                      onChange={(newValue) => {
+                        setFormData(prev => ({
+                          ...prev,
+                          scheduledTime: newValue
+                        }));
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} fullWidth />
+                      )}
+                    />
+                  </Grid>
+                </Grid>
+              )} */}
+         
             </Grid>
 
             {/* Summary */}
